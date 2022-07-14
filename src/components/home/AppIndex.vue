@@ -29,8 +29,8 @@
                   <span>报名审核</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="2-1">待审核</el-menu-item>
-                  <el-menu-item index="2-2">审核列表</el-menu-item>
+                  <el-menu-item index="/waitAudit">待审核</el-menu-item>
+                  <el-menu-item index="/auditList">审核列表</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-menu-item index="3">

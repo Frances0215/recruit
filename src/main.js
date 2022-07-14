@@ -13,7 +13,7 @@ Vue.use(VueSmoothScroll)
 
 // 设置反向代理
 var axios = require('axios')
-axios.default.baseURL = 'http://loaclhost:8443/api'
+axios.default.baseURL = 'http://140.210.193.88:8888/api'
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
