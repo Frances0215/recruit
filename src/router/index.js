@@ -2,8 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 
-import Appindex from '../components/home/AppIndex'
 import Login from '../components/Login'
+import AppIndex from '../components/home/AppIndex'
+import ActivityAdd from '../components/home/ActivityAdd'
+import ActivityList from '../components/home/ActivityList'
 Vue.use(Router)
 
 export default new Router({
@@ -18,10 +20,31 @@ export default new Router({
     {
       path: '/index',
       name: 'AppIndex',
-      component: Appindex,
-      meta: {
-        requireAuth: true
-      }
+      component: AppIndex,
+      // meta: {
+      //   requireAuth: true
+      // }
+      // 输入路由home会重定向到Preferred页面(一进来显示的页面)
+      redirect: {name: 'ActivityAdd'},
+      children:
+        [
+          {
+            path: '/ActivityAdd',
+            name: 'ActivityAdd',
+            component: ActivityAdd,
+            meta: {
+              title: '活动添加'
+            }
+          },
+          {
+            path: '/ActivityList',
+            name: 'ActivityList',
+            component: ActivityList,
+            meta: {
+              title: '活动列表'
+            }
+          }
+        ]
     }
   ]
 

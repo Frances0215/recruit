@@ -80,6 +80,8 @@ export default {
     width: 100%;
     background-size: cover;
     position: fixed;
+    background-size: cover; /* 使图片平铺满整个浏览器（从宽和高的最大需求方面来满足，会使某些部分无法显示在区域中） */
+    position: absolute; /* 不可缺少 */
   }
   body{
     margin: 0px;
