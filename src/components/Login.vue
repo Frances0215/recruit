@@ -11,6 +11,19 @@
       <el-input type="password" v-model="loginForm.password"
                 auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
+    <el-form-item>
+      <el-select v-model="loginForm.value" clearable placeholder="用户类型" style="width: 350px">
+        <el-option
+          :key="item.value"
+          v-for="item in options"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item>
+      <el-checkbox v-model="checked">记住密码</el-checkbox>
+    </el-form-item>
     <el-form-item style="width: 100%">
       <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">登录</el-button>
     </el-form-item>
@@ -25,10 +38,26 @@ export default {
   name: 'Login',
   data () {
     return {
+      checked: true,
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        value: '',
+        radio: '1'
       },
+      options: [{
+        value: '选项1',
+        label: '学生'
+      }, {
+        value: '选项2',
+        label: '教师'
+      }, {
+        value: '选项3',
+        label: '学院招生办'
+      }, {
+        value: '选项4',
+        label: '学校招生办'
+      }],
       responseResult: []
     }
   },
@@ -51,8 +80,14 @@ export default {
         })
         .catch(failResponse => {
         })
+    },
+    clickitem () {
+      if (this.loginForm === 1) {
+        this.loginForm.radio = ''
+      } else {
+        this.loginForm.radio = '1'
+      }
     }
-
   }
 }
 </script>
