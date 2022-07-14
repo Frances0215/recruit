@@ -64,13 +64,14 @@ export default {
   methods: {
     login () {
       var _this = this
-      console.log(this.$store.state)
+      // console.log(this.$store.state)
       this.$axios
         .post('/login', {
           username: this.loginForm.username,
           password: this.loginForm.password
         })
         .then(successResponse => {
+          console.log(successResponse)
           if (successResponse.data.code === 200) {
             // var data = this.loginForm
             _this.$store.commit('login', _this.loginForm)
