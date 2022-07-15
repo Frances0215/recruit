@@ -61,7 +61,28 @@ export default new Router({
             name: 'auditList',
             component: auditList,
             meta: {
-              title: '审核列表'
+              title: '审核记录'
+            }
+          }
+        ]
+    },
+    {
+      path: '/index',
+      name: 'AppIndex',
+      component: AppIndex,
+      // meta: {
+      //   requireAuth: true
+      // }
+      // 输入路由home会重定向到Preferred页面(一进来显示的页面)
+      redirect: {name: 'feedback'},
+      children:
+        [
+          {
+            path: '/feedback',
+            name: 'feedback',
+            component: waitAudit,
+            meta: {
+              title: '活动反馈'
             }
           },
           {
