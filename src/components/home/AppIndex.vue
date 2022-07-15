@@ -30,7 +30,7 @@
                 </template>
                 <el-menu-item-group>
                   <el-menu-item index="/waitAudit">待审核</el-menu-item>
-                  <el-menu-item index="/auditList">审核记录</el-menu-item>
+                  <el-menu-item index="/auditList">审核列表</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-menu-item index="/feedback">
@@ -40,6 +40,10 @@
               <el-menu-item index="4">
                 <i class="el-icon-setting"></i>
                 <span slot="title">个人信息</span>
+              </el-menu-item>
+              <el-menu-item index="/StuActivityList">
+                <i class="el-icon-document"></i>
+                <span slot="title">学生活动</span>
               </el-menu-item>
             </el-menu>
 <!--          </el-col>-->
