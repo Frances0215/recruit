@@ -14,7 +14,7 @@
     <el-button size="mini"
                @click="handleEdit(scope.$index, scope.row)"
                style="float: left"
-               type="success" round>审核通过</el-button>
+               type="success" round>审核不通过</el-button>
     <el-button size="mini"
                @click="handleEdit(scope.$index, scope.row)"
                style="float: left"

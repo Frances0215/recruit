@@ -88,7 +88,7 @@
       </template>
     </el-table-column>
     <el-table-column
-      label="活动学生剩余名额"
+      label="活动总名额"
       width="180">
       <template slot-scope="scope">
         <i class="el-icon-circle-check"></i>
@@ -96,7 +96,7 @@
       </template>
     </el-table-column>
     <el-table-column
-      label="活动教师剩余名额"
+      label="活动剩余名额"
       width="180">
       <template slot-scope="scope">
         <i class="el-icon-circle-check"></i>
@@ -146,7 +146,7 @@ export default {
         address: '上海市普陀区金沙江路 1518 弄',
         activity: '寝室文化节',
         activityAddress: '四川大学江安校区',
-        restS: '2',
+        restS: '5',
         restT: '3',
         statuss: '报名阶段',
         typee: '学生'
@@ -156,7 +156,7 @@ export default {
         activity: '寝室文化节',
         activityAddress: '四川大学江安校区',
         address: '上海市普陀区金沙江路 1517 弄',
-        restS: '2',
+        restS: '5',
         restT: '3',
         statuss: '报名阶段',
         typee: '学生'
@@ -166,7 +166,7 @@ export default {
         activity: '寝室文化节',
         activityAddress: '四川大学江安校区',
         address: '上海市普陀区金沙江路 1519 弄',
-        restS: '2',
+        restS: '5',
         restT: '3',
         statuss: '报名阶段',
         typee: '学生'
@@ -176,7 +176,7 @@ export default {
         activity: '寝室文化节',
         activityAddress: '四川大学江安校区',
         address: '上海市普陀区金沙江路 1516 弄',
-        restS: '2',
+        restS: '5',
         restT: '3',
         statuss: '报名阶段',
         typee: '学生'

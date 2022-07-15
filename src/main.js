@@ -17,7 +17,7 @@ Vue.use(VueSmoothScroll)
 // Vue.prototype.$axios = axios
 // Vue.config.productionTip = false
 var axios = require('axios')
-axios.defaults.baseURL = 'http://140.210.193.88:8888/api'
+axios.defaults.baseURL = '/api'
 // 全局注册，之后可在其他组件中通过 this.$axios 发送数据
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
