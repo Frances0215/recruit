@@ -33,7 +33,7 @@
                   <el-menu-item index="/auditList">审核列表</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
-              <el-menu-item index="3">
+              <el-menu-item index="/auditList">
                 <i class="el-icon-document"></i>
                 <span slot="title">活动反馈</span>
               </el-menu-item>

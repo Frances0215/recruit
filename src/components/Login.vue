@@ -22,7 +22,8 @@
       </el-select>
     </el-form-item>
     <el-form-item>
-      <el-checkbox v-model="checked">记住密码</el-checkbox>
+      <el-checkbox v-model="checked" style="float: left">记住密码</el-checkbox>
+      <el-link style="float: right">忘记密码</el-link>
     </el-form-item>
     <el-form-item style="width: 100%">
       <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">登录</el-button>
@@ -74,11 +75,21 @@ export default {
           console.log(successResponse)
           if (successResponse.data.code === 200) {
             // var data = this.loginForm
+            console.log('success')
             // _this.$store.commit('login', _this.loginForm)
             var path = this.$route.query.redirect
-            this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+            // this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+            // this.$router.replace({path: '/index'})
           }
         })
+        .catch(failResponse => {
+        })
+      this.$axios.get('/auth/myself').then(successResponse => {
+        console.log(successResponse)
+        if (successResponse.data.result.role === 'super') {
+          console.log('super')
+        }
+      })
         .catch(failResponse => {
         })
     },
