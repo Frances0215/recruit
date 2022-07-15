@@ -41,6 +41,10 @@
                 <i class="el-icon-setting"></i>
                 <span slot="title">个人信息</span>
               </el-menu-item>
+              <el-menu-item index="/StuActivityList">
+                <i class="el-icon-document"></i>
+                <span slot="title">学生活动</span>
+              </el-menu-item>
             </el-menu>
 <!--          </el-col>-->
 <!--        </el-row>-->
