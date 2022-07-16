@@ -7,25 +7,14 @@
       </el-carousel-item>
     </el-carousel>
 
-    <div id="divSearch">
-      <el-select v-model="value" placeholder="请选择学校" style="margin-right: 10px">
-        <el-option
-          v-for="item in cities"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-          <span style="float: left">{{ item.label }}</span>
-          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-        </el-option>
-      </el-select>
+    <div id="divSearch" style="text-align: right">
       <el-input
-        placeholder="请输入内容"
+        placeholder="请输入需要查找的活动名或创建人"
         v-model="input"
         clearable
         style="width: 400px">
       </el-input>
       <el-button type="primary" style="margin-left: 10px" @click="searcht">查询</el-button>
-      <el-button type="danger" @click="clear">重置</el-button>
     </div>
     <el-table
       ref="multipleTable"
@@ -188,7 +177,7 @@ export default {
       console.log(this.input)
       let par=new FormData
       par.append("publisher",this.input)
-      this.$axios.post('/no-authc/publisher/page=1', {publisher:"this.input"}).then(successResponse => {
+      this.$axios.post('/no-authc/name/page=1', {name:this.input}).then(successResponse => {
           console.log(successResponse)
         this.tableData=successResponse.data.result.content
         this.total=successResponse.data.result.totalElements
