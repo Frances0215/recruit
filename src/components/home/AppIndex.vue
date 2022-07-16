@@ -123,5 +123,12 @@ export default {
   /*隐藏滚轮*/
   display: none;
 }
-
+.el-divider--vertical {
+  display: inline-block;
+  width: 1px;
+  height: 4em;
+  margin: 13px 8px;
+  vertical-align: middle;
+  position: relative;
+}
 </style>
