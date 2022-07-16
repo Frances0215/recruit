@@ -106,7 +106,9 @@
       <el-pagination
         @current-change="pagehandle"
         layout="prev, pager, next"
-        :total=this.total>
+        :total=this.total
+        :current-page=this.page
+      >
       </el-pagination>
     </div>
   </div>
