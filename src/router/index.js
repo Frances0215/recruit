@@ -11,6 +11,8 @@ import waitAudit from '../components/home/waitAudit'
 import auditList from '../components/home/auditList'
 import ActivityDetail from '../components/home/ActivityDetail'
 import feedback from '../components/home/feedback'
+import modify from '../components/modify'
+import feedbackmassage from '../components/home/feedbackmassage'
 
 Vue.use(Router)
 
@@ -22,6 +24,16 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/modify',
+      name: 'modify',
+      component: modify
+    },
+    {
+      path: '/feedbackmassage',
+      name: 'feedbackmassage',
+      component: feedbackmassage
     },
     {
       path: '/index',
@@ -82,7 +94,7 @@ export default new Router({
           {
             path: '/feedback',
             name: 'feedback',
-            component: waitAudit,
+            component: feedback,
             meta: {
               title: '活动反馈'
             }

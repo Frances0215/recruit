@@ -1,11 +1,32 @@
 <template>
   <div>
+    <img :src=this.src style="width:50%;height:50%">
     <el-carousel :interval="4000" type="card" height="200px">
       <el-carousel-item v-for="item in 6" :key="item">
         <h3 class="medium">{{ item }}</h3>
       </el-carousel-item>
     </el-carousel>
-    <h1 ref="test" id="test">dd</h1>
+
+    <div id="divSearch">
+      <el-select v-model="value" placeholder="请选择学校" style="margin-right: 10px">
+        <el-option
+          v-for="item in cities"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+          <span style="float: left">{{ item.label }}</span>
+          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+        </el-option>
+      </el-select>
+      <el-input
+        placeholder="请输入内容"
+        v-model="input"
+        clearable
+        style="width: 400px">
+      </el-input>
+      <el-button type="primary" style="margin-left: 10px" @click="searcht">查询</el-button>
+      <el-button type="danger" @click="clear">重置</el-button>
+    </div>
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -76,19 +97,29 @@
 <!--      <el-button @click="toggleSelection()">取消选择</el-button>-->
     </div>
     <el-dialog title="活动信息" :visible.sync="dialogTableVisible">
+      <div class="block">
+        <span class="demonstration">默认</span>
+        <el-image :src="src"></el-image>
+      </div>
       <el-descriptions class="margin-top"  :column="3" :size="size" border>
         <template slot="extra">
-          <el-button type="primary" size="small">操作</el-button>
+          <el-button type="primary" size="small">参与</el-button>
         </template>
         <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
         <el-descriptions-item label="活动名">{{this.aname}}</el-descriptions-item>
         <el-descriptions-item label="活动时间">{{ this.astart_time+'-'+this.aend_time }}</el-descriptions-item>
         <el-descriptions-item label="报名时间">{{ this.aenroll_time }}</el-descriptions-item>
-        <el-descriptions-item label="活动图片">{{ this.afile }}</el-descriptions-item>
         <el-descriptions-item label="活动描述">{{ this.atext }}</el-descriptions-item>
         <el-descriptions-item label="活动附件">{{ this.afile }}</el-descriptions-item>
       </el-descriptions>
     </el-dialog>
+    <div class="block">
+      <el-pagination
+        @current-change="pagehandle"
+        layout="prev, pager, next"
+        :total=this.total>
+      </el-pagination>
+    </div>
   </div>
 
 </template>
@@ -98,17 +129,11 @@ var responses
 
 /* eslint-disable */
 export default {
-  detail:{name:'d'},
+  mounted:function () {   //自动触发写入的函数
+    this.refreshtable()
+  },
   data () {
-    this.$axios.get('/auth/can_join/page=1').then(successResponse => {
-      if (successResponse.data.code === 200) {
 
-        this.tableData=successResponse.data.result.content
-        console.log(this.tableData)
-      }
-    })
-      .catch(failResponse => {
-      })
     return {
       tableData: [],
       multipleSelection: [],
@@ -128,12 +153,56 @@ export default {
       alimit:null,
       aenroll_time:null,
       aplace:null,
-      afile:null
-
+      afile:null,
+      size:'',
+      src:'',
+      total:1,
+      page:1,
+      input: ''
     }
   },
 
   methods: {
+    pagehandle(val){
+      this.page=val
+      this.refreshtable()
+    },
+    refreshtable(){
+      var url='/no_authc/allactive/page='+this.page
+      console.log(url)
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log(successResponse.data.result.totalElements)
+          this.total=successResponse.data.result.totalElements
+          this.tableData=successResponse.data.result.content
+          console.log(this.tableData)
+        }
+      })
+        .catch(failResponse => {
+        })
+    },
+    clear(){
+      this.input=''
+    },
+    searcht(){
+      console.log(this.input)
+      let par=new FormData
+      par.append("publisher",this.input)
+      this.$axios.post('/no-authc/publisher/page=1', {publisher:"this.input"}).then(successResponse => {
+          console.log(successResponse)
+        this.tableData=successResponse.data.result.content
+        this.total=successResponse.data.result.totalElements
+        this.page=1
+      })
+    },
+    // nextpage(){
+    //   this.page=this.page+1
+    //   this.refreshtable()
+    // },
+    // prepage(){
+    //   this.page=this.page-1
+    //   this.refreshtable()
+    // },
     handleClick(row) {
       this.aid=row.id
       this.astart_time=row.star_time
@@ -142,10 +211,16 @@ export default {
       this.aenroll_time=row.enroll_time
       this.afile=row.files
       this.atext=row.text
-      let param=new FormData
-      param.append("fid",17)
-      this.$axios.get('/file',param).then(successResponse => {
+      // let param=new FormData
+      // param.append("fid",'17')
+      // let param={
+      //   fid:'17'
+      // }
+      this.$axios.get('/file',{params:{fid:17}}).then(successResponse => {
         console.log(successResponse)
+        let blob = new Blob([successResponse.data])
+        let url = window.URL.createObjectURL(blob)
+        this.src = url
       })
       // this.$refs.edate.innerText="a"
       // this.$axios

@@ -6,28 +6,36 @@
         <el-option label="活动名称" value="1"></el-option>
         <el-option label="学生姓名" value="2"></el-option>
         <el-option label="教师姓名" value="3"></el-option>
-        <el-option label="审核结果" value="3"></el-option>
       </el-select>
       <el-button slot="append" icon="el-icon-search"></el-button>
     </el-input>
   </div>
+  <el-row style="margin-top: 10px">
+      <el-button size="mini"
+                 @click="handleEdit(scope.$index, scope.row)"
+                 style="float: left"
+                 type="danger" round>删除记录</el-button>
+  </el-row>
   <el-table
-    style="margin-top: 10px;width: 100%"
     ref="multipleTable"
     :data="tableData"
     tooltip-effect="dark"
+    style="width: 100%"
     @selection-change="handleSelectionChange">
-    <!--    <el-table-header>-->
-    <!--      <el-button size="mini"-->
-    <!--                 @click="handleEdit(scope.$index, scope.row)" type="success" round>成功按钮</el-button>-->
-    <!--      <el-button type="danger" round>危险按钮</el-button>-->
-    <!--    </el-table-header>-->
     <el-table-column
       type="selection"
       width="55">
     </el-table-column>
     <el-table-column
-      label="审核日期"
+      label="审批日期"
+      width="180">
+      <template slot-scope="scope">
+        <i class="el-icon-time"></i>
+        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="申请日期"
       width="180">
       <template slot-scope="scope">
         <i class="el-icon-time"></i>
@@ -52,7 +60,6 @@
       label="身份"
       width="180">
       <template slot-scope="scope">
-        <!--        <i class="el-icon-user-solid"></i>-->
         <span style="margin-left: 10px">{{ scope.row.typee }}</span>
       </template>
     </el-table-column>
@@ -71,40 +78,21 @@
       </template>
     </el-table-column>
     <el-table-column
-      label="审核结果"
+      label="活动状态"
       width="180">
       <template slot-scope="scope">
-        <i class="el-icon-document"></i>
+        <i class="el-icon-video-pause"></i>
         <span style="margin-left: 10px">{{ scope.row.statuss }}</span>
       </template>
     </el-table-column>
-<!--    <el-table-column-->
-<!--      label="活动学生剩余名额"-->
-<!--      width="180">-->
-<!--      <template slot-scope="scope">-->
-<!--        <i class="el-icon-circle-check"></i>-->
-<!--        <span style="margin-left: 10px">{{ scope.row.restS }}</span>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
-<!--    <el-table-column-->
-<!--      label="活动教师剩余名额"-->
-<!--      width="180">-->
-<!--      <template slot-scope="scope">-->
-<!--        <i class="el-icon-circle-check"></i>-->
-<!--        <span style="margin-left: 10px">{{ scope.row.restT }}</span>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
-    <!--    <el-table-column label="审批">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <el-button-->
-    <!--          size="mini"-->
-    <!--          @click="handleEdit(scope.$index, scope.row)">通过</el-button>-->
-    <!--        <el-button-->
-    <!--          size="mini"-->
-    <!--          type="danger"-->
-    <!--          @click="handleDelete(scope.$index, scope.row)">不通过</el-button>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
+    <el-table-column
+      label="审批结果"
+      width="180">
+      <template slot-scope="scope">
+        <i class="el-icon-circle-check"></i>
+        <span style="margin-left: 10px">{{ scope.row.result }}</span>
+      </template>
+    </el-table-column>
   </el-table>
   <div class="block" style="margin-top: 10px">
     <el-pagination
@@ -137,9 +125,8 @@ export default {
         address: '上海市普陀区金沙江路 1518 弄',
         activity: '寝室文化节',
         activityAddress: '四川大学江安校区',
-        restS: '2',
-        restT: '3',
-        statuss: '审核通过',
+        result: '通过',
+        statuss: '报名阶段',
         typee: '学生'
       }, {
         date: '2016-05-04',
@@ -147,9 +134,8 @@ export default {
         activity: '寝室文化节',
         activityAddress: '四川大学江安校区',
         address: '上海市普陀区金沙江路 1517 弄',
-        restS: '2',
-        restT: '3',
-        statuss: '审核通过',
+        result: '通过',
+        statuss: '报名阶段',
         typee: '学生'
       }, {
         date: '2016-05-01',
@@ -157,9 +143,8 @@ export default {
         activity: '寝室文化节',
         activityAddress: '四川大学江安校区',
         address: '上海市普陀区金沙江路 1519 弄',
-        restS: '2',
-        restT: '3',
-        statuss: '审核通过',
+        result: '通过',
+        statuss: '报名阶段',
         typee: '学生'
       }, {
         date: '2016-05-03',
@@ -167,9 +152,8 @@ export default {
         activity: '寝室文化节',
         activityAddress: '四川大学江安校区',
         address: '上海市普陀区金沙江路 1516 弄',
-        restS: '2',
-        restT: '3',
-        statuss: '审核通过',
+        result: '通过',
+        statuss: '报名阶段',
         typee: '学生'
       }],
       multipleSelection: [],
