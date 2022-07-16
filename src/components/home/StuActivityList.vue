@@ -9,12 +9,22 @@
 
     <div id="divSearch" style="text-align: right">
       <el-input
-        placeholder="请输入需要查找的活动名或创建人"
+        placeholder="请根据活动名或创建者输入查找"
         v-model="input"
         clearable
-        style="width: 400px">
+        style="width: 200px">
       </el-input>
+      <el-select v-model="value" placeholder="请选择">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          :size="mini">
+        </el-option>
+      </el-select>
       <el-button type="primary" style="margin-left: 10px" @click="searcht">查询</el-button>
+      <el-button type="danger" @click="clear">重置</el-button>
     </div>
     <el-table
       ref="multipleTable"
@@ -149,14 +159,34 @@ export default {
       src:'',
       total:1,
       page:1,
-      input: ''
+      input: '',
+      mode:1,
+
+      options: [{
+        value: '1',
+        label: '发布者'
+      }, {
+        value: '2',
+        label: '活动名'
+      }],
+      value: '1'
     }
   },
 
   methods: {
+    clear(){
+      this.mode=1
+      this.page=1
+      this.refreshtable()
+    },
     pagehandle(val){
       this.page=val
-      this.refreshtable()
+      if(this.mode=1){
+        this.refreshtable()
+      }
+      else{
+        this.searchnext()
+      }
     },
     refreshtable(){
       var url='/no_authc/allactive/page='+this.page
@@ -172,19 +202,51 @@ export default {
         .catch(failResponse => {
         })
     },
-    clear(){
-      this.input=''
-    },
     searcht(){
-      console.log(this.input)
-      let par=new FormData
-      par.append("publisher",this.input)
-      this.$axios.post('/no-authc/name/page=1', {name:this.input}).then(successResponse => {
-          console.log(successResponse)
-        this.tableData=successResponse.data.result.content
-        this.total=successResponse.data.result.totalElements
-        this.page=1
-      })
+      this.mode=2
+      // console.log(this.input)
+      if(this.value==1){
+        this.$axios.post('/no-authc/publisher/page=1', {publisher:this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.tableData=successResponse.data.result.content
+          this.total=this.total=successResponse.data.result.totalElements
+          this.page=1
+        }).catch(failResponse => {
+          this.tableData=[]
+        })
+      }
+      else{
+        this.$axios.post('/no-authc/name/page=1', {name:this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.tableData=successResponse.data.result.content
+          this.total=this.total=successResponse.data.result.totalElements
+          this.page=1
+        }).catch(failResponse => {
+          this.tableData=[]
+        })
+      }
+    },
+    searchnext(){
+      var result=new Array()
+      var url1='/no_authc/name/page='+this.page
+      var url2='/no_authc/publisher/page='+this.page
+      if(this.value==1){
+        this.$axios.post(url2, {publisher:this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.tableData=successResponse.data.result.content
+        }).catch(failResponse => {
+          this.tableData=[]
+        })
+      }
+      else{
+        this.$axios.post(url1, {name:this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.tableData=successResponse.data.result.content
+        }).catch(failResponse => {
+          this.tableData=[]
+        })
+      }
+
     },
     // nextpage(){
     //   this.page=this.page+1

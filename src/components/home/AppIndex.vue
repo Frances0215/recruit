@@ -45,6 +45,10 @@
                 <i class="el-icon-document"></i>
                 <span slot="title">学生活动</span>
               </el-menu-item>
+              <el-menu-item index="/StuActivityDetail">
+                <i class="el-icon-document"></i>
+                <span slot="title">学生我的活动</span>
+              </el-menu-item>
             </el-menu>
 <!--          </el-col>-->
 <!--        </el-row>-->

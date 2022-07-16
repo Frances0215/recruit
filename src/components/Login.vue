@@ -77,7 +77,7 @@ export default {
             console.log('success')
             // _this.$store.commit('login', _this.loginForm)
             var path = this.$route.query.redirect
-            // this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+            this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
             // this.$router.replace({path: '/index'})
           }
         })

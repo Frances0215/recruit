@@ -11,7 +11,7 @@ import waitAudit from '../components/home/waitAudit'
 import auditList from '../components/home/auditList'
 import ActivityDetail from '../components/home/ActivityDetail'
 import feedback from '../components/home/feedback'
-
+import StuActivityDetail from '../components/home/StuActivityDetail'
 Vue.use(Router)
 
 export default new Router({
@@ -93,6 +93,14 @@ export default new Router({
             component: StuActivityList,
             meta: {
               title: '学生活动'
+            }
+          },
+          {
+            path: '/StuActivityDetail',
+            name: 'StuActivityDetail',
+            component: StuActivityDetail,
+            meta: {
+              title: '学生我的活动'
             }
           }
         ]
