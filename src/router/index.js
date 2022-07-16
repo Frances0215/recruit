@@ -9,6 +9,7 @@ import ActivityList from '../components/home/ActivityList'
 import StuActivityList from '../components/home/StuActivityList'
 import waitAudit from '../components/home/waitAudit'
 import auditList from '../components/home/auditList'
+import ActivityDetail from '../components/home/ActivityDetail'
 import feedback from '../components/home/feedback'
 
 Vue.use(Router)
@@ -81,7 +82,7 @@ export default new Router({
           {
             path: '/feedback',
             name: 'feedback',
-            component: feedback,
+            component: waitAudit,
             meta: {
               title: '活动反馈'
             }
@@ -95,6 +96,11 @@ export default new Router({
             }
           }
         ]
+    },
+    {
+      path: '/activityDetail',
+      name: 'ActivityDetail',
+      component: ActivityDetail
     }
     // {
     //   path: '/index',

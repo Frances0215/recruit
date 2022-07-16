@@ -31,7 +31,6 @@
   </el-form>
   </body>
 </template>
-
 <script>
 import {methods} from 'babel-plugin-transform-runtime/lib/definitions'
 

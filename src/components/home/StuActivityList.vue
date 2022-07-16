@@ -146,7 +146,7 @@ export default {
       param.append("fid",17)
       this.$axios.get('/file',param).then(successResponse => {
         console.log(successResponse)
-      }.
+      })
       // this.$refs.edate.innerText="a"
       // this.$axios
       //   .post('/no-authc/publisher/page=1', {
