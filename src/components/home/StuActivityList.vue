@@ -1,5 +1,6 @@
 <template>
   <div>
+    <img :src=this.src style="width:50%;height:50%">
     <el-carousel :interval="4000" type="card" height="200px">
       <el-carousel-item v-for="item in 6" :key="item">
         <h3 class="medium">{{ item }}</h3>
@@ -76,19 +77,30 @@
 <!--      <el-button @click="toggleSelection()">取消选择</el-button>-->
     </div>
     <el-dialog title="活动信息" :visible.sync="dialogTableVisible">
+      <div class="block">
+        <span class="demonstration">默认</span>
+        <el-image :src="src"></el-image>
+      </div>
       <el-descriptions class="margin-top"  :column="3" :size="size" border>
         <template slot="extra">
-          <el-button type="primary" size="small">操作</el-button>
+          <el-button type="primary" size="small">参与</el-button>
         </template>
         <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
         <el-descriptions-item label="活动名">{{this.aname}}</el-descriptions-item>
         <el-descriptions-item label="活动时间">{{ this.astart_time+'-'+this.aend_time }}</el-descriptions-item>
         <el-descriptions-item label="报名时间">{{ this.aenroll_time }}</el-descriptions-item>
-        <el-descriptions-item label="活动图片">{{ this.afile }}</el-descriptions-item>
         <el-descriptions-item label="活动描述">{{ this.atext }}</el-descriptions-item>
         <el-descriptions-item label="活动附件">{{ this.afile }}</el-descriptions-item>
       </el-descriptions>
     </el-dialog>
+    <div class="block">
+      <el-pagination
+        @next-click="nextpage"
+        @prev-click="prepage"
+        layout="prev, pager, next"
+        :total=this.total>
+      </el-pagination>
+    </div>
   </div>
 
 </template>
@@ -98,17 +110,22 @@ var responses
 
 /* eslint-disable */
 export default {
-  detail:{name:'d'},
-  data () {
-    this.$axios.get('/auth/can_join/page=1').then(successResponse => {
+  mounted:function () {   //自动触发写入的函数
+    var url='/auth/can_join/page='+this.page
+    console.log(url)
+    this.$axios.get(url).then(successResponse => {
       if (successResponse.data.code === 200) {
-
+        console.log(successResponse.data.result.totalElements)
+        this.total=successResponse.data.result.totalElements
         this.tableData=successResponse.data.result.content
         console.log(this.tableData)
       }
     })
       .catch(failResponse => {
       })
+  },
+  data () {
+
     return {
       tableData: [],
       multipleSelection: [],
@@ -128,12 +145,45 @@ export default {
       alimit:null,
       aenroll_time:null,
       aplace:null,
-      afile:null
-
+      afile:null,
+      size:'',
+      src:'',
+      total:1,
+      page:1
     }
   },
 
   methods: {
+    nextpage(){
+      this.page=this.page+1
+      var url='/auth/can_join/page='+this.page
+      console.log(url)
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log(successResponse.data.result.totalElements)
+          this.total=successResponse.data.result.totalElements
+          this.tableData=successResponse.data.result.content
+          console.log(this.tableData)
+        }
+      })
+        .catch(failResponse => {
+        })
+    },
+    prepage(){
+      this.page=this.page-1
+      var url='/auth/can_join/page='+this.page
+      console.log(url)
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log(successResponse.data.result.totalElements)
+          this.total=successResponse.data.result.totalElements
+          this.tableData=successResponse.data.result.content
+          console.log(this.tableData)
+        }
+      })
+        .catch(failResponse => {
+        })
+    },
     handleClick(row) {
       this.aid=row.id
       this.astart_time=row.star_time
@@ -142,11 +192,17 @@ export default {
       this.aenroll_time=row.enroll_time
       this.afile=row.files
       this.atext=row.text
-      let param=new FormData
-      param.append("fid",17)
-      this.$axios.get('/file',param).then(successResponse => {
+      // let param=new FormData
+      // param.append("fid",'17')
+      // let param={
+      //   fid:'17'
+      // }
+      this.$axios.get('/file',{params:{fid:17}}).then(successResponse => {
         console.log(successResponse)
-      }.
+        let blob = new Blob([successResponse.data])
+        let url = window.URL.createObjectURL(blob)
+        this.src = url
+      })
       // this.$refs.edate.innerText="a"
       // this.$axios
       //   .post('/no-authc/publisher/page=1', {
