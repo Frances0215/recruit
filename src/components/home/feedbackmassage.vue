@@ -142,7 +142,7 @@ var responses
 export default {
   mounted: function () {
     this.refreshtable()
-    this.aid = this.$route.query.aid
+    this.aid = parseInt(this.$route.query.aid)
     console.log(this.aid)
   },
   detail: {name: 'd'},
@@ -179,8 +179,8 @@ export default {
       console.log(url)
       this.$axios
         .post(url, {
-          aid: this.aid,
-          status: '已评价'
+          aid: 23,
+          status: '已反馈'
         })
         .then(successResponse => {
           console.log(successResponse)
