@@ -33,13 +33,13 @@
     <!--      <el-button type="danger" round>危险按钮</el-button>-->
     <!--    </el-table-header>-->
     <el-table-column
-      prop="id"
-      label="活动ID"
+      prop="aid"
+      label="活动名称"
       width="150">
     </el-table-column>
     <el-table-column
-      prop="name"
-      label="活动"
+      prop="id"
+      label="参与者"
       width="150"
       show-overflow-tooltip>
       <!--      <template slot-scope="scope">-->
@@ -58,19 +58,14 @@
     <!--      width="55">-->
     <!--    </el-table-column>-->
     <el-table-column
-      prop="star_time"
-      label="开始时间"
+      prop="desc_"
+      label="反馈内容"
       width="150"
       show-overflow-tooltip>
       <!--      <template slot-scope="scope">-->
       <!--        <i class="el-icon-time"></i>-->
       <!--        <span style="margin-left: 10px">{{ scope.row.date }}</span>-->
       <!--      </template>-->
-    </el-table-column>
-    <el-table-column
-      prop="end_time"
-      label="结束时间"
-      width="150">
     </el-table-column>
     <!--    <el-table-column-->
     <!--      label="申请日期"-->
@@ -94,19 +89,12 @@
     <!--        </el-popover>-->
     <!--      </template>-->
     <!--    </el-table-column>-->
-    <el-table-column
-      prop="tag1"
-      label="活动类型"
-      width="150"
-      show-overflow-tooltip>
       <!--      <template slot-scope="scope">-->
       <!--        <i class="el-icon-video-pause"></i>-->
       <!--        <span style="margin-left: 10px">{{ scope.row.statuss }}</span>-->
       <!--      </template>-->
-    </el-table-column>
     <el-table-column
-      prop="join_num"
-      label="参与人数"
+      label="下载附件"
       width="150"
       show-overflow-tooltip>
       <!--      <template slot-scope="scope">-->
@@ -130,18 +118,6 @@
     <!--        <span style="margin-left: 10px">{{ scope.row.submit}}</span>-->
     <!--      </template>-->
     <!--    </el-table-column>-->
-    <el-table-column label="操作">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          v-on:click="handleEdit(scope.row)">查看反馈
-        </el-button>
-        <el-button
-          size="mini"
-          @click="handleDelete(scope.$index, scope.row)">编辑活动总结
-        </el-button>
-      </template>
-    </el-table-column>
   </el-table>
   <div class="block" style="margin-top: 10px">
     <el-pagination
@@ -166,6 +142,8 @@ var responses
 export default {
   mounted: function () {
     this.refreshtable()
+    this.aid = this.$route.query.aid
+    console.log(this.aid)
   },
   detail: {name: 'd'},
   data () {
@@ -195,17 +173,24 @@ export default {
       this.refreshtable()
     },
     refreshtable () {
-      var url = '/no_authc/allactive/page=' + this.page
+      var _this = this
+      var url = '/admin/order/find/pages=' + this.page
+      // var url = '/admin/order/find/pages=1'
       console.log(url)
-      this.$axios.get(url).then(successResponse => {
-        if (successResponse.data.code === 200) {
-          console.log(successResponse.data.result.totalElements)
-          this.total = successResponse.data.result.totalElements
-          this.tableData = successResponse.data.result.content
-          console.log(this.tableData)
-        }
-      })
-        .catch(failResponse => {
+      this.$axios
+        .post(url, {
+          aid: this.aid,
+          status: '已评价'
+        })
+        .then(successResponse => {
+          console.log(successResponse)
+          if (successResponse.data.code === 200) {
+            console.log(successResponse.data.result.totalElements)
+            this.total = successResponse.data.result.totalElements
+            this.id = successResponse.data.result.id
+            this.desc_ = successResponse.data.result.desc_
+            console.log(this.id, this.desc_)
+          }
         })
     },
     handleDelete (index, row) {
