@@ -82,7 +82,7 @@ export default new Router({
           {
             path: '/feedback',
             name: 'feedback',
-            component: waitAudit,
+            component: feedback,
             meta: {
               title: '活动反馈'
             }
