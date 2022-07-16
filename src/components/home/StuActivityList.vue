@@ -6,7 +6,27 @@
         <h3 class="medium">{{ item }}</h3>
       </el-carousel-item>
     </el-carousel>
-    <h1 ref="test" id="test">dd</h1>
+
+    <div id="divSearch">
+      <el-select v-model="value" placeholder="请选择学校" style="margin-right: 10px">
+        <el-option
+          v-for="item in cities"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+          <span style="float: left">{{ item.label }}</span>
+          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+        </el-option>
+      </el-select>
+      <el-input
+        placeholder="请输入内容"
+        v-model="input"
+        clearable
+        style="width: 400px">
+      </el-input>
+      <el-button type="primary" style="margin-left: 10px" @click="searcht">查询</el-button>
+      <el-button type="danger" @click="clear">重置</el-button>
+    </div>
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -95,8 +115,7 @@
     </el-dialog>
     <div class="block">
       <el-pagination
-        @next-click="nextpage"
-        @prev-click="prepage"
+        @current-change="pagehandle"
         layout="prev, pager, next"
         :total=this.total>
       </el-pagination>
@@ -111,18 +130,7 @@ var responses
 /* eslint-disable */
 export default {
   mounted:function () {   //自动触发写入的函数
-    var url='/auth/can_join/page='+this.page
-    console.log(url)
-    this.$axios.get(url).then(successResponse => {
-      if (successResponse.data.code === 200) {
-        console.log(successResponse.data.result.totalElements)
-        this.total=successResponse.data.result.totalElements
-        this.tableData=successResponse.data.result.content
-        console.log(this.tableData)
-      }
-    })
-      .catch(failResponse => {
-      })
+    this.refreshtable()
   },
   data () {
 
@@ -149,14 +157,18 @@ export default {
       size:'',
       src:'',
       total:1,
-      page:1
+      page:1,
+      input: ''
     }
   },
 
   methods: {
-    nextpage(){
-      this.page=this.page+1
-      var url='/auth/can_join/page='+this.page
+    pagehandle(val){
+      this.page=val
+      this.refreshtable()
+    },
+    refreshtable(){
+      var url='/no_authc/allactive/page='+this.page
       console.log(url)
       this.$axios.get(url).then(successResponse => {
         if (successResponse.data.code === 200) {
@@ -169,21 +181,28 @@ export default {
         .catch(failResponse => {
         })
     },
-    prepage(){
-      this.page=this.page-1
-      var url='/auth/can_join/page='+this.page
-      console.log(url)
-      this.$axios.get(url).then(successResponse => {
-        if (successResponse.data.code === 200) {
-          console.log(successResponse.data.result.totalElements)
-          this.total=successResponse.data.result.totalElements
-          this.tableData=successResponse.data.result.content
-          console.log(this.tableData)
-        }
-      })
-        .catch(failResponse => {
-        })
+    clear(){
+      this.input=''
     },
+    searcht(){
+      console.log(this.input)
+      let par=new FormData
+      par.append("publisher",this.input)
+      this.$axios.post('/no-authc/publisher/page=1', {publisher:"this.input"}).then(successResponse => {
+          console.log(successResponse)
+        this.tableData=successResponse.data.result.content
+        this.total=successResponse.data.result.totalElements
+        this.page=1
+      })
+    },
+    // nextpage(){
+    //   this.page=this.page+1
+    //   this.refreshtable()
+    // },
+    // prepage(){
+    //   this.page=this.page-1
+    //   this.refreshtable()
+    // },
     handleClick(row) {
       this.aid=row.id
       this.astart_time=row.star_time
