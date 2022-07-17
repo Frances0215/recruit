@@ -12,18 +12,18 @@
                 auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-select v-model="loginForm.value" clearable placeholder="用户类型" style="width: 350px">
-        <el-option
-          :key="item.value"
-          v-for="item in options"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
+<!--      <el-select v-model="loginForm.value" clearable placeholder="用户类型" style="width: 350px">-->
+<!--        <el-option-->
+<!--          :key="item.value"-->
+<!--          v-for="item in options"-->
+<!--          :label="item.label"-->
+<!--          :value="item.value">-->
+<!--        </el-option>-->
+<!--      </el-select>-->
     </el-form-item>
     <el-form-item>
       <el-checkbox v-model="checked" style="float: left">记住密码</el-checkbox>
-      <el-button type="text" v-on:click="modify">修改密码</el-button>
+<!--      <el-button type="text" v-on:click="modify">修改密码</el-button>-->
       <el-link style="float: right">忘记密码</el-link>
     </el-form-item>
     <el-form-item style="width: 100%">
@@ -40,6 +40,7 @@ export default {
   data () {
     return {
       checked: true,
+      role: '',
       loginForm: {
         username: '',
         password: '',
@@ -47,16 +48,16 @@ export default {
         radio: '1'
       },
       options: [{
-        value: '选项1',
+        value: '学生',
         label: '学生'
       }, {
-        value: '选项2',
+        value: '教师',
         label: '教师'
       }, {
-        value: '选项3',
+        value: '学院招生办',
         label: '学院招生办'
       }, {
-        value: '选项4',
+        value: '学校招生办',
         label: '学校招生办'
       }],
       responseResult: []
@@ -78,7 +79,43 @@ export default {
             console.log('success')
             // _this.$store.commit('login', _this.loginForm)
             var path = this.$route.query.redirect
-            this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+            this.$axios.get('/auth/myself').then(suresponse => {
+              if (suresponse.data.code === 200) {
+                this.role = suresponse.data.result.role
+                console.log(this.role)
+                if (this.role === 'super') {
+                  this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+                }
+                if (this.role === '学院') {
+                  this.$router.replace({path: path === '/' || path === undefined ? '/indexaca' : path})
+                }
+                if (this.role === '学校') {
+                  this.$router.replace({path: path === '/' || path === undefined ? '/indexschool' : path})
+                }
+                if (this.role === '学生') {
+                  this.$router.replace({path: path === '/' || path === undefined ? '/indexstudent' : path})
+                }
+                if (this.role === '教师') {
+                  this.$router.replace({path: path === '/' || path === undefined ? '/indexstudent' : path})
+                }
+              }
+            })
+            // if (this.loginForm.value === '') {
+            //   this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+            // }
+            // if (this.loginForm.value === '学生') {
+            //   this.$router.replace({path: path === '/' || path === undefined ? '/indexstudent' : path})
+            // }
+            // if (this.loginForm.value === '教师') {
+            //   this.$router.replace({path: path === '/' || path === undefined ? '/indexstudent' : path})
+            // }
+            // if (this.loginForm.value === '学院招生办') {
+            //   this.$router.replace({path: path === '/' || path === undefined ? '/indexaca' : path})
+            // }
+            // if (this.loginForm.value === '学校招生办') {
+            //   this.$router.replace({path: path === '/' || path === undefined ? '/indexschool' : path})
+            // }
+            // this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
             // this.$router.replace({path: '/index'})
           }
         })
