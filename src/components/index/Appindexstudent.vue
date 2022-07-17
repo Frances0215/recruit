@@ -13,13 +13,17 @@
         text-color="#fff"
         active-text-color="#ffd04b"
         style="height: 100vh">
-        <el-menu-item index="massageStu">
+        <el-menu-item index="/MyinfoStu">
           <i class="el-icon-setting"></i>
           <span slot="title">个人信息</span>
         </el-menu-item>
         <el-menu-item index="/StuActivityListStu">
           <i class="el-icon-document"></i>
           <span slot="title">学生活动</span>
+        </el-menu-item>
+        <el-menu-item index="/StuActivityDetailStu">
+          <i class="el-icon-document"></i>
+          <span slot="title">学生我的活动</span>
         </el-menu-item>
       </el-menu>
       <!--          </el-col>-->

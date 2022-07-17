@@ -38,11 +38,6 @@ export default new Router({
       component: modify
     },
     {
-      path: '/feedbackmassage',
-      name: 'feedbackmassage',
-      component: feedbackmassage
-    },
-    {
       path: '/ActivityInfo',
       name: 'ActivityInfo',
       component: ActivityInfo
@@ -192,6 +187,14 @@ export default new Router({
             path: '/feedbackmassageSch',
             name: 'feedbackmassageSch',
             component: feedbackmassage
+          },
+          {
+            path: '/MyinfoSch',
+            name: 'MyinfoSch',
+            component: Myinfo,
+            meta: {
+              title: '个人信息'
+            }
           }
         ]
     },
@@ -213,6 +216,22 @@ export default new Router({
             component: StuActivityList,
             meta: {
               title: '学生活动'
+            }
+          },
+          {
+            path: '/StuActivityDetailStu',
+            name: 'StuActivityDetailStu',
+            component: StuActivityDetail,
+            meta: {
+              title: '学生我的活动'
+            }
+          },
+          {
+            path: '/MyinfoStu',
+            name: 'MyinfoStu',
+            component: Myinfo,
+            meta: {
+              title: '个人信息'
             }
           }
         ]
@@ -265,6 +284,14 @@ export default new Router({
             path: '/feedbackmassageaca',
             name: 'feedbackmassageaca',
             component: feedbackmassage
+          },
+          {
+            path: '/Myinfoaca',
+            name: 'Myinfoaca',
+            component: Myinfo,
+            meta: {
+              title: '个人信息'
+            }
           }
         ]
     }
