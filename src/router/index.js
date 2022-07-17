@@ -38,16 +38,6 @@ export default new Router({
       component: modify
     },
     {
-      path: '/ActivityInfo',
-      name: 'ActivityInfo',
-      component: ActivityInfo
-    },
-    {
-      path: '/JoinedActivityInfo',
-      name: 'JoinedActivityInfo',
-      component: JoinedActivityInfo
-    },
-    {
       path: '/index',
       name: 'AppIndex',
       component: AppIndex,
@@ -129,6 +119,16 @@ export default new Router({
             meta: {
               title: '个人信息'
             }
+          },
+          {
+            path: '/ActivityInfo',
+            name: 'ActivityInfo',
+            component: ActivityInfo
+          },
+          {
+            path: '/JoinedActivityInfo',
+            name: 'JoinedActivityInfo',
+            component: JoinedActivityInfo
           }
         ]
     },
@@ -233,6 +233,16 @@ export default new Router({
             meta: {
               title: '个人信息'
             }
+          },
+          {
+            path: '/ActivityInfostu',
+            name: 'ActivityInfostu',
+            component: ActivityInfo
+          },
+          {
+            path: '/JoinedActivityInfostu',
+            name: 'JoinedActivityInfostu',
+            component: JoinedActivityInfo
           }
         ]
     },
