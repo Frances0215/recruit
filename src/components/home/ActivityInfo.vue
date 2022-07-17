@@ -20,7 +20,7 @@
     <br>
     <el-descriptions class="margin-top"  :column="3" :size="size" border>
       <template slot="extra">
-        <el-button type="primary" size="small">参与</el-button>
+        <el-button type="primary" size="small" @click="dialogTableVisible=true" :disabled='this.avaible'>{{ this.bttext }}</el-button>
       </template>
 
       <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
@@ -32,17 +32,21 @@
     </el-descriptions>
 
     <el-dialog title="报名信息" :visible.sync="dialogTableVisible">
-      <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-        <el-form-item label="新密码">
-          <el-input v-model="formLabelAlign.pass" show-password></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码">
-          <el-input v-model="formLabelAlign.confirm" show-password></el-input>
-        </el-form-item>
-      </el-form>
+      <el-descriptions title="用户信息" direction="horizontal" :column="1" border>
+        <el-descriptions-item label="用户ID">{{ this.id }}</el-descriptions-item>
+        <el-descriptions-item label="用户名">{{ this.name }}</el-descriptions-item>
+        <el-descriptions-item label="角色">
+          <el-tag size="small">{{ this.role }}</el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="手机号">{{ this.phone }}</el-descriptions-item>
+        <el-descriptions-item label="邮箱">{{ this.email }}</el-descriptions-item>
+        <el-descriptions-item label="管理员ID">{{ this.father }}</el-descriptions-item>
+        <el-descriptions-item label="绩点" :span="2">{{ this.garde }}</el-descriptions-item>
+        <el-descriptions-item label="联系地址">江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item>
+      </el-descriptions>
       <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogTableVisibleVisible = false">取 消</el-button>
-          <el-button type="primary" @click="changepassword">确 定</el-button>
+          <el-button @click="dialogTableVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submit">提 交</el-button>
         </span>
     </el-dialog>
   </div>
@@ -52,31 +56,12 @@
 <script>
 export default {
   mounted: function () {
-    this.row = this.$route.query.row
-    this.aid = this.row.id
-    this.astart_time = this.row.star_time
-    this.aend_time = this.row.end_time
-    this.aname = this.row.name
-    this.aenroll_time = this.row.enroll_time
-    this.afile = this.row.files
-    this.atext = this.row.text
-    this.$axios.get('/file/f78pe5QQ图片20210901104628.png', {responseType: 'blob'}).then(successResponse => {
-      console.log(successResponse.data)
-      // let blob = new Blob([successResponse.data])
-      // let url = window.URL.createObjectURL(blob)
-      this.src = window.URL.createObjectURL(successResponse.data)
-      this.items.push(this.src)
-    })
-    this.$axios.get('/file/v3uis0InkedUFOZJXZGO@P4U6VQ_T@X2$G_LI.jpg', {responseType: 'blob'}).then(successResponse => {
-      console.log(successResponse.data)
-      // let blob = new Blob([successResponse.data])
-      // let url = window.URL.createObjectURL(blob)
-      this.src = window.URL.createObjectURL(successResponse.data)
-      this.items.push(this.src)
-    })
+    this.loadActive()
   },
   data () {
     return {
+      avaible: false,
+      bttext: '报 名',
       aid: null,
       astart_time: null,
       aend_time: null,
@@ -112,6 +97,13 @@ export default {
     }
   },
   methods: {
+    submit () {
+      this.$axios.post('/auth/join', {id: this.aid}).then(resp => {
+        if (resp && resp.data.code === 200) {
+          alert('报名成功')
+        }
+      })
+    },
     loadActive () {
       var _this = this
       this.$axios.get('/auth/myself').then(resp => {
@@ -124,8 +116,41 @@ export default {
           this.father = resp.data.result.father
           this.garde = resp.data.result.garde
           this.role = resp.data.result.role
-          console.log('this.info')
-          console.log(this.info)
+          // console.log('this.info')
+          // console.log(this.info)
+
+          this.row = this.$route.query.row
+          this.aid = this.row.id
+          this.astart_time = this.row.star_time
+          this.aend_time = this.row.end_time
+          this.aname = this.row.name
+          this.aenroll_time = this.row.enroll_time
+          this.afile = this.row.files
+          this.atext = this.row.text
+          this.$axios.post('auth/can_join', {aid: 23, uid: 3}).then(successResponse => {
+            console.log(successResponse.data.result)
+            if (successResponse && successResponse.data.code === 200) {
+              if (!successResponse.data.result) {
+                console.log('auth/can_join')
+                this.bttext = '没有报名资格'
+                this.avaible = true
+              }
+            }
+          })
+          this.$axios.get('/file/f78pe5QQ图片20210901104628.png', {responseType: 'blob'}).then(successResponse => {
+            // console.log(successResponse.data)
+            // let blob = new Blob([successResponse.data])
+            // let url = window.URL.createObjectURL(blob)
+            this.src = window.URL.createObjectURL(successResponse.data)
+            this.items.push(this.src)
+          })
+          this.$axios.get('/file/v3uis0InkedUFOZJXZGO@P4U6VQ_T@X2$G_LI.jpg', {responseType: 'blob'}).then(successResponse => {
+            // console.log(successResponse.data)
+            // let blob = new Blob([successResponse.data])
+            // let url = window.URL.createObjectURL(blob)
+            this.src = window.URL.createObjectURL(successResponse.data)
+            this.items.push(this.src)
+          })
         }
       })
     },

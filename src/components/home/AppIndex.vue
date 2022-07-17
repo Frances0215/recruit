@@ -101,7 +101,7 @@ export default {
       this.$axios.get('/auth/myself').then(resp => {
         if (resp && resp.data.code === 200) {
           this.name=resp.data.result.username
-          console.log(resp)
+          // console.log(resp)
         }
       })
     },
