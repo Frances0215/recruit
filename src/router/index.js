@@ -11,8 +11,12 @@ import waitAudit from '../components/home/waitAudit'
 import auditList from '../components/home/auditList'
 import ActivityDetail from '../components/home/ActivityDetail'
 import feedback from '../components/home/feedback'
+import StuActivityDetail from '../components/home/StuActivityDetail'
+import Myinfo from '../components/home/Myinfo'
 import modify from '../components/modify'
 import feedbackmassage from '../components/home/feedbackmassage'
+import ActivityInfo from '../components/home/ActivityInfo'
+import JoinedActivityInfo from '../components/home/JoinedActivityInfo'
 import AppIndexschool from '../components/index/Appindexschool'
 import Appindexstudent from '../components/index/Appindexstudent'
 import Appindexaca from '../components/index/Appindexaca'
@@ -34,6 +38,21 @@ export default new Router({
       component: modify
     },
     {
+      path: '/feedbackmassage',
+      name: 'feedbackmassage',
+      component: feedbackmassage
+    },
+    {
+      path: '/ActivityInfo',
+      name: 'ActivityInfo',
+      component: ActivityInfo
+    },
+    {
+      path: '/JoinedActivityInfo',
+      name: 'JoinedActivityInfo',
+      component: JoinedActivityInfo
+    },
+    {
       path: '/index',
       name: 'AppIndex',
       component: AppIndex,
@@ -49,7 +68,7 @@ export default new Router({
             name: 'ActivityAdd',
             component: ActivityAdd,
             meta: {
-              title: '活动添加', requireAuth: true, roles: ['super']
+              title: '活动添加'
             }
           },
           {
@@ -98,6 +117,22 @@ export default new Router({
             component: StuActivityList,
             meta: {
               title: '学生活动'
+            }
+          },
+          {
+            path: '/StuActivityDetail',
+            name: 'StuActivityDetail',
+            component: StuActivityDetail,
+            meta: {
+              title: '学生我的活动'
+            }
+          },
+          {
+            path: '/Myinfo',
+            name: 'Myinfo',
+            component: Myinfo,
+            meta: {
+              title: '个人信息'
             }
           }
         ]
