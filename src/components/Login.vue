@@ -23,7 +23,7 @@
     </el-form-item>
     <el-form-item>
       <el-checkbox v-model="checked" style="float: left">记住密码</el-checkbox>
-      <el-link style="float: right">忘记密码</el-link>
+      <el-link style="float: right" @click="forget">忘记密码</el-link>
     </el-form-item>
     <el-form-item style="width: 100%">
       <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">登录</el-button>

@@ -12,7 +12,7 @@
         placeholder="请根据活动名或创建者输入查找"
         v-model="input"
         clearable
-        style="width: 200px">
+        style="width: 300px">
       </el-input>
       <el-select v-model="value" placeholder="请选择">
         <el-option
@@ -23,7 +23,7 @@
           :size="mini">
         </el-option>
       </el-select>
-      <el-button type="primary" style="margin-left: 10px" @click="searcht">查询</el-button>
+      <el-button type="primary" style="margin-left: 10px" @click="searcht" icon="el-icon-search">查询</el-button>
       <el-button type="danger" @click="clear">重置</el-button>
     </div>
     <el-table
