@@ -11,6 +11,8 @@ import waitAudit from '../components/home/waitAudit'
 import auditList from '../components/home/auditList'
 import ActivityDetail from '../components/home/ActivityDetail'
 import feedback from '../components/home/feedback'
+import StuActivityDetail from '../components/home/StuActivityDetail'
+import Myinfo from '../components/home/Myinfo'
 import modify from '../components/modify'
 import feedbackmassage from '../components/home/feedbackmassage'
 
@@ -105,6 +107,22 @@ export default new Router({
             component: StuActivityList,
             meta: {
               title: '学生活动'
+            }
+          },
+          {
+            path: '/StuActivityDetail',
+            name: 'StuActivityDetail',
+            component: StuActivityDetail,
+            meta: {
+              title: '学生我的活动'
+            }
+          },
+          {
+            path: '/Myinfo',
+            name: 'Myinfo',
+            component: Myinfo,
+            meta: {
+              title: '个人信息'
             }
           }
         ]
