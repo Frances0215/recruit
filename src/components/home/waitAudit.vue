@@ -26,11 +26,6 @@
     tooltip-effect="dark"
     style="width: 100%"
     @selection-change="handleSelectionChange">
-<!--    <el-table-header>-->
-<!--      <el-button size="mini"-->
-<!--                 @click="handleEdit(scope.$index, scope.row)" type="success" round>成功按钮</el-button>-->
-<!--      <el-button type="danger" round>危险按钮</el-button>-->
-<!--    </el-table-header>-->
     <el-table-column
       type="selection"
       width="55">
@@ -61,7 +56,6 @@
       label="身份"
       width="180">
       <template slot-scope="scope">
-<!--        <i class="el-icon-user-solid"></i>-->
         <span style="margin-left: 10px">{{ scope.row.typee }}</span>
       </template>
     </el-table-column>
@@ -73,7 +67,6 @@
           <p>活动名称: {{ scope.row.activity }}</p>
           <p>举办地址: {{ scope.row.activityAddress }}</p>
           <div slot="reference" class="name-wrapper">
-<!--            <i class="el-icon-s-flag"></i>-->
             <el-tag size="medium">{{ scope.row.activity }}</el-tag>
           </div>
         </el-popover>
@@ -103,17 +96,6 @@
         <span style="margin-left: 10px">{{ scope.row.restT }}</span>
       </template>
     </el-table-column>
-    <!--    <el-table-column label="审批">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <el-button-->
-    <!--          size="mini"-->
-    <!--          @click="handleEdit(scope.$index, scope.row)">通过</el-button>-->
-    <!--        <el-button-->
-    <!--          size="mini"-->
-    <!--          type="danger"-->
-    <!--          @click="handleDelete(scope.$index, scope.row)">不通过</el-button>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
   </el-table>
   <div class="block" style="margin-top: 10px">
     <el-pagination
@@ -187,6 +169,9 @@ export default {
       currentPage4: 1
     }
   },
+  mounted: function () {
+    this.loadAudits()
+  },
   methods: {
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
@@ -200,6 +185,14 @@ export default {
     handleDelete (index, row) {
       console.log(index, row)
     }
+    // loadAudits () {
+    //   var _this = this
+    //   this.$axios.get('/admin/audit').then(successResponse => {
+    //     if (resp && resp.status === 200) {
+    //       _this.books = resp.data
+    //     }
+    //   })
+    // }
   },
   toggleSelection (rows) {
     if (rows) {

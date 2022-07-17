@@ -2,14 +2,18 @@
   <body id="poster">
   <el-form class="login-container" label-position="left"
            label-width="0px">
-    <h3 class="login_title">系统登录</h3>
+    <h3 class="login_title">修改密码</h3>
     <el-form-item>
       <el-input type="text" v-model="loginForm.username"
                 auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item>
       <el-input type="password" v-model="loginForm.password"
-                auto-complete="off" placeholder="密码"></el-input>
+                auto-complete="off" placeholder="原始密码"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-input type="password" v-model="loginForm.newpassword"
+                auto-complete="off" placeholder="修改密码"></el-input>
     </el-form-item>
     <el-form-item>
       <el-select v-model="loginForm.value" clearable placeholder="用户类型" style="width: 350px">
@@ -21,13 +25,8 @@
         </el-option>
       </el-select>
     </el-form-item>
-    <el-form-item>
-      <el-checkbox v-model="checked" style="float: left">记住密码</el-checkbox>
-      <el-button type="text" v-on:click="modify">修改密码</el-button>
-      <el-link style="float: right">忘记密码</el-link>
-    </el-form-item>
     <el-form-item style="width: 100%">
-      <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">登录</el-button>
+      <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">确认修改</el-button>
     </el-form-item>
   </el-form>
   </body>
@@ -43,6 +42,7 @@ export default {
       loginForm: {
         username: '',
         password: '',
+        newpassword: '',
         value: '',
         radio: '1'
       },
@@ -76,9 +76,9 @@ export default {
           if (successResponse.data.code === 200) {
             // var data = this.loginForm
             console.log('success')
-            // _this.$store.commit('login', _this.loginForm)
             var path = this.$route.query.redirect
-            this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
+            this.$router.replace({path: path === '/' || path === undefined ? '/login' : path})
+            // _this.$store.commit('login', _this.loginForm)
             // this.$router.replace({path: '/index'})
           }
         })
@@ -110,33 +110,33 @@ export default {
 </script>
 
 <style scoped>
-  .login-container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 90px auto;
-    width: 350px;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-  }
-  .login_title {
-    margin: 0px auto 40px auto;
-    text-align: center;
-    color: #505458;
-  }
-  #poster {
-    background:url("../assets/eva.jpg") no-repeat;
-    background-position: center;
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    position: fixed;
-    background-size: cover; /* 使图片平铺满整个浏览器（从宽和高的最大需求方面来满足，会使某些部分无法显示在区域中） */
-    position: absolute; /* 不可缺少 */
-  }
-  body{
-    margin: 0px;
-  }
+.login-container {
+  border-radius: 15px;
+  background-clip: padding-box;
+  margin: 90px auto;
+  width: 350px;
+  padding: 35px 35px 15px 35px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+}
+.login_title {
+  margin: 0px auto 40px auto;
+  text-align: center;
+  color: #505458;
+}
+#poster {
+  background:url("../assets/eva.jpg") no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  position: fixed;
+  background-size: cover; /* 使图片平铺满整个浏览器（从宽和高的最大需求方面来满足，会使某些部分无法显示在区域中） */
+  position: absolute; /* 不可缺少 */
+}
+body{
+  margin: 0px;
+}
 
 </style>
