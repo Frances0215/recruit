@@ -13,7 +13,8 @@
           <el-option label="发布用户" value="1"></el-option>
         </el-select>
         <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
-        <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
+        <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>
+        <el-button slot="append" type="danger" @click="myact">我可以参加的活动</el-button>
       </el-input>
     </div>
 <!--    <div id="divSearch" style="text-align: right">-->
@@ -184,6 +185,36 @@ export default {
   },
 
   methods: {
+    myact(){
+      this.page=1
+      this.mode=3
+      var url='/auth/can_join/page='+this.page
+      this.$axios.get(url).then(successResponse => {
+        console.log(successResponse)
+        if (successResponse.data.code === 200) {
+          console.log(successResponse.data.result.totalElements)
+          this.total=successResponse.data.result.totalElements
+          this.tableData=successResponse.data.result.content
+
+        }
+        else{
+          this.tableData=[]
+          this.total=0
+        }
+      })
+    },
+    myactnext(){
+      var url='/auth/can_join/page='+this.page
+      console.log(url)
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log(successResponse)
+          console.log(successResponse.data.result.totalElements)
+          this.total=successResponse.data.result.totalElements
+          this.tableData=successResponse.data.result.content
+        }
+      })
+    },
     clear(){
       this.mode=1
       this.page=1
@@ -194,8 +225,11 @@ export default {
       if(this.mode==1){
         this.refreshtable()
       }
-      else{
+      else if(this.mode==2){
         this.searchnext()
+      }
+      else{
+        this.myactnext()
       }
     },
     refreshtable(){
@@ -223,6 +257,7 @@ export default {
           this.page=1
         }).catch(failResponse => {
           this.tableData=[]
+          this.total=0
         })
       }
       else{
@@ -233,6 +268,7 @@ export default {
           this.page=1
         }).catch(failResponse => {
           this.tableData=[]
+          this.total=0
         })
       }
     },
@@ -246,6 +282,7 @@ export default {
           this.tableData=successResponse.data.result.content
         }).catch(failResponse => {
           this.tableData=[]
+          this.total=0
         })
       }
       else{
@@ -254,6 +291,7 @@ export default {
           this.tableData=successResponse.data.result.content
         }).catch(failResponse => {
           this.tableData=[]
+          this.total=0
         })
       }
 
