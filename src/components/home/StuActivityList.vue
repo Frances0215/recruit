@@ -6,26 +6,35 @@
         <h3 class="medium">{{ item }}</h3>
       </el-carousel-item>
     </el-carousel>
-
-    <div id="divSearch" style="text-align: right">
-      <el-input
-        placeholder="请根据活动名或创建者输入查找"
-        v-model="input"
-        clearable
-        style="width: 300px">
+    <div style="margin-top: 15px;">
+      <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+        <el-select v-model="value" slot="prepend" placeholder="请选择">
+          <el-option label="活动名称" value="2"></el-option>
+          <el-option label="发布用户" value="1"></el-option>
+        </el-select>
+        <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
+        <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
       </el-input>
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :size="mini">
-        </el-option>
-      </el-select>
-      <el-button type="primary" style="margin-left: 10px" @click="searcht" icon="el-icon-search">查询</el-button>
-      <el-button type="danger" @click="clear">重置</el-button>
     </div>
+<!--    <div id="divSearch" style="text-align: right">-->
+<!--      <el-input-->
+<!--        placeholder="请根据活动名或创建者输入查找"-->
+<!--        v-model="input"-->
+<!--        clearable-->
+<!--        style="width: 300px">-->
+<!--      </el-input>-->
+<!--      <el-select v-model="value" placeholder="请选择">-->
+<!--        <el-option-->
+<!--          v-for="item in options"-->
+<!--          :key="item.value"-->
+<!--          :label="item.label"-->
+<!--          :value="item.value"-->
+<!--          :size="mini">-->
+<!--        </el-option>-->
+<!--      </el-select>-->
+<!--      <el-button type="primary" style="margin-left: 10px" @click="searcht" icon="el-icon-search">查询</el-button>-->
+<!--      <el-button type="danger" @click="clear">重置</el-button>-->
+<!--    </div>-->
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -87,7 +96,7 @@
         label="操作"
         width="100">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row),dialogTableVisible = true" type="text" size="small">查看详情</el-button>
+          <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -161,6 +170,7 @@ export default {
       page:1,
       input: '',
       mode:1,
+      // input3:'',
 
       options: [{
         value: '1',
@@ -181,7 +191,7 @@ export default {
     },
     pagehandle(val){
       this.page=val
-      if(this.mode=1){
+      if(this.mode==1){
         this.refreshtable()
       }
       else{
@@ -228,8 +238,8 @@ export default {
     },
     searchnext(){
       var result=new Array()
-      var url1='/no_authc/name/page='+this.page
-      var url2='/no_authc/publisher/page='+this.page
+      var url1='/no-authc/name/page='+this.page
+      var url2='/no-authc/publisher/page='+this.page
       if(this.value==1){
         this.$axios.post(url2, {publisher:this.input}).then(successResponse => {
           console.log(successResponse.data.result.content)
@@ -248,15 +258,14 @@ export default {
       }
 
     },
-    // nextpage(){
-    //   this.page=this.page+1
-    //   this.refreshtable()
-    // },
-    // prepage(){
-    //   this.page=this.page-1
-    //   this.refreshtable()
-    // },
+
     handleClick(row) {
+      this.$router.push({
+        path: '/ActivityInfo',
+        query: {
+          row: row
+        }
+      })
       this.aid=row.id
       this.astart_time=row.star_time
       this.aend_time=row.end_time
@@ -264,45 +273,8 @@ export default {
       this.aenroll_time=row.enroll_time
       this.afile=row.files
       this.atext=row.text
-      // let param=new FormData
-      // param.append("fid",'17')
-      // let param={
-      //   fid:'17'
-      // }
-      this.$axios.get('/file',{params:{fid:17}}).then(successResponse => {
-        console.log(successResponse)
-        let blob = new Blob([successResponse.data])
-        let url = window.URL.createObjectURL(blob)
-        this.src = url
-      })
-      // this.$refs.edate.innerText="a"
-      // this.$axios
-      //   .post('/no-authc/publisher/page=1', {
-      //     username: this.loginForm.username,
-      //     password: this.loginForm.password
-      //   })
-      //   .then(successResponse => {
-      //     console.log(successResponse)
-      //     if (successResponse.data.code === 200) {
-      //       // var data = this.loginForm
-      //       console.log('success')
-      //       // _this.$store.commit('login', _this.loginForm)
-      //       var path = this.$route.query.redirect
-      //       // this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
-      //       // this.$router.replace({path: '/index'})
-      //     }
-      //   })
-      //   .catch(failResponse => {
-      //   })
-    },
-    toggleSelection (rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
+
+
     },
     handleSelectionChange (val) {
       this.multipleSelection = val

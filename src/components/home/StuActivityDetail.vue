@@ -1,25 +1,25 @@
 <template>
   <div>
 
-    <div id="divSearch" style="text-align: right">
-      <el-input
-        placeholder="请根据活动名或创建者输入查找"
-        v-model="input"
-        clearable
-        style="width: 200px">
-      </el-input>
-      <el-select v-model="value" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          >
-        </el-option>
-      </el-select>
-      <el-button type="primary" style="margin-left: 10px" @click="searcht">查询</el-button>
-      <el-button type="danger" @click="clear">重置</el-button>
-    </div>
+<!--    <div id="divSearch" style="text-align: right">-->
+<!--      <el-input-->
+<!--        placeholder="请根据活动名或创建者输入查找"-->
+<!--        v-model="input"-->
+<!--        clearable-->
+<!--        style="width: 200px">-->
+<!--      </el-input>-->
+<!--      <el-select v-model="value" placeholder="请选择">-->
+<!--        <el-option-->
+<!--          v-for="item in options"-->
+<!--          :key="item.value"-->
+<!--          :label="item.label"-->
+<!--          :value="item.value"-->
+<!--          >-->
+<!--        </el-option>-->
+<!--      </el-select>-->
+<!--      <el-button type="primary" style="margin-left: 10px" @click="searcht">查询</el-button>-->
+<!--      <el-button type="danger" @click="clear">重置</el-button>-->
+<!--    </div>-->
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -208,7 +208,7 @@ export default {
       }
     },
     refreshtable(){
-      var url='/admin/order/my/pages='+this.page
+      var url='/auth/order/my/pages='+this.page
       // var url='/no_authc/allactive/page='+this.page
       console.log(url)
       this.$axios.get(url).then(successResponse => {
@@ -289,6 +289,12 @@ export default {
       this.des_=row.desc_
     },
     handleClick(row) {
+      this.$router.push({
+        path: '/JoinedActivityInfo',
+        query: {
+          row: row.active
+        }
+      })
       this.aid=row.active.id
       this.astart_time=row.active.star_time
       this.aend_time=row.active.end_time
