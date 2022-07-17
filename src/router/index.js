@@ -15,7 +15,8 @@ import StuActivityDetail from '../components/home/StuActivityDetail'
 import Myinfo from '../components/home/Myinfo'
 import modify from '../components/modify'
 import feedbackmassage from '../components/home/feedbackmassage'
-
+import ActivityInfo from '../components/home/ActivityInfo'
+import JoinedActivityInfo from '../components/home/JoinedActivityInfo'
 Vue.use(Router)
 
 export default new Router({
@@ -36,6 +37,16 @@ export default new Router({
       path: '/feedbackmassage',
       name: 'feedbackmassage',
       component: feedbackmassage
+    },
+    {
+      path: '/ActivityInfo',
+      name: 'ActivityInfo',
+      component: ActivityInfo
+    },
+    {
+      path: '/JoinedActivityInfo',
+      name: 'JoinedActivityInfo',
+      component: JoinedActivityInfo
     },
     {
       path: '/index',
