@@ -33,20 +33,20 @@
       </el-form-item>
       <el-form-item label="报名时间" required>
         <el-col :span="11">
-          <el-form-item prop="date1">
-            <el-date-picker type="date" placeholder="选择报名开始日期" v-model="ruleForm.enroll_time" style="width: 100%;"></el-date-picker>
+          <el-form-item prop="enroll_time">
+            <el-date-picker placeholder="选择报名开始日期" v-model="ruleForm.enroll_time" style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-form-item prop="date2">
+          <el-form-item prop="enroll_end_time">
             <el-date-picker placeholder="选择报名结束日期" v-model="ruleForm.enroll_end_time" style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-form-item>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="参与对象" style="float: left">
+          <el-form-item label="参与对象" style="float: left" prop="limit">
             <el-radio-group v-model="ruleForm.limit" style="margin-left: 10px">
               <el-radio label="学生"></el-radio>
               <el-radio label="教师"></el-radio>
@@ -79,51 +79,84 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="24">
-          <el-form-item label="审核流程" prop="reviewer" style="float: left">
-            <el-cascader
-              :options="options3"
-              :props="{ multiple: true, checkStrictly: true }"
-              clearable
-              v-model="ruleForm.reviewer"
-              style="width: 100%"></el-cascader>
+        <el-col :span="12">
+          <el-form-item label="审核学校" prop="sch" style="float: left">
+            <el-select v-model="ruleForm.sch" placeholder="请选择审核学校">
+              <el-option
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="审核学院" prop="aca" style="float: left">
+            <el-select v-model="ruleForm.aca" placeholder="请选择审核学院">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="参加学校" prop="can_join1" style="float: left">
+            <el-select v-model="ruleForm.can_join1" multiple placeholder="请选择参加学校">
+              <el-option
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="参加学院" prop="can_join2" style="float: left">
+            <el-select v-model="ruleForm.can_join2" multiple placeholder="请选择参加学院">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="活动详情" prop="text">
         <el-input type="textarea" autosize v-model="ruleForm.text" placeholder="在此输入活动详情页内容"></el-input>
       </el-form-item>
-      <el-form-item label="上传图片" prop="photos">
-        <el-upload
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
-          list-type="picture"
-          show-file-list="true"
-          v-model="ruleForm.photos">
-          <el-button size="small" type="primary">点击上传图片</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
-      </el-form-item>
       <el-form-item label="上传附件" prop="files">
         <el-upload
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          class="upload-file"
+          action="/admin/active/creat"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
           multiple
           :on-exceed="handleExceed"
           :file-list="fileList"
-          v-model="ruleForm.files">
-          <el-button size="small" type="primary">点击上传附件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传文件，且不超过500kb</div>
+          :auto-upload="false"
+          :on-change="handleChange"
+          name="file"
+          ref="upload"
+          show-file-list="true"
+          :http-request="httpRequest"
+          on-success="handleSuccess"
+        >
+          <el-button size="small" type="primary">点击上传附件/图片</el-button>
+          <div slot="tip" class="el-upload__tip">单个文件不超过500kb</div>
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">立即创建</el-button>
+        <el-button type="primary" @click="submitUpload">立即创建</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -132,7 +165,12 @@
 </template>
 
 <script>
+
 export default {
+  mounted: function () { // 自动触发写入的函数
+    this.refreshOptions()
+    this.refreshOptions2()
+  },
   data () {
     return {
       ruleForm: {
@@ -143,14 +181,15 @@ export default {
         tag2: '',
         name: '',
         join_num: '',
-        reviewer: [],
         text: '',
-        photos: [],
-        files: [],
         limit: '',
         enroll_time: '',
         enroll_end_time: '',
-        place: ''
+        place: '',
+        aca: '',
+        sch: '',
+        can_join1: [],
+        can_join2: []
       },
       rules: {
         name: [
@@ -190,267 +229,152 @@ export default {
           { type: 'date', required: true, message: '请选择报名结束日期', trigger: 'change' }
         ]
       },
-      options3: [{
-        value: 'zhinan',
-        label: '指南',
-        children: [{
-          value: 'shejiyuanze',
-          label: '设计原则',
-          children: [{
-            value: 'yizhi',
-            label: '一致'
-          }, {
-            value: 'fankui',
-            label: '反馈'
-          }, {
-            value: 'xiaolv',
-            label: '效率'
-          }, {
-            value: 'kekong',
-            label: '可控'
-          }]
-        }, {
-          value: 'daohang',
-          label: '导航',
-          children: [{
-            value: 'cexiangdaohang',
-            label: '侧向导航'
-          }, {
-            value: 'dingbudaohang',
-            label: '顶部导航'
-          }]
-        }]
-      }, {
-        value: 'zujian',
-        label: '组件',
-        children: [{
-          value: 'basic',
-          label: 'Basic',
-          children: [{
-            value: 'layout',
-            label: 'Layout 布局'
-          }, {
-            value: 'color',
-            label: 'Color 色彩'
-          }, {
-            value: 'typography',
-            label: 'Typography 字体'
-          }, {
-            value: 'icon',
-            label: 'Icon 图标'
-          }, {
-            value: 'button',
-            label: 'Button 按钮'
-          }]
-        }, {
-          value: 'form',
-          label: 'Form',
-          children: [{
-            value: 'radio',
-            label: 'Radio 单选框'
-          }, {
-            value: 'checkbox',
-            label: 'Checkbox 多选框'
-          }, {
-            value: 'input',
-            label: 'Input 输入框'
-          }, {
-            value: 'input-number',
-            label: 'InputNumber 计数器'
-          }, {
-            value: 'select',
-            label: 'Select 选择器'
-          }, {
-            value: 'cascader',
-            label: 'Cascader 级联选择器'
-          }, {
-            value: 'switch',
-            label: 'Switch 开关'
-          }, {
-            value: 'slider',
-            label: 'Slider 滑块'
-          }, {
-            value: 'time-picker',
-            label: 'TimePicker 时间选择器'
-          }, {
-            value: 'date-picker',
-            label: 'DatePicker 日期选择器'
-          }, {
-            value: 'datetime-picker',
-            label: 'DateTimePicker 日期时间选择器'
-          }, {
-            value: 'upload',
-            label: 'Upload 上传'
-          }, {
-            value: 'rate',
-            label: 'Rate 评分'
-          }, {
-            value: 'form',
-            label: 'Form 表单'
-          }]
-        }, {
-          value: 'data',
-          label: 'Data',
-          children: [{
-            value: 'table',
-            label: 'Table 表格'
-          }, {
-            value: 'tag',
-            label: 'Tag 标签'
-          }, {
-            value: 'progress',
-            label: 'Progress 进度条'
-          }, {
-            value: 'tree',
-            label: 'Tree 树形控件'
-          }, {
-            value: 'pagination',
-            label: 'Pagination 分页'
-          }, {
-            value: 'badge',
-            label: 'Badge 标记'
-          }]
-        }, {
-          value: 'notice',
-          label: 'Notice',
-          children: [{
-            value: 'alert',
-            label: 'Alert 警告'
-          }, {
-            value: 'loading',
-            label: 'Loading 加载'
-          }, {
-            value: 'message',
-            label: 'Message 消息提示'
-          }, {
-            value: 'message-box',
-            label: 'MessageBox 弹框'
-          }, {
-            value: 'notification',
-            label: 'Notification 通知'
-          }]
-        }, {
-          value: 'navigation',
-          label: 'Navigation',
-          children: [{
-            value: 'menu',
-            label: 'NavMenu 导航菜单'
-          }, {
-            value: 'tabs',
-            label: 'Tabs 标签页'
-          }, {
-            value: 'breadcrumb',
-            label: 'Breadcrumb 面包屑'
-          }, {
-            value: 'dropdown',
-            label: 'Dropdown 下拉菜单'
-          }, {
-            value: 'steps',
-            label: 'Steps 步骤条'
-          }]
-        }, {
-          value: 'others',
-          label: 'Others',
-          children: [{
-            value: 'dialog',
-            label: 'Dialog 对话框'
-          }, {
-            value: 'tooltip',
-            label: 'Tooltip 文字提示'
-          }, {
-            value: 'popover',
-            label: 'Popover 弹出框'
-          }, {
-            value: 'card',
-            label: 'Card 卡片'
-          }, {
-            value: 'carousel',
-            label: 'Carousel 走马灯'
-          }, {
-            value: 'collapse',
-            label: 'Collapse 折叠面板'
-          }]
-        }]
-      }, {
-        value: 'ziyuan',
-        label: '资源',
-        children: [{
-          value: 'axure',
-          label: 'Axure Components'
-        }, {
-          value: 'sketch',
-          label: 'Sketch Templates'
-        }, {
-          value: 'jiaohu',
-          label: '组件交互文档'
-        }]
-      }],
-      fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      options2: [],
+      options: [],
+      photoList: [],
+      fileList: [],
+      headers: {
+        Authorization: 'Bearer ' + window.localStorage.getItem('token')
+      },
+      params: {},
+      file: []
+      // param: {}
     }
   },
   methods: {
-    submitForm () {
-      console.log(this.ruleForm)
-      let param = new FormData()
-      // param.append('star_time', this.ruleForm.star_time)
-      // param.append('end_time', this.ruleForm.end_time)
-      // param.append('theme', this.ruleForm.theme)
-      // param.append('tag1', this.ruleForm.tag1)
-      // param.append('tag2', this.ruleForm.tag2)
-      // param.append('name', this.ruleForm.name)
-      // param.append('join_num', this.ruleForm.join_num)
-      // param.append('reviewer', this.ruleForm.reviewer)
-      // param.append('text', this.ruleForm.text)
-      // param.append('limit', this.ruleForm.limit)
-      // param.append('enroll_time', this.ruleForm.enroll_time)
-      // param.append('enroll_end_time', this.ruleForm.enroll_end_time)
-      // param.append('place', this.ruleForm.place)
-      param.append('star_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
-      param.append('end_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
-      param.append('theme', '诚邀新友，共赏明月')
-      param.append('tag1', '校内活动')
-      param.append('tag2', '线下活动')
-      param.append('name', '寝室文化节')
-      param.append('join_num', 100)
-      param.append('reviewer', ['软件学院'])
-      param.append('text', '111111111111111')
-      param.append('limit', '全部')
-      param.append('enroll_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
-      param.append('enroll_end_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
-      param.append('place', '二基楼报告厅')
-      param.append('can_join', '四川大学')
-      let url = '/admin/active/creat'
-      this.$axios.post(url, param).then(res => {
-        console.log('请求成功')
-        console.log(res)
-      }).catch(error => {
-        console.log('请求失败')
-        console.log(error)
-      })
-    },
-    // {
-    //   star_time: this.ruleForm.star_time,
-    //     end_time: this.ruleForm.end_time,
-    //   theme: this.ruleForm.theme,
-    //   tag1: this.ruleForm.tag1,
-    //   tag2: this.ruleForm.tag2,
-    //   name: this.ruleForm.name,
-    //   join_num: this.ruleForm.join_num,
-    //   reviewer: this.ruleForm.reviewer,
-    //   text: this.ruleForm.text,
-    //   limit: this.ruleForm.limit,
-    //   enroll_time: this.ruleForm.enroll_time,
-    //   enroll_end_time: this.ruleForm.enroll_end_time,
-    //   place: this.ruleForm.place
-    // }
     resetForm (formName) {
       this.$refs[formName].resetFields()
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)
+      fileList.remove(file)
     },
     handlePreview (file) {
       console.log(file)
+    },
+    submitUpload () {
+      var param = new FormData()
+      this.$refs.upload.submit()
+      this.file.forEach(function (file) {
+        param.append('file', file, file.name)
+      })
+      var num = parseInt(this.ruleForm.join_num)
+      var canJoin = this.ruleForm.can_join1.concat(this.ruleForm.can_join2)
+      // param.append('star_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
+      // param.append('end_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
+      // param.append('theme', '诚邀新友，共赏明月')
+      // param.append('tag1', '校内活动')
+      // param.append('tag2', '线下活动')
+      // param.append('name', '寝室文化节')
+      // param.append('join_num', 100)
+      // param.append('aca', '软件学院')
+      // param.append('sch', '四川大学')
+      // param.append('text', '111111111111111')
+      // param.append('limit', '全部')
+      // param.append('enroll_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
+      // param.append('enroll_end_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
+      // param.append('place', '二基楼报告厅')
+      // param.append('can_join', '四川大学')
+      // param.append('body', JSON.stringify(this.newData))
+      param.append('star_time', this.ruleForm.star_time)
+      param.append('end_time', this.ruleForm.end_time)
+      param.append('theme', this.ruleForm.theme)
+      param.append('tag1', this.ruleForm.tag1)
+      param.append('tag2', this.ruleForm.tag2)
+      param.append('name', this.ruleForm.name)
+      param.append('join_num', num)
+      param.append('text', this.ruleForm.text)
+      param.append('limit', this.ruleForm.limit)
+      param.append('enroll_time', this.ruleForm.enroll_time)
+      param.append('enroll_end_time', this.ruleForm.enroll_end_time)
+      param.append('place', this.ruleForm.place)
+      param.append('aca', this.ruleForm.aca)
+      param.append('sch', this.ruleForm.sch)
+      param.append('place', this.ruleForm.place)
+      param.append('can_join', canJoin)
+      let config = {
+        header: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      this.$axios.post('/admin/active/creat', param, config).then(response => {
+        console.log('请求成功')
+        console.log(response)
+        this.$refs.upload.clearFiles()
+        this.$refs['ruleForm'].resetFields()
+        this.$message({
+          type: 'info',
+          message: '创建成功'
+        })
+        // this.openMessage()
+        // 接口成功调用params上的onSuccess函数，会触发默认的successHandler函数
+        // 这样可以用自带的ui等
+        // params.onSuccess({name: 'eric'})
+      }).catch(err => {
+        console.log('请求失败')
+        console.log(err)
+      })
+    },
+    handleChange (file, fileList) {
+      console.log(fileList)
+      console.log(file)
+      this.fileList = fileList
+    },
+    httpRequest (param) {
+      // this.photoList = fd.fileList
+      this.file.push(param.file)
+      // console.log(this.photoList)
+    },
+    getFile (event) {
+      this.files = event.target.files
+    },
+    refreshOptions () {
+      var url = '/un-authc/user/academy'
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          var temp = successResponse.data.result
+          console.log(temp)
+          for (var i = 0; i < temp.length; i++) {
+            var a = {'label': temp[i].username, 'value': temp[i].username}
+            this.options.push(a)
+          }
+          console.log(this.options)
+        }
+      })
+        .catch(failResponse => {
+          console.log(failResponse)
+        })
+    },
+    refreshOptions2 () {
+      var url = '/un-authc/user/school'
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          var temp = successResponse.data.result
+          for (var i = 0; i < temp.length; i++) {
+            var a = {'label': temp[i].username, 'value': temp[i].username}
+            this.options2.push(a)
+          }
+          console.log(this.options2)
+        }
+      })
+        .catch(failResponse => {
+          console.log('请求失败')
+        })
+    },
+    openMessage () {
+      this.$alert('创建成功！', '提示', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$message({
+            type: 'info',
+            message: `action: $ { action }`
+          })
+        }
+      })
     }
   }
 }

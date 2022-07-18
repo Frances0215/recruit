@@ -1,6 +1,5 @@
 <template>
   <div>
-    <img :src=this.src style="width:50%;height:50%">
     <el-carousel :interval="4000" type="card" height="200px">
       <el-carousel-item v-for="item in 6" :key="item">
         <h3 class="medium">{{ item }}</h3>
@@ -16,25 +15,6 @@
         <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
       </el-input>
     </div>
-<!--    <div id="divSearch" style="text-align: right">-->
-<!--      <el-input-->
-<!--        placeholder="请根据活动名或创建者输入查找"-->
-<!--        v-model="input"-->
-<!--        clearable-->
-<!--        style="width: 300px">-->
-<!--      </el-input>-->
-<!--      <el-select v-model="value" placeholder="请选择">-->
-<!--        <el-option-->
-<!--          v-for="item in options"-->
-<!--          :key="item.value"-->
-<!--          :label="item.label"-->
-<!--          :value="item.value"-->
-<!--          :size="mini">-->
-<!--        </el-option>-->
-<!--      </el-select>-->
-<!--      <el-button type="primary" style="margin-left: 10px" @click="searcht" icon="el-icon-search">查询</el-button>-->
-<!--      <el-button type="danger" @click="clear">重置</el-button>-->
-<!--    </div>-->
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -273,8 +253,6 @@ export default {
       this.aenroll_time=row.enroll_time
       this.afile=row.files
       this.atext=row.text
-
-
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -319,5 +297,12 @@ export default {
 
 .box-card {
   width: 480px;
+}
+
+.el-scrollbar__wrap {
+  overflow: scroll;
+  height: 100%;
+  margin-bottom: 0px;
+  margin-right: 0px;
 }
 </style>
