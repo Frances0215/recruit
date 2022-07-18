@@ -7,7 +7,7 @@
 <!--    <div class="block">-->
 <!--      <el-image :src="src"></el-image>-->
 <!--    </div>-->
-    <div class="block">
+    <div class="block" v-if="carouselTableVisible">
       <el-carousel trigger="click" height="350px" type="card">
         <el-carousel-item v-for="url in items" :key="url">
           <el-image
@@ -18,7 +18,7 @@
       </el-carousel>
     </div>
     <br>
-    <el-descriptions class="margin-top"  :column="3" :size="size" border>
+    <el-descriptions class="margin-top"  :column="2" border>
       <template slot="extra">
         <el-button type="primary" size="small" @click="dialogTableVisible=true" :disabled='this.avaible'>{{ this.bttext }}</el-button>
       </template>
@@ -28,7 +28,14 @@
       <el-descriptions-item label="活动时间">{{ this.astart_time+'-'+this.aend_time }}</el-descriptions-item>
       <el-descriptions-item label="报名时间">{{ this.aenroll_time }}</el-descriptions-item>
       <el-descriptions-item label="活动描述">{{ this.atext }}</el-descriptions-item>
-      <el-descriptions-item label="活动附件">{{ this.afile }}</el-descriptions-item>
+      <el-descriptions-item label="活动附件" >
+<!--        <el-link @click="downloadFile(this.src)" target="_blank">默认链接</el-link>-->
+<!--      <button @click="downloadFile(item)"  v-for="item in blobfile" :key="item">a标签下载</button>-->
+        <div v-for="item in blobfile" :key="item">
+          <el-link @click="downloadFile(item)" >{{ item.filename }}<br></el-link>
+        </div>
+
+      </el-descriptions-item>
     </el-descriptions>
 
     <el-dialog title="报名信息" :visible.sync="dialogTableVisible">
@@ -60,6 +67,7 @@ export default {
   },
   data () {
     return {
+      carouselTableVisible: false,
       avaible: false,
       bttext: '报 名',
       aid: null,
@@ -93,10 +101,28 @@ export default {
         region: '',
         confirm: ''
       },
-      items: []
+      items: [],
+      file: [],
+      blobfile: []
     }
   },
   methods: {
+    // downloadFile (url, fileName = 'a') {
+    //   let link = document.createElement('a')
+    //   link.style.display = 'none'
+    //   link.href = url
+    //   link.setAttribute('download', fileName)
+    //   document.body.appendChild(link)
+    //   link.click()
+    // },
+    downloadFile (item) {
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = item.src
+      link.setAttribute('download', item.filename)
+      document.body.appendChild(link)
+      link.click()
+    },
     submit () {
       this.$axios.post('/auth/join', {id: this.aid}).then(resp => {
         if (resp && resp.data.code === 200) {
@@ -128,29 +154,81 @@ export default {
           this.afile = this.row.files
           this.atext = this.row.text
           this.$axios.post('auth/can_join', {aid: 23, uid: 3}).then(successResponse => {
-            console.log(successResponse.data.result)
+            // console.log(successResponse.data.result)
             if (successResponse && successResponse.data.code === 200) {
               if (!successResponse.data.result) {
-                console.log('auth/can_join')
+                // console.log('auth/can_join')
                 this.bttext = '没有报名资格'
                 this.avaible = true
               }
             }
           })
-          this.$axios.get('/file/f78pe5QQ图片20210901104628.png', {responseType: 'blob'}).then(successResponse => {
-            // console.log(successResponse.data)
-            // let blob = new Blob([successResponse.data])
-            // let url = window.URL.createObjectURL(blob)
-            this.src = window.URL.createObjectURL(successResponse.data)
-            this.items.push(this.src)
-          })
-          this.$axios.get('/file/v3uis0InkedUFOZJXZGO@P4U6VQ_T@X2$G_LI.jpg', {responseType: 'blob'}).then(successResponse => {
-            // console.log(successResponse.data)
-            // let blob = new Blob([successResponse.data])
-            // let url = window.URL.createObjectURL(blob)
-            this.src = window.URL.createObjectURL(successResponse.data)
-            this.items.push(this.src)
-          })
+          if (this.afile != null && this.afile.length > 0) {
+            // console.log('has')
+            var photo = []
+            for (var k = 0; k < this.afile.length; k++) {
+              var item = this.afile[k]
+              if (item.type === 'photo') {
+                var index = item.url.indexOf('files')
+                item.url = item.url.substring(index + 5, item.url.length)
+                photo.push(item)
+              } else {
+                var index1 = item.url.indexOf('files')
+                item.url = item.url.substring(index1 + 5, item.url.length)
+                this.file.push({url: item.url, filename: item.name})
+                console.log(this.file)
+              }
+            }
+            this.afile.forEach(function (item) {
+
+            })
+            if (photo.length > 0) {
+              this.carouselTableVisible = true
+              for (var i = 0; i < photo.length; i++) {
+                var url = '/file' + photo[i].url
+                this.$axios.get(url, {responseType: 'blob'}).then(successResponse => {
+                  // console.log(successResponse.data)
+                  // let blob = new Blob([successResponse.data])
+                  // let url = window.URL.createObjectURL(blob)
+                  this.src = window.URL.createObjectURL(successResponse.data)
+                  this.items.push(this.src)
+                  // console.log(this.items)
+                })
+              }
+            }
+            if (this.file.length > 0) {
+              console.log('file')
+
+              for (var j = 0; j < this.file.length; j++) {
+                var temp = j
+                var url1 = '/file' + this.file[j].url
+                // console.log(url1)
+                this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+                  console.log(successResponse)
+                  // let blob = new Blob([successResponse.data])
+                  // let url = window.URL.createObjectURL(blob)
+                  this.src = window.URL.createObjectURL(successResponse.data)
+                  // console.log(this.file[temp])
+                  this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+                })
+              }
+            }
+          }
+          console.log(this.blobfile)
+          // this.$axios.get('/file/f78pe5QQ图片20210901104628.png', {responseType: 'blob'}).then(successResponse => {
+          //   // console.log(successResponse.data)
+          //   // let blob = new Blob([successResponse.data])
+          //   // let url = window.URL.createObjectURL(blob)
+          //   this.src = window.URL.createObjectURL(successResponse.data)
+          //   this.items.push(this.src)
+          // })
+          // this.$axios.get('/file/v3uis0InkedUFOZJXZGO@P4U6VQ_T@X2$G_LI.jpg', {responseType: 'blob'}).then(successResponse => {
+          //   // console.log(successResponse.data)
+          //   // let blob = new Blob([successResponse.data])
+          //   // let url = window.URL.createObjectURL(blob)
+          //   this.src = window.URL.createObjectURL(successResponse.data)
+          //   this.items.push(this.src)
+          // })
         }
       })
     },

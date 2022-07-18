@@ -140,6 +140,14 @@ export default {
               }
             })
           }
+          if (this.role === '学生' || this.role === '教师') {
+            this.$router.push({
+              path: '/StuActivityDetail',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
           if (this.role === '学院') {
             this.$router.push({
               path: '/feedbackaca',

@@ -86,10 +86,10 @@
         label="操作"
         width="300">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row),dialogTableVisible = true" type="text" size="small">查看详情</el-button>
-          <el-button @click="handlefeedClick(scope.row),dialogFeedbackVisible = true" type="text" size="small">查看反馈</el-button>
+          <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
+          <el-button @click="handleEdit(scope.row)" type="text" size="small">查看反馈</el-button>
           <el-button @click="handlefeedClick(scope.row),dialogFeedbackVisible = true" type="text" size="small">附件下载</el-button>
-          <el-button @click="handlefeedClick(scope.row),dialogFeedbackVisible = true" type="text" size="small">附件上传</el-button>
+          <el-button @click="handlefeedClick(scope.row)" type="text" size="small">附件上传</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -188,11 +188,54 @@ export default {
         value: '2',
         label: '活动名'
       }],
-      value: '1'
+      value: '1',
+      file:[]
     }
   },
 
   methods: {
+    handleEdit (row) {
+      this.aid = row.id
+      console.log(row.id)
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/feedbackmassage',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+          if (this.role === '学生'||'教师') {
+            this.$router.push({
+              path: '/feedbackmassage',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+          if (this.role === '学院') {
+            this.$router.push({
+              path: '/feedbackmassageaca',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+          if (this.role === '学校') {
+            this.$router.push({
+              path: '/feedbackmassageSch',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+        }
+      })
+    },
     clear(){
       this.mode=1
       this.page=1
