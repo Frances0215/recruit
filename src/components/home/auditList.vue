@@ -1,108 +1,183 @@
 <template>
   <body>
   <div style="margin-top: 15px;">
-    <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
-      <el-select v-model="select" slot="prepend" placeholder="请选择">
-        <el-option label="活动名称" value="1"></el-option>
-        <el-option label="学生姓名" value="2"></el-option>
-        <el-option label="教师姓名" value="3"></el-option>
+    <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+      <el-select v-model="value" slot="prepend" placeholder="请选择">
+        <el-option label="待审核活动ID" value="2"></el-option>
+        <el-option label="报名学生/老师ID" value="1"></el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
+      <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
     </el-input>
   </div>
-  <el-row style="margin-top: 10px">
-      <el-button size="mini"
-                 @click="handleEdit(scope.$index, scope.row)"
-                 style="float: left"
-                 type="danger" round>删除记录</el-button>
-  </el-row>
+<!--  <el-row style="margin-top: 10px">-->
+<!--      <el-button size="mini"-->
+<!--                 @click="handleEdit(scope.$index, scope.row)"-->
+<!--                 style="float: left"-->
+<!--                 type="danger" round>删除记录</el-button>-->
+<!--  </el-row>-->
   <el-table
     ref="multipleTable"
     :data="tableData"
     tooltip-effect="dark"
     style="width: 100%"
     @selection-change="handleSelectionChange">
+<!--    <el-table-column-->
+<!--      type="selection"-->
+<!--      width="55">-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--      label="审批日期"-->
+<!--      width="180">-->
+<!--      <template slot-scope="scope">-->
+<!--        <i class="el-icon-time"></i>-->
+<!--        <span style="margin-left: 10px">{{ scope.row.date }}</span>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--      label="申请日期"-->
+<!--      width="180">-->
+<!--      <template slot-scope="scope">-->
+<!--        <i class="el-icon-time"></i>-->
+<!--        <span style="margin-left: 10px">{{ scope.row.date }}</span>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--      label="姓名"-->
+<!--      width="180">-->
+<!--      <template slot-scope="scope">-->
+<!--        <el-popover trigger="hover" placement="top">-->
+<!--          <p>姓名: {{ scope.row.name }}</p>-->
+<!--          <p>住址: {{ scope.row.address }}</p>-->
+<!--          <div slot="reference" class="name-wrapper">-->
+<!--            &lt;!&ndash;            <i class="el-icon-user"></i>&ndash;&gt;-->
+<!--            <el-tag size="medium">{{ scope.row.name }}</el-tag>-->
+<!--          </div>-->
+<!--        </el-popover>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--      label="身份"-->
+<!--      width="180">-->
+<!--      <template slot-scope="scope">-->
+<!--        <span style="margin-left: 10px">{{ scope.row.typee }}</span>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--      label="活动"-->
+<!--      width="180">-->
+<!--      <template slot-scope="scope">-->
+<!--        <el-popover trigger="hover" placement="top">-->
+<!--          <p>活动名称: {{ scope.row.activity }}</p>-->
+<!--          <p>举办地址: {{ scope.row.activityAddress }}</p>-->
+<!--          <div slot="reference" class="name-wrapper">-->
+<!--            &lt;!&ndash;            <i class="el-icon-s-flag"></i>&ndash;&gt;-->
+<!--            <el-tag size="medium">{{ scope.row.activity }}</el-tag>-->
+<!--          </div>-->
+<!--        </el-popover>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--      label="活动状态"-->
+<!--      width="180">-->
+<!--      <template slot-scope="scope">-->
+<!--        <i class="el-icon-video-pause"></i>-->
+<!--        <span style="margin-left: 10px">{{ scope.row.statuss }}</span>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--      label="审批结果"-->
+<!--      width="180">-->
+<!--      <template slot-scope="scope">-->
+<!--        <i class="el-icon-circle-check"></i>-->
+<!--        <span style="margin-left: 10px">{{ scope.row.result }}</span>-->
+<!--      </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column-->
+<!--      prop="active.id"-->
+<!--      label="活动ID"-->
+<!--      width="120"-->
+<!--      show-overflow-tooltip>-->
+<!--    </el-table-column>-->
     <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
-      label="审批日期"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ scope.row.date }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="申请日期"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ scope.row.date }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
+      prop="user.username"
       label="姓名"
-      width="180">
-      <template slot-scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>姓名: {{ scope.row.name }}</p>
-          <p>住址: {{ scope.row.address }}</p>
-          <div slot="reference" class="name-wrapper">
-            <!--            <i class="el-icon-user"></i>-->
-            <el-tag size="medium">{{ scope.row.name }}</el-tag>
-          </div>
-        </el-popover>
-      </template>
+      width="120"
+      show-overflow-tooltip>
+      <!--      <template slot-scope="scope">-->
+      <!--        <el-popover trigger="hover" placement="top">-->
+      <!--          <p>姓名: {{ scope.row.name }}</p>-->
+      <!--          <p>住址: {{ scope.row.address }}</p>-->
+      <!--          <div slot="reference" class="name-wrapper">-->
+      <!--&lt;!&ndash;            <i class="el-icon-user"></i>&ndash;&gt;-->
+      <!--            <el-tag size="medium">{{ scope.row.name }}</el-tag>-->
+      <!--          </div>-->
+      <!--        </el-popover>-->
+      <!--      </template>-->
     </el-table-column>
     <el-table-column
+      prop="user.id"
+      label="报名者ID"
+      width="120"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="user.father"
+      label="学院"
+      width="120"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="status"
+      label="报名状态"
+      width="120"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="user.role"
       label="身份"
-      width="180">
-      <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.typee }}</span>
-      </template>
+      width="120"
+      show-overflow-tooltip>
     </el-table-column>
     <el-table-column
+      prop="aid"
+      label="活动id"
+      width="120"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="active.name"
       label="活动"
-      width="180">
-      <template slot-scope="scope">
-        <el-popover trigger="hover" placement="top">
-          <p>活动名称: {{ scope.row.activity }}</p>
-          <p>举办地址: {{ scope.row.activityAddress }}</p>
-          <div slot="reference" class="name-wrapper">
-            <!--            <i class="el-icon-s-flag"></i>-->
-            <el-tag size="medium">{{ scope.row.activity }}</el-tag>
-          </div>
-        </el-popover>
-      </template>
+      width="120"
+      show-overflow-tooltip>
+      <!--      <template slot-scope="scope">-->
+      <!--        <el-popover trigger="hover" placement="top">-->
+      <!--          <p>活动名称: {{ activename }}</p>-->
+      <!--          <p>举办地址: {{ scope.row.activityAddress }}</p>-->
+      <!--          <div slot="reference" class="name-wrapper">-->
+      <!--            <el-tag size="medium">{{ scope.row.activity }}</el-tag>-->
+      <!--          </div>-->
+      <!--        </el-popover>-->
+      <!--      </template>-->
     </el-table-column>
     <el-table-column
-      label="活动状态"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-video-pause"></i>
-        <span style="margin-left: 10px">{{ scope.row.statuss }}</span>
-      </template>
+      prop="active.limit_"
+      label="限制参与"
+      width="120"
+      show-overflow-tooltip>
     </el-table-column>
     <el-table-column
-      label="审批结果"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-circle-check"></i>
-        <span style="margin-left: 10px">{{ scope.row.result }}</span>
-      </template>
+      prop="active.join_num"
+      label="活动总名额"
+      width="120"
+      show-overflow-tooltip>
     </el-table-column>
   </el-table>
   <div class="block" style="margin-top: 10px">
     <el-pagination
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
+      layout="total, prev, pager, next, jumper"
+      :total="this.total">
     </el-pagination>
   </div>
   </body>
@@ -117,63 +192,117 @@
 </style>
 <script>
 export default {
+  mounted: function () {
+    this.refreshtable()
+  },
+  detail: {name: 'd'},
   data () {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        activity: '寝室文化节',
-        activityAddress: '四川大学江安校区',
-        result: '通过',
-        statuss: '报名阶段',
-        typee: '学生'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        activity: '寝室文化节',
-        activityAddress: '四川大学江安校区',
-        address: '上海市普陀区金沙江路 1517 弄',
-        result: '通过',
-        statuss: '报名阶段',
-        typee: '学生'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        activity: '寝室文化节',
-        activityAddress: '四川大学江安校区',
-        address: '上海市普陀区金沙江路 1519 弄',
-        result: '通过',
-        statuss: '报名阶段',
-        typee: '学生'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        activity: '寝室文化节',
-        activityAddress: '四川大学江安校区',
-        address: '上海市普陀区金沙江路 1516 弄',
-        result: '通过',
-        statuss: '报名阶段',
-        typee: '学生'
-      }],
+      tableData: [],
+      tableData1: [],
       multipleSelection: [],
-      input3: '',
+      input: '',
+      date: '',
+      name: '',
+      address: '',
+      activity: '',
+      activityAddress: '',
+      restS: '',
+      statuss: '',
+      typee: '',
+      status: '',
+      currentPage4: 1,
       select: '',
-      currentPage4: 1
+      currentPage: 1,
+      total: 1,
+      page: 1,
+      role: '',
+      mode: 1,
+      activename: '',
+      publisher: '',
+      id: '',
+      ids: [],
+      sels: [],
+      orders: [],
+      options: [{
+        value: '1',
+        label: '发布者'
+      }, {
+        value: '2',
+        label: '活动名'
+      }],
+      value: '1'
     }
   },
   methods: {
+    clear () {
+      this.mode = 1
+      this.page = 1
+      this.refreshtable()
+    },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
+    },
+    searcht () {
+      this.mode = 2
+      // console.log(this.input)
+      if (this.value === '1') {
+        console.log('3')
+        this.$axios.post('/admin/userjoin/pages=1', {
+          uid: parseInt(this.input),
+          status: ''
+        }).then(successResponse => {
+          console.log('success')
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      } else {
+        console.log(this.value)
+        this.$axios.post('/admin/order/find/pages=1', {
+          aid: parseInt(this.input),
+          father: '',
+          status: '',
+          grandfather: ''
+        }).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      }
     },
     handleEdit (index, row) {
       console.log(index, row)
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.page = val
+      this.refreshtable()
     },
     handleDelete (index, row) {
       console.log(index, row)
+    },
+    refreshtable () {
+      var url = '/auth/order/deed_audit/pages=' + this.page
+      console.log(url)
+      this.$axios.post(url, {
+        status: ''
+      }).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log(successResponse.data.result.totalElements)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.activename = successResponse.data.result.content.active.name
+          console.log(successResponse.data.result.content)
+        }
+      })
+        .catch(failResponse => {
+        })
     }
   },
   toggleSelection (rows) {
