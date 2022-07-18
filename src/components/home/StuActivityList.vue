@@ -16,25 +16,6 @@
         <el-button slot="append" type="danger" @click="myact">我可以参加的活动</el-button>
       </el-input>
     </div>
-<!--    <div id="divSearch" style="text-align: right">-->
-<!--      <el-input-->
-<!--        placeholder="请根据活动名或创建者输入查找"-->
-<!--        v-model="input"-->
-<!--        clearable-->
-<!--        style="width: 300px">-->
-<!--      </el-input>-->
-<!--      <el-select v-model="value" placeholder="请选择">-->
-<!--        <el-option-->
-<!--          v-for="item in options"-->
-<!--          :key="item.value"-->
-<!--          :label="item.label"-->
-<!--          :value="item.value"-->
-<!--          :size="mini">-->
-<!--        </el-option>-->
-<!--      </el-select>-->
-<!--      <el-button type="primary" style="margin-left: 10px" @click="searcht" icon="el-icon-search">查询</el-button>-->
-<!--      <el-button type="danger" @click="clear">重置</el-button>-->
-<!--    </div>-->
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -297,12 +278,43 @@ export default {
     },
 
     handleClick(row) {
-      this.$router.push({
-        path: '/ActivityInfo',
-        query: {
-          row: row
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/ActivityInfo',
+              query: {
+                row: row
+              }
+            })
+          }
+          if (this.role === '学生') {
+            this.$router.push({
+              path: '/ActivityInfostu',
+              query: {
+                row: row
+              }
+            })
+          }
+          if (this.role === '教师') {
+            this.$router.push({
+              path: '/ActivityInfostu',
+              query: {
+                row: row
+              }
+            })
+          }
+
         }
       })
+      // this.$router.push({
+      //   path: '/ActivityInfo',
+      //   query: {
+      //     row: row
+      //   }
+      // })
       this.aid=row.id
       this.astart_time=row.star_time
       this.aend_time=row.end_time
@@ -310,8 +322,6 @@ export default {
       this.aenroll_time=row.enroll_time
       this.afile=row.files
       this.atext=row.text
-
-
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -356,5 +366,12 @@ export default {
 
 .box-card {
   width: 480px;
+}
+
+.el-scrollbar__wrap {
+  overflow: scroll;
+  height: 100%;
+  margin-bottom: 0px;
+  margin-right: 0px;
 }
 </style>

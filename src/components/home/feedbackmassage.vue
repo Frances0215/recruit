@@ -118,9 +118,8 @@ export default {
           if (successResponse.data.code === 200) {
             console.log(successResponse.data.result.totalElements)
             this.total = successResponse.data.result.totalElements
-            this.id = successResponse.data.result.id
-            this.desc_ = successResponse.data.result.desc_
-            console.log(this.id, this.desc_)
+            this.tableData = successResponse.data.result.content
+            console.log(this.tableData)
           }
         })
     },

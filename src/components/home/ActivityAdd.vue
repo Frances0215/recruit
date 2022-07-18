@@ -15,100 +15,148 @@
         </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="活动地点" prop="address">
-        <el-input v-model="ruleForm.address"></el-input>
+      <el-form-item label="活动地点" prop="place">
+        <el-input v-model="ruleForm.place"></el-input>
       </el-form-item>
       <el-form-item label="活动时间" required>
         <el-col :span="11">
-          <el-form-item prop="date1">
-            <el-date-picker type="date" placeholder="选择开始日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+          <el-form-item prop="star_time">
+            <el-date-picker type="date" placeholder="选择开始日期" v-model="ruleForm.star_time" style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-form-item prop="date2">
-            <el-date-picker placeholder="选择结束日期" v-model="ruleForm.date2" style="width: 100%;"></el-date-picker>
+          <el-form-item prop="end_time">
+            <el-date-picker placeholder="选择结束日期" v-model="ruleForm.end_time" style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-form-item>
       <el-form-item label="报名时间" required>
         <el-col :span="11">
-          <el-form-item prop="date1">
-            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+          <el-form-item prop="enroll_time">
+            <el-date-picker placeholder="选择报名开始日期" v-model="ruleForm.enroll_time" style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col class="line" :span="2">-</el-col>
         <el-col :span="11">
-          <el-form-item prop="date2">
-            <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+          <el-form-item prop="enroll_end_time">
+            <el-date-picker placeholder="选择报名结束日期" v-model="ruleForm.enroll_end_time" style="width: 100%;"></el-date-picker>
           </el-form-item>
         </el-col>
       </el-form-item>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="参与对象" prop="type" style="float: left">
-            <el-checkbox-group v-model="ruleForm.type" style="margin-left: 10px">
-              <el-checkbox label="学生" name="type"></el-checkbox>
-              <el-checkbox label="老师" name="type"></el-checkbox>
-            </el-checkbox-group>
+          <el-form-item label="参与对象" style="float: left" prop="limit">
+            <el-radio-group v-model="ruleForm.limit" style="margin-left: 10px">
+              <el-radio label="学生"></el-radio>
+              <el-radio label="教师"></el-radio>
+              <el-radio label="全部"></el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="参与人数" prop="address">
-            <el-input v-model="ruleForm.address"></el-input>
+          <el-form-item label="参与人数" prop="join_num">
+            <el-input v-model="ruleForm.join_num"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="活动形式" prop="resource" style="float: left">
-            <el-radio-group v-model="ruleForm.resource" style="margin-left: 10px">
+          <el-form-item label="进行方式" prop="tag2" style="float: left">
+            <el-radio-group v-model="ruleForm.tag2" style="margin-left: 10px">
               <el-radio label="线上活动"></el-radio>
               <el-radio label="线下活动"></el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="活动范围" prop="resource" style="float: left">
-            <el-radio-group v-model="ruleForm.resource" style="margin-left: 10px">
+          <el-form-item label="活动类型" prop="tag1" style="float: left">
+            <el-radio-group v-model="ruleForm.tag1" style="width: 100%">
               <el-radio label="校内活动"></el-radio>
               <el-radio label="校外活动"></el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="活动详情" prop="desc">
-        <el-input type="textarea" autosize v-model="ruleForm.desc" placeholder="在此输入活动详情页内容"></el-input>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="审核学校" prop="sch" style="float: left">
+            <el-select v-model="ruleForm.sch" placeholder="请选择审核学校">
+              <el-option
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="审核学院" prop="aca" style="float: left">
+            <el-select v-model="ruleForm.aca" placeholder="请选择审核学院">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="参加学校" prop="can_join1" style="float: left">
+            <el-select v-model="ruleForm.can_join1" multiple placeholder="请选择参加学校">
+              <el-option
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="参加学院" prop="can_join2" style="float: left">
+            <el-select v-model="ruleForm.can_join2" multiple placeholder="请选择参加学院">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-form-item label="活动详情" prop="text">
+        <el-input type="textarea" autosize v-model="ruleForm.text" placeholder="在此输入活动详情页内容"></el-input>
       </el-form-item>
-      <el-form-item label="上传图片">
+      <el-form-item label="上传附件" prop="files">
         <el-upload
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
-          list-type="picture"
-          show-file-list="true">
-          <el-button size="small" type="primary">点击上传图片</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="上传附件">
-        <el-upload
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          class="upload-file"
+          action="/admin/active/creat"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
           multiple
           :on-exceed="handleExceed"
-          :file-list="fileList">
-          <el-button size="small" type="primary">点击上传附件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传文件，且不超过500kb</div>
+          :file-list="fileList"
+          :auto-upload="false"
+          :on-change="handleChange"
+          name="file"
+          ref="upload"
+          show-file-list="true"
+          :http-request="httpRequest"
+          on-success="handleSuccess"
+        >
+          <el-button size="small" type="primary">点击上传附件/图片</el-button>
+          <div slot="tip" class="el-upload__tip">单个文件不超过500kb</div>
         </el-upload>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+        <el-button type="primary" @click="submitUpload">立即创建</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -117,65 +165,216 @@
 </template>
 
 <script>
+
 export default {
+  mounted: function () { // 自动触发写入的函数
+    this.refreshOptions()
+    this.refreshOptions2()
+  },
   data () {
     return {
       ruleForm: {
+        star_time: '',
+        end_time: '',
+        theme: '',
+        tag1: '',
+        tag2: '',
         name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        join_num: '',
+        text: '',
+        limit: '',
+        enroll_time: '',
+        enroll_end_time: '',
+        place: '',
+        aca: '',
+        sch: '',
+        can_join1: [],
+        can_join2: []
       },
       rules: {
         name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入活动名称', trigger: 'blur' }
         ],
-        region: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
+        theme: [
+          { required: true, message: '请输入活动主题', trigger: 'blur' }
         ],
-        date1: [
-          { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+        star_time: [
+          { type: 'date', required: true, message: '请选择开始日期', trigger: 'change' }
         ],
-        date2: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+        end_time: [
+          { type: 'date', required: true, message: '请选择结束日期', trigger: 'change' }
         ],
         type: [
           { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
         ],
-        resource: [
-          { required: true, message: '请选择活动资源', trigger: 'change' }
+        tag1: [
+          { required: true, message: '请选择活动类型', trigger: 'change' }
         ],
-        desc: [
-          { required: true, message: '请填写活动形式', trigger: 'blur' }
+        tag2: [
+          { required: true, message: '请选择活动形式', trigger: 'change' }
+        ],
+        join_num: [
+          { required: true, type: 'int', message: '请输入最大参与人数', trigger: 'blur' }
+        ],
+        limit: [
+          { required: true, message: '请选择参与对象', trigger: 'change' }
+        ],
+        text: [
+          { required: true, type: 'text', message: '请输入活动详情', trigger: 'blur' }
+        ],
+        enroll_time: [
+          { type: 'date', required: true, message: '请选择报名开始日期', trigger: 'change' }
+        ],
+        enroll_end_time: [
+          { type: 'date', required: true, message: '请选择报名结束日期', trigger: 'change' }
         ]
       },
-      fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+      options2: [],
+      options: [],
+      photoList: [],
+      fileList: [],
+      headers: {
+        Authorization: 'Bearer ' + window.localStorage.getItem('token')
+      },
+      params: {},
+      file: []
+      // param: {}
     }
   },
   methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
     resetForm (formName) {
       this.$refs[formName].resetFields()
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)
+      fileList.remove(file)
     },
     handlePreview (file) {
       console.log(file)
+    },
+    submitUpload () {
+      var param = new FormData()
+      this.$refs.upload.submit()
+      this.file.forEach(function (file) {
+        param.append('file', file, file.name)
+      })
+      var num = parseInt(this.ruleForm.join_num)
+      var canJoin = this.ruleForm.can_join1.concat(this.ruleForm.can_join2)
+      // param.append('star_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
+      // param.append('end_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
+      // param.append('theme', '诚邀新友，共赏明月')
+      // param.append('tag1', '校内活动')
+      // param.append('tag2', '线下活动')
+      // param.append('name', '寝室文化节')
+      // param.append('join_num', 100)
+      // param.append('aca', '软件学院')
+      // param.append('sch', '四川大学')
+      // param.append('text', '111111111111111')
+      // param.append('limit', '全部')
+      // param.append('enroll_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
+      // param.append('enroll_end_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
+      // param.append('place', '二基楼报告厅')
+      // param.append('can_join', '四川大学')
+      // param.append('body', JSON.stringify(this.newData))
+      param.append('star_time', this.ruleForm.star_time)
+      param.append('end_time', this.ruleForm.end_time)
+      param.append('theme', this.ruleForm.theme)
+      param.append('tag1', this.ruleForm.tag1)
+      param.append('tag2', this.ruleForm.tag2)
+      param.append('name', this.ruleForm.name)
+      param.append('join_num', num)
+      param.append('text', this.ruleForm.text)
+      param.append('limit', this.ruleForm.limit)
+      param.append('enroll_time', this.ruleForm.enroll_time)
+      param.append('enroll_end_time', this.ruleForm.enroll_end_time)
+      param.append('place', this.ruleForm.place)
+      param.append('aca', this.ruleForm.aca)
+      param.append('sch', this.ruleForm.sch)
+      param.append('place', this.ruleForm.place)
+      param.append('can_join', canJoin)
+      let config = {
+        header: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      this.$axios.post('/admin/active/creat', param, config).then(response => {
+        console.log('请求成功')
+        console.log(response)
+        this.$refs.upload.clearFiles()
+        this.$refs['ruleForm'].resetFields()
+        this.$message({
+          type: 'info',
+          message: '创建成功'
+        })
+        // this.openMessage()
+        // 接口成功调用params上的onSuccess函数，会触发默认的successHandler函数
+        // 这样可以用自带的ui等
+        // params.onSuccess({name: 'eric'})
+      }).catch(err => {
+        console.log('请求失败')
+        console.log(err)
+      })
+    },
+    handleChange (file, fileList) {
+      console.log(fileList)
+      console.log(file)
+      this.fileList = fileList
+    },
+    httpRequest (param) {
+      // this.photoList = fd.fileList
+      this.file.push(param.file)
+      // console.log(this.photoList)
+    },
+    getFile (event) {
+      this.files = event.target.files
+    },
+    refreshOptions () {
+      var url = '/un-authc/user/academy'
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          var temp = successResponse.data.result
+          console.log(temp)
+          for (var i = 0; i < temp.length; i++) {
+            var a = {'label': temp[i].username, 'value': temp[i].username}
+            this.options.push(a)
+          }
+          console.log(this.options)
+        }
+      })
+        .catch(failResponse => {
+          console.log(failResponse)
+        })
+    },
+    refreshOptions2 () {
+      var url = '/un-authc/user/school'
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          var temp = successResponse.data.result
+          for (var i = 0; i < temp.length; i++) {
+            var a = {'label': temp[i].username, 'value': temp[i].username}
+            this.options2.push(a)
+          }
+          console.log(this.options2)
+        }
+      })
+        .catch(failResponse => {
+          console.log('请求失败')
+        })
+    },
+    openMessage () {
+      this.$alert('创建成功！', '提示', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$message({
+            type: 'info',
+            message: `action: $ { action }`
+          })
+        }
+      })
     }
   }
 }

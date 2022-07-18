@@ -1,13 +1,13 @@
 <template>
   <body>
   <div style="margin-top: 15px;">
-    <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+    <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
       <el-select v-model="select" slot="prepend" placeholder="请选择">
-        <el-option label="活动名称" value="1"></el-option>
-        <el-option label="学生姓名" value="2"></el-option>
-        <el-option label="教师姓名" value="3"></el-option>
+        <el-option label="活动名称" value="2"></el-option>
+        <el-option label="发布用户" value="1"></el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
+      <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
     </el-input>
   </div>
   <el-table
@@ -92,15 +92,54 @@ export default {
     return {
       tableData: [],
       multipleSelection: [],
-      input3: '',
+      input: '',
       select: '',
       currentPage: 1,
       total: 1,
       page: 1,
-      role: ''
+      role: '',
+      mode: 1,
+      name: '',
+      publisher: '',
+      options: [{
+        value: '1',
+        label: '发布者'
+      }, {
+        value: '2',
+        label: '活动名'
+      }],
+      value: '1'
     }
   },
   methods: {
+    clear () {
+      this.mode = 1
+      this.page = 1
+      this.refreshtable()
+    },
+    searcht () {
+      this.mode = 2
+      console.log(this.input)
+      if (this.value === 1) {
+        this.$axios.post('/no-authc/publisher/page=1', {publisher: this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      } else {
+        this.$axios.post('/no-authc/name/page=1', {name: this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      }
+    },
     handleEdit (row) {
       this.aid = row.id
       console.log(row.id)

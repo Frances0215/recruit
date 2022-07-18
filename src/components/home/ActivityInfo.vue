@@ -233,9 +233,30 @@ export default {
       })
     },
     goBack () {
-      this.$router.push({
-        path: '/StuActivityList'
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/StuActivityList'
+            })
+          }
+          if (this.role === '学生') {
+            this.$router.push({
+              path: '/StuActivityListStu'
+            })
+          }
+          if (this.role === '教师') {
+            this.$router.push({
+              path: '/StuActivityListStu'
+            })
+          }
+        }
       })
+      // this.$router.push({
+      //   path: '/StuActivityList'
+      // })
     }
 
   }
