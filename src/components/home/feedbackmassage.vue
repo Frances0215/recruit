@@ -2,13 +2,13 @@
   <body>
   <el-button slot="append" style='float: left;margin-bottom: 10px' v-on:click="back" icon="el-icon-arrow-left"></el-button>
   <div>
-    <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
-      <el-select v-model="select" slot="prepend" placeholder="请选择">
-        <el-option label="活动名称" value="1"></el-option>
-        <el-option label="学生姓名" value="2"></el-option>
-        <el-option label="教师姓名" value="3"></el-option>
+    <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+      <el-select v-model="value" slot="prepend" placeholder="请选择">
+        <el-option label="学生学院" value="2"></el-option>
+        <el-option label="学生学校" value="1"></el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
+      <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
     </el-input>
   </div>
 <!--  <el-row style="margin-top: 10px">-->
@@ -22,19 +22,30 @@
     style="width: 100%"
     @selection-change="handleSelectionChange">
     <el-table-column
-      prop="aid"
+      prop="active.name"
       label="活动名称"
       width="150">
     </el-table-column>
     <el-table-column
-      prop="id"
+      prop="user.username"
       label="参与者"
+      width="150"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="status"
+      label="参与状态"
       width="150"
       show-overflow-tooltip>
     </el-table-column>
     <el-table-column
       prop="desc_"
       label="反馈内容"
+      width="150"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      label="下载图片"
       width="150"
       show-overflow-tooltip>
     </el-table-column>
@@ -74,19 +85,68 @@ export default {
     return {
       tableData: [],
       multipleSelection: [],
-      input3: '',
+      input: '',
       select: '',
       currentPage: 1,
       total: 1,
       page: 1,
+      name: '',
+      publisher: '',
       father: '',
       status: '',
       grandfather: '',
       aid: '',
-      role: ''
+      role: '',
+      mode: 1,
+      options: [{
+        value: '1',
+        label: '发布者'
+      }, {
+        value: '2',
+        label: '活动名'
+      }],
+      value: '1'
     }
   },
   methods: {
+    clear () {
+      this.mode = 1
+      this.page = 1
+      this.refreshtable()
+    },
+    searcht () {
+      this.mode = 2
+      console.log(this.input)
+      if (this.value === '1') {
+        this.$axios.post('/admin/order/find/pages=1', {
+          aid: this.aid,
+          father: '',
+          status: '已反馈',
+          grandfather: parseInt(this.input)
+        }).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      } else {
+        this.$axios.post('/admin/order/find/pages=1', {
+          aid: this.aid,
+          father: parseInt(this.input),
+          status: '已反馈',
+          grandfather: ''
+        }).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      }
+    },
     // handleEdit (row) {
     //   this.aid = row.id
     //   console.log(row.id)
@@ -109,7 +169,7 @@ export default {
         .post(url, {
           aid: this.aid,
           father: '',
-          status: '',
+          status: '已反馈',
           grandfather: ''
           // status: ''
         })
