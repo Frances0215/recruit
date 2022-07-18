@@ -169,8 +169,15 @@ export default {
             for (var k = 0; k < this.afile.length; k++) {
               var item = this.afile[k]
               if (item.type === 'photo') {
-                var index = item.url.indexOf('files')
-                item.url = item.url.substring(index + 5, item.url.length)
+                var index = item.url.indexOf('files//')
+                if (index !== -1) {
+                  item.url = item.url.substring(index + 6, item.url.length)
+                } else {
+                  index = item.url.indexOf('files/')
+                  if (index !== -1) {
+                    item.url = item.url.substring(index + 5, item.url.length)
+                  }
+                }
                 photo.push(item)
               } else {
                 var index1 = item.url.indexOf('files')
@@ -179,13 +186,11 @@ export default {
                 console.log(this.file)
               }
             }
-            this.afile.forEach(function (item) {
-
-            })
             if (photo.length > 0) {
               this.carouselTableVisible = true
               for (var i = 0; i < photo.length; i++) {
                 var url = '/file' + photo[i].url
+                console.log(url)
                 this.$axios.get(url, {responseType: 'blob'}).then(successResponse => {
                   // console.log(successResponse.data)
                   // let blob = new Blob([successResponse.data])

@@ -141,7 +141,7 @@ export default {
           }
           if (this.role === '学生' || this.role === '教师') {
             this.$router.push({
-              path: '/StuActivityDetail',
+              path: '/StuActivityDetailStu',
               query: {
                 aid: this.aid
               }
