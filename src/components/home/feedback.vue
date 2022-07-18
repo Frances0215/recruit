@@ -1,37 +1,21 @@
 <template>
   <body>
   <div style="margin-top: 15px;">
-    <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+    <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
       <el-select v-model="select" slot="prepend" placeholder="请选择">
-        <el-option label="活动名称" value="1"></el-option>
-        <el-option label="学生姓名" value="2"></el-option>
-        <el-option label="教师姓名" value="3"></el-option>
+        <el-option label="活动名称" value="2"></el-option>
+        <el-option label="发布用户" value="1"></el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
+      <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
     </el-input>
   </div>
-  <!--  <el-row style="margin-top: 10px">-->
-  <!--    <el-button size="mini"-->
-  <!--               @click="handleEdit(scope.$index, scope.row)"-->
-  <!--               style="float: left"-->
-  <!--               type="success" round>审核通过</el-button>-->
-  <!--    <el-button size="mini"-->
-  <!--               @click="handleEdit(scope.$index, scope.row)"-->
-  <!--               style="float: left"-->
-  <!--               type="danger" round>删除记录</el-button>-->
-  <!--  </el-row>-->
   <el-table
     ref="multipleTable"
     :data="tableData"
     tooltip-effect="dark"
     style="width: 100%"
     @selection-change="handleSelectionChange">
-    <!--    @selection-change="handleSelectionChange">-->
-    <!--    <el-table-header>-->
-    <!--      <el-button size="mini"-->
-    <!--                 @click="handleEdit(scope.$index, scope.row)" type="success" round>成功按钮</el-button>-->
-    <!--      <el-button type="danger" round>危险按钮</el-button>-->
-    <!--    </el-table-header>-->
     <el-table-column
       prop="id"
       label="活动ID"
@@ -42,94 +26,30 @@
       label="活动"
       width="150"
       show-overflow-tooltip>
-      <!--      <template slot-scope="scope">-->
-      <!--        <el-popover trigger="hover" placement="top">-->
-      <!--          <p>活动名称: {{ scope.row.activity }}</p>-->
-      <!--          <p>举办地址: {{ scope.row.activityAddress }}</p>-->
-      <!--          <div slot="reference" class="name-wrapper">-->
-      <!--            &lt;!&ndash;            <i class="el-icon-s-flag"></i>&ndash;&gt;-->
-      <!--            <el-tag size="medium">{{ scope.row.activity }}</el-tag>-->
-      <!--          </div>-->
-      <!--        </el-popover>-->
-      <!--      </template>-->
     </el-table-column>
-    <!--    <el-table-column-->
-    <!--      type="selection"-->
-    <!--      width="55">-->
-    <!--    </el-table-column>-->
     <el-table-column
       prop="star_time"
       label="开始时间"
       width="150"
       show-overflow-tooltip>
-      <!--      <template slot-scope="scope">-->
-      <!--        <i class="el-icon-time"></i>-->
-      <!--        <span style="margin-left: 10px">{{ scope.row.date }}</span>-->
-      <!--      </template>-->
     </el-table-column>
     <el-table-column
       prop="end_time"
       label="结束时间"
       width="150">
     </el-table-column>
-    <!--    <el-table-column-->
-    <!--      label="申请日期"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <i class="el-icon-time"></i>-->
-    <!--        <span style="margin-left: 10px">{{ scope.row.date }}</span>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="姓名"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <el-popover trigger="hover" placement="top">-->
-    <!--          <p>姓名: {{ scope.row.name }}</p>-->
-    <!--          <p>住址: {{ scope.row.address }}</p>-->
-    <!--          <div slot="reference" class="name-wrapper">-->
-    <!--            &lt;!&ndash;            <i class="el-icon-user"></i>&ndash;&gt;-->
-    <!--            <el-tag size="medium">{{ scope.row.name }}</el-tag>-->
-    <!--          </div>-->
-    <!--        </el-popover>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
     <el-table-column
       prop="tag1"
       label="活动类型"
       width="150"
       show-overflow-tooltip>
-      <!--      <template slot-scope="scope">-->
-      <!--        <i class="el-icon-video-pause"></i>-->
-      <!--        <span style="margin-left: 10px">{{ scope.row.statuss }}</span>-->
-      <!--      </template>-->
     </el-table-column>
     <el-table-column
       prop="join_num"
       label="参与人数"
       width="150"
       show-overflow-tooltip>
-      <!--      <template slot-scope="scope">-->
-      <!--        &lt;!&ndash;        <i class="el-icon-user-solid"></i>&ndash;&gt;-->
-      <!--        <span style="margin-left: 10px">{{ scope.row.num }}</span>-->
-      <!--      </template>-->
     </el-table-column>
-    <!--    <el-table-column-->
-    <!--      label="活动学生剩余名额"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <i class="el-icon-circle-check"></i>-->
-    <!--        <span style="margin-left: 10px">{{ scope.row.restS }}</span>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="已提交反馈份数"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <i class="el-icon-circle-check"></i>-->
-    <!--        <span style="margin-left: 10px">{{ scope.row.submit}}</span>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
     <el-table-column label="操作">
       <template slot-scope="scope">
         <el-button
@@ -172,21 +92,85 @@ export default {
     return {
       tableData: [],
       multipleSelection: [],
-      input3: '',
+      input: '',
       select: '',
       currentPage: 1,
       total: 1,
-      page: 1
+      page: 1,
+      role: '',
+      mode: 1,
+      name: '',
+      publisher: '',
+      options: [{
+        value: '1',
+        label: '发布者'
+      }, {
+        value: '2',
+        label: '活动名'
+      }],
+      value: '1'
     }
   },
   methods: {
+    clear () {
+      this.mode = 1
+      this.page = 1
+      this.refreshtable()
+    },
+    searcht () {
+      this.mode = 2
+      console.log(this.input)
+      if (this.value === 1) {
+        this.$axios.post('/no-authc/publisher/page=1', {publisher: this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      } else {
+        this.$axios.post('/no-authc/name/page=1', {name: this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      }
+    },
     handleEdit (row) {
       this.aid = row.id
       console.log(row.id)
-      this.$router.push({
-        path: '/feedbackmassage',
-        query: {
-          aid: this.aid
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/feedbackmassage',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+          if (this.role === '学院') {
+            this.$router.push({
+              path: '/feedbackmassageaca',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+          if (this.role === '学校') {
+            this.$router.push({
+              path: '/feedbackmassageSch',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
         }
       })
     },

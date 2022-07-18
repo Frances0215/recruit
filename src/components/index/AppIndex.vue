@@ -144,4 +144,7 @@ export default {
   vertical-align: middle;
   position: relative;
 }
+.el-card__body, .el-main {
+  padding: 0px;
+}
 </style>

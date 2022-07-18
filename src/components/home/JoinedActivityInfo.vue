@@ -102,9 +102,30 @@ export default {
       })
     },
     goBack () {
-      this.$router.push({
-        path: '/StuActivityDetail'
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/StuActivityDetail'
+            })
+          }
+          if (this.role === '学生') {
+            this.$router.push({
+              path: '/StuActivityDetailStu'
+            })
+          }
+          if (this.role === '教师') {
+            this.$router.push({
+              path: '/StuActivityDetailStu'
+            })
+          }
+        }
       })
+      // this.$router.push({
+      //   path: '/StuActivityDetail'
+      // })
     },
     changepassword () {
       if (this.formLabelAlign.confirm === this.formLabelAlign.pass) {

@@ -240,12 +240,43 @@ export default {
     },
 
     handleClick(row) {
-      this.$router.push({
-        path: '/ActivityInfo',
-        query: {
-          row: row
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/ActivityInfo',
+              query: {
+                row: row
+              }
+            })
+          }
+          if (this.role === '学生') {
+            this.$router.push({
+              path: '/ActivityInfostu',
+              query: {
+                row: row
+              }
+            })
+          }
+          if (this.role === '教师') {
+            this.$router.push({
+              path: '/ActivityInfostu',
+              query: {
+                row: row
+              }
+            })
+          }
+
         }
       })
+      // this.$router.push({
+      //   path: '/ActivityInfo',
+      //   query: {
+      //     row: row
+      //   }
+      // })
       this.aid=row.id
       this.astart_time=row.star_time
       this.aend_time=row.end_time

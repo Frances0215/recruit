@@ -289,12 +289,43 @@ export default {
       this.des_=row.desc_
     },
     handleClick(row) {
-      this.$router.push({
-        path: '/JoinedActivityInfo',
-        query: {
-          row: row.active
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/JoinedActivityInfo',
+              query: {
+                row: row.active
+              }
+            })
+          }
+          if (this.role === '学生') {
+            this.$router.push({
+              path: '/JoinedActivityInfostu',
+              query: {
+                row: row.active
+              }
+            })
+          }
+          if (this.role === '教师') {
+            this.$router.push({
+              path: '/JoinedActivityInfostu',
+              query: {
+                row: row.active
+              }
+            })
+          }
+
         }
       })
+      // this.$router.push({
+      //   path: '/JoinedActivityInfo',
+      //   query: {
+      //     row: row.active
+      //   }
+      // })
       this.aid=row.active.id
       this.astart_time=row.active.star_time
       this.aend_time=row.active.end_time

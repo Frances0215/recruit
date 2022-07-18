@@ -1,13 +1,13 @@
 <template>
   <body>
   <div style="margin-top: 15px;">
-    <el-input placeholder="请输入内容" v-model="input3" class="input-with-select">
+    <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
       <el-select v-model="select" slot="prepend" placeholder="请选择">
-        <el-option label="活动名称" value="1"></el-option>
-        <el-option label="学生姓名" value="2"></el-option>
-        <el-option label="教师姓名" value="3"></el-option>
+        <el-option label="活动名称" value="2"></el-option>
+        <el-option label="发布用户" value="1"></el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
+      <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
     </el-input>
   </div>
   <el-row style="margin-top: 10px">
@@ -32,11 +32,8 @@
     </el-table-column>
     <el-table-column
       label="申请日期"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-time"></i>
-        <span style="margin-left: 10px">{{ scope.row.date }}</span>
-      </template>
+      width="180"
+      show-overflow-tooltip>
     </el-table-column>
     <el-table-column
       label="姓名"
@@ -53,11 +50,15 @@
       </template>
     </el-table-column>
     <el-table-column
+      prop="status"
+      label="报名状态"
+      width="180"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
       label="身份"
-      width="180">
-      <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.typee }}</span>
-      </template>
+      width="180"
+      show-overflow-tooltip>
     </el-table-column>
     <el-table-column
       label="活动"
@@ -74,38 +75,20 @@
     </el-table-column>
     <el-table-column
       label="活动状态"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-video-pause"></i>
-        <span style="margin-left: 10px">{{ scope.row.statuss }}</span>
-      </template>
+      width="180"
+      show-overflow-tooltip>
     </el-table-column>
     <el-table-column
       label="活动总名额"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-circle-check"></i>
-        <span style="margin-left: 10px">{{ scope.row.restS }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="活动剩余名额"
-      width="180">
-      <template slot-scope="scope">
-        <i class="el-icon-circle-check"></i>
-        <span style="margin-left: 10px">{{ scope.row.restT }}</span>
-      </template>
+      width="180"
+      show-overflow-tooltip>
     </el-table-column>
   </el-table>
   <div class="block" style="margin-top: 10px">
     <el-pagination
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
+      layout="total, prev, pager, next, jumper"
+      :total="this.total">
     </el-pagination>
   </div>
   </body>
@@ -120,79 +103,101 @@
 </style>
 <script>
 export default {
+  mounted: function () {
+    this.refreshtable()
+  },
+  detail: {name: 'd'},
   data () {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        activity: '寝室文化节',
-        activityAddress: '四川大学江安校区',
-        restS: '5',
-        restT: '3',
-        statuss: '报名阶段',
-        typee: '学生'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        activity: '寝室文化节',
-        activityAddress: '四川大学江安校区',
-        address: '上海市普陀区金沙江路 1517 弄',
-        restS: '5',
-        restT: '3',
-        statuss: '报名阶段',
-        typee: '学生'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        activity: '寝室文化节',
-        activityAddress: '四川大学江安校区',
-        address: '上海市普陀区金沙江路 1519 弄',
-        restS: '5',
-        restT: '3',
-        statuss: '报名阶段',
-        typee: '学生'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        activity: '寝室文化节',
-        activityAddress: '四川大学江安校区',
-        address: '上海市普陀区金沙江路 1516 弄',
-        restS: '5',
-        restT: '3',
-        statuss: '报名阶段',
-        typee: '学生'
-      }],
+      tableData: [],
       multipleSelection: [],
+      input: '',
+      date: '',
+      name: '',
+      address: '',
+      activity: '',
+      activityAddress: '',
+      restS: '',
+      statuss: '',
+      typee: '',
+      status: '',
       input3: '',
+      currentPage4: 1,
       select: '',
-      currentPage4: 1
+      currentPage: 1,
+      total: 1,
+      page: 1,
+      role: '',
+      mode: 1,
+      publisher: '',
+      options: [{
+        value: '1',
+        label: '发布者'
+      }, {
+        value: '2',
+        label: '活动名'
+      }],
+      value: '1'
     }
   },
-  mounted: function () {
-    this.loadAudits()
-  },
   methods: {
+    clear () {
+      this.mode = 1
+      this.page = 1
+      this.refreshtable()
+    },
+    searcht () {
+      this.mode = 2
+      console.log(this.input)
+      if (this.value === 1) {
+        this.$axios.post('/no-authc/publisher/page=1', {publisher: this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      } else {
+        this.$axios.post('/no-authc/name/page=1', {name: this.input}).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      }
+    },
+    handleDelete (index, row) {
+      console.log(index, row)
+    },
+    handleCurrentChange (val) {
+      this.page = val
+      this.refreshtable()
+    },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
     },
     handleEdit (index, row) {
       console.log(index, row)
     },
-    handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
-    },
-    handleDelete (index, row) {
-      console.log(index, row)
+    refreshtable () {
+      var url = '/auth/order/deed_audit/pages=' + this.page
+      console.log(url)
+      this.$axios.post(url, {
+        status: '审核中'
+      }).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log(successResponse.data.result.totalElements)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          console.log(this.tableData)
+        }
+      })
+        .catch(failResponse => {
+        })
     }
-    // loadAudits () {
-    //   var _this = this
-    //   this.$axios.get('/admin/audit').then(successResponse => {
-    //     if (resp && resp.status === 200) {
-    //       _this.books = resp.data
-    //     }
-    //   })
-    // }
   },
   toggleSelection (rows) {
     if (rows) {
