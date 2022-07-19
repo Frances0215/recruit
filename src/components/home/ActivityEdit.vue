@@ -1,6 +1,8 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
+  <body>
+<!--  <el-button slot="append" style='float: left;margin-bottom: 10px' v-on:click="back" icon="el-icon-arrow-left"></el-button>-->
+<!--  <el-button style='float: left;margin-bottom: 10px' icon="el-icon-back"></el-button>-->
   <div>
-    <el-button slot="append" style='float: left;margin-bottom: 10px' v-on:click="back" icon="el-icon-arrow-left"></el-button>
     <el-row>
       <el-col :span ="24">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="medium">
@@ -165,6 +167,7 @@
       </el-col>
     </el-row>
   </div>
+  </body>
 </template>
 
 <script>
@@ -457,16 +460,16 @@ export default {
           console.log('请求失败')
           console.log(failResponse)
         })
-    },
-    back () {
-      console.log()
-      this.$router.push({
-        path: '/ActivityList',
-        query: {
-          id: this.id
-        }
-      })
     }
+    // back () {
+    //   console.log()
+    //   this.$router.push({
+    //     path: '/ActivityList',
+    //     query: {
+    //       id: this.id
+    //     }
+    //   })
+    // }
   }
 }
 </script>
