@@ -22,83 +22,6 @@
     tooltip-effect="dark"
     style="width: 100%"
     @selection-change="handleSelectionChange">
-    <!--    <el-table-column-->
-    <!--      type="selection"-->
-    <!--      width="55">-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="审批日期"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <i class="el-icon-time"></i>-->
-    <!--        <span style="margin-left: 10px">{{ scope.row.date }}</span>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="申请日期"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <i class="el-icon-time"></i>-->
-    <!--        <span style="margin-left: 10px">{{ scope.row.date }}</span>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="姓名"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <el-popover trigger="hover" placement="top">-->
-    <!--          <p>姓名: {{ scope.row.name }}</p>-->
-    <!--          <p>住址: {{ scope.row.address }}</p>-->
-    <!--          <div slot="reference" class="name-wrapper">-->
-    <!--            &lt;!&ndash;            <i class="el-icon-user"></i>&ndash;&gt;-->
-    <!--            <el-tag size="medium">{{ scope.row.name }}</el-tag>-->
-    <!--          </div>-->
-    <!--        </el-popover>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="身份"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <span style="margin-left: 10px">{{ scope.row.typee }}</span>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="活动"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <el-popover trigger="hover" placement="top">-->
-    <!--          <p>活动名称: {{ scope.row.activity }}</p>-->
-    <!--          <p>举办地址: {{ scope.row.activityAddress }}</p>-->
-    <!--          <div slot="reference" class="name-wrapper">-->
-    <!--            &lt;!&ndash;            <i class="el-icon-s-flag"></i>&ndash;&gt;-->
-    <!--            <el-tag size="medium">{{ scope.row.activity }}</el-tag>-->
-    <!--          </div>-->
-    <!--        </el-popover>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="活动状态"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <i class="el-icon-video-pause"></i>-->
-    <!--        <span style="margin-left: 10px">{{ scope.row.statuss }}</span>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      label="审批结果"-->
-    <!--      width="180">-->
-    <!--      <template slot-scope="scope">-->
-    <!--        <i class="el-icon-circle-check"></i>-->
-    <!--        <span style="margin-left: 10px">{{ scope.row.result }}</span>-->
-    <!--      </template>-->
-    <!--    </el-table-column>-->
-    <!--    <el-table-column-->
-    <!--      prop="active.id"-->
-    <!--      label="活动ID"-->
-    <!--      width="120"-->
-    <!--      show-overflow-tooltip>-->
-    <!--    </el-table-column>-->
     <el-table-column
       prop="id"
       label="用户ID"
@@ -130,7 +53,7 @@
     <el-table-column
       prop="email"
       label="邮箱"
-      width="120"
+      width="150"
       show-overflow-tooltip>
     </el-table-column>
     <el-table-column

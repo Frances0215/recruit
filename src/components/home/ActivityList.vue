@@ -9,27 +9,27 @@
           @click="clickcarousel(item.aid)"></el-image>
       </el-carousel-item>
     </el-carousel>
-  <div id="divNumber">
-    <div class="block" style="width: 25%">
-      <p class="demonstration">全部活动</p>
-      <p class="demonstration">8个</p>
-    </div>
-    <el-divider direction="vertical" style="height: 100%" content-position="center"></el-divider>
-    <div class="block" style="width: 25%">
-      <p class="demonstration">未开始</p>
-      <p class="demonstration">0个</p>
-    </div>
-    <el-divider direction="vertical"></el-divider>
-    <div class="block" style="width: 25%">
-      <p class="demonstration">报名中</p>
-      <p class="demonstration">0个</p>
-    </div>
-    <el-divider direction="vertical"></el-divider>
-    <div class="block" style="width: 25%">
-      <p class="demonstration">活动中</p>
-      <p class="demonstration">3个</p>
-    </div>
-  </div>
+<!--  <div id="divNumber">-->
+<!--    <div class="block" style="width: 25%">-->
+<!--      <p class="demonstration">全部活动</p>-->
+<!--      <p class="demonstration">8个</p>-->
+<!--    </div>-->
+<!--    <el-divider direction="vertical" style="height: 100%" content-position="center"></el-divider>-->
+<!--    <div class="block" style="width: 25%">-->
+<!--      <p class="demonstration">未开始</p>-->
+<!--      <p class="demonstration">0个</p>-->
+<!--    </div>-->
+<!--    <el-divider direction="vertical"></el-divider>-->
+<!--    <div class="block" style="width: 25%">-->
+<!--      <p class="demonstration">报名中</p>-->
+<!--      <p class="demonstration">0个</p>-->
+<!--    </div>-->
+<!--    <el-divider direction="vertical"></el-divider>-->
+<!--    <div class="block" style="width: 25%">-->
+<!--      <p class="demonstration">活动中</p>-->
+<!--      <p class="demonstration">3个</p>-->
+<!--    </div>-->
+<!--  </div>-->
 <!--    <div id="divSelect">-->
 <!--      <el-select v-model="value" placeholder="请选择地区">-->
 <!--        <el-option-->
@@ -112,7 +112,8 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange"
+        stripe="true">
         <el-table-column
           prop="id"
           label="活动ID"

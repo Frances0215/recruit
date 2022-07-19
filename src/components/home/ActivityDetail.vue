@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div style="margin-bottom: 20px">
     <br>
     <el-page-header @back="goBack" content="详情页面">
     </el-page-header>
     <br>
+    <h1 style="font-size: 35px">{{this.ruleForm.name}}</h1>
     <div class="block" v-if="carouselTableVisible">
       <el-carousel trigger="click" height="350px" type="card">
         <el-carousel-item v-for="url in items" :key="url">
@@ -17,19 +18,19 @@
     <br>
     <el-descriptions class="margin-top"  :column="2" border :contentStyle="CS" :label-style="LS ">
 
-      <el-descriptions-item label="活动ID" labelStyle='labelStyle'>{{this.aid}}</el-descriptions-item>
-      <el-descriptions-item label="活动名" labelStyle='labelStyle'>{{this.ruleForm.name}}</el-descriptions-item>
-      <el-descriptions-item label="活动地点" labelStyle='labelStyle'>{{ this.ruleForm.place}}</el-descriptions-item>
-      <el-descriptions-item label="活动主题" labelStyle='labelStyle'>{{ this.ruleForm.theme}}</el-descriptions-item>
-      <el-descriptions-item label="活动时间" labelStyle='labelStyle'>{{ this.ruleForm.star_time+'-'+this.ruleForm.end_time }}</el-descriptions-item>
-      <el-descriptions-item label="报名时间" labelStyle='labelStyle'>{{ this.ruleForm.enroll_time+'-'+this.ruleForm.enroll_end_time }}</el-descriptions-item>
-      <el-descriptions-item label="参与对象" labelStyle='labelStyle'>{{ this.ruleForm.limit}}</el-descriptions-item>
-      <el-descriptions-item label="参与人数" labelStyle='labelStyle'>{{ this.ruleForm.join_num}}</el-descriptions-item>
-      <el-descriptions-item label="进行方式" labelStyle='labelStyle'>{{ this.ruleForm.tag1}}</el-descriptions-item>
-      <el-descriptions-item label="活动类型" labelStyle='labelStyle'>{{ this.ruleForm.tag2}}</el-descriptions-item>
-      <el-descriptions-item label="审核流程" labelStyle='labelStyle'>{{ this.ruleForm.sch+'->'+this.ruleForm.aca}}</el-descriptions-item>
-      <el-descriptions-item label="活动描述" labelStyle='labelStyle'>{{ this.ruleForm.text }}</el-descriptions-item>
-      <el-descriptions-item label="活动附件" labelStyle='labelStyle' >
+      <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
+      <el-descriptions-item label="活动名" >{{this.ruleForm.name}}</el-descriptions-item>
+      <el-descriptions-item label="活动地点">{{ this.ruleForm.place}}</el-descriptions-item>
+      <el-descriptions-item label="活动主题">{{ this.ruleForm.theme}}</el-descriptions-item>
+      <el-descriptions-item label="活动时间">{{ this.ruleForm.star_time+'-'+this.ruleForm.end_time }}</el-descriptions-item>
+      <el-descriptions-item label="报名时间">{{ this.ruleForm.enroll_time+'-'+this.ruleForm.enroll_end_time }}</el-descriptions-item>
+      <el-descriptions-item label="参与对象">{{ this.ruleForm.limit}}</el-descriptions-item>
+      <el-descriptions-item label="参与人数">{{ this.ruleForm.join_num}}</el-descriptions-item>
+      <el-descriptions-item label="进行方式">{{ this.ruleForm.tag1}}</el-descriptions-item>
+      <el-descriptions-item label="活动类型">{{ this.ruleForm.tag2}}</el-descriptions-item>
+      <el-descriptions-item label="审核流程">{{ this.ruleForm.sch+'->'+this.ruleForm.aca}}</el-descriptions-item>
+      <el-descriptions-item label="活动描述">{{ this.ruleForm.text }}</el-descriptions-item>
+      <el-descriptions-item label="活动附件" >
         <!--        <el-link @click="downloadFile(this.src)" target="_blank">默认链接</el-link>-->
         <!--      <button @click="downloadFile(item)"  v-for="item in blobfile" :key="item">a标签下载</button>-->
         <div v-for="item in blobfile" :key="item">
@@ -82,7 +83,7 @@ export default {
         'text-align': 'center',
         'font-weight': '600',
         'height': '40px',
-        'background-color': 'rgba(255, 97, 2, 0.1)',
+        'background-color': '#b3c1d1',
         'min-width': '200px',
         'word-break': 'keep-all'
       },
@@ -323,6 +324,7 @@ export default {
               sch = this.options2[a].value
             }
           }
+          console.log(sch)
           if (typeof sch === 'undefined') {
             sch = '开始'
           }

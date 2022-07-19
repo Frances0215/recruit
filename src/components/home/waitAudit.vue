@@ -11,14 +11,14 @@
     </el-input>
   </div>
   <el-row style="margin-top: 10px">
-      <el-button size="mini"
+      <el-button size="small"
                  @click="handleEdit()"
                  style="float: left"
-                 type="success" round>审核通过</el-button>
-      <el-button size="mini"
+                 type="success" >审核通过</el-button>
+      <el-button size="small"
                  @click="handleEditfail()"
                  style="float: left"
-                 type="danger" round>审核不通过</el-button>
+                 type="danger" >审核不通过</el-button>
   </el-row>
   <el-table
     ref="multipleTable"

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-descriptions title="用户信息" direction="horizontal" :column="1" border>
+    <h1 style="font-size: 35px">用户信息</h1>
+    <el-descriptions direction="horizontal" :column="1" border :contentStyle="CS" :label-style="LS ">
       <el-descriptions-item label="用户ID">{{ this.id }}</el-descriptions-item>
       <el-descriptions-item label="用户名">{{ this.name }}</el-descriptions-item>
       <el-descriptions-item label="角色">
@@ -72,6 +73,22 @@ export default {
       }
     }
     return {
+      CS: {
+        'text-align': 'center', // 文本居中
+        'min-width': '250px', // 最小宽度
+        'word-break': 'break-all', // 过长时自动换行
+        'font-size': '16px'
+      },
+      LS: {
+        'color': '#000',
+        'text-align': 'center',
+        'font-weight': '600',
+        'height': '40px',
+        'background-color': '#b3c1d1',
+        'min-width': '100px',
+        'word-break': 'keep-all',
+        'font-size': '16px'
+      },
       id: '',
       name: '',
       phone: '',

@@ -27,7 +27,8 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
-      @selection-change="handleSelectionChange">
+      @selection-change="handleSelectionChange"
+      stripe="true">
       <el-table-column
         prop="id"
         label="活动ID"

@@ -7,6 +7,7 @@
 <!--    <div class="block">-->
 <!--      <el-image :src="src"></el-image>-->
 <!--    </div>-->
+    <h1 style="font-size: 35px">{{this.ruleForm.name}}</h1>
     <div class="block" v-if="carouselTableVisible">
       <el-carousel trigger="click" height="350px" type="card">
         <el-carousel-item v-for="url in items" :key="url">
@@ -18,16 +19,19 @@
       </el-carousel>
     </div>
     <br>
-    <el-descriptions class="margin-top"  :column="2" border>
-      <template slot="extra">
-        <el-button type="primary" size="small" @click="dialogTableVisible=true" :disabled='this.avaible'>{{ this.bttext }}</el-button>
-      </template>
-
+    <el-descriptions class="margin-top"  :column="2" border :contentStyle="CS" :label-style="LS ">
       <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
-      <el-descriptions-item label="活动名">{{this.aname}}</el-descriptions-item>
-      <el-descriptions-item label="活动时间">{{ this.astart_time+'-'+this.aend_time }}</el-descriptions-item>
-      <el-descriptions-item label="报名时间">{{ this.aenroll_time }}</el-descriptions-item>
-      <el-descriptions-item label="活动描述">{{ this.atext }}</el-descriptions-item>
+      <el-descriptions-item label="活动名" >{{this.ruleForm.name}}</el-descriptions-item>
+      <el-descriptions-item label="活动地点">{{ this.ruleForm.place}}</el-descriptions-item>
+      <el-descriptions-item label="活动主题">{{ this.ruleForm.theme}}</el-descriptions-item>
+      <el-descriptions-item label="活动时间">{{ this.ruleForm.star_time+'-'+this.ruleForm.end_time }}</el-descriptions-item>
+      <el-descriptions-item label="报名时间">{{ this.ruleForm.enroll_time+'-'+this.ruleForm.enroll_end_time }}</el-descriptions-item>
+      <el-descriptions-item label="参与对象">{{ this.ruleForm.limit}}</el-descriptions-item>
+      <el-descriptions-item label="参与人数">{{ this.ruleForm.join_num}}</el-descriptions-item>
+      <el-descriptions-item label="进行方式">{{ this.ruleForm.tag1}}</el-descriptions-item>
+      <el-descriptions-item label="活动类型">{{ this.ruleForm.tag2}}</el-descriptions-item>
+      <el-descriptions-item label="审核流程">{{ this.ruleForm.sch+'->'+this.ruleForm.aca}}</el-descriptions-item>
+      <el-descriptions-item label="活动描述">{{ this.ruleForm.text }}</el-descriptions-item>
       <el-descriptions-item label="活动附件" >
 <!--        <el-link @click="downloadFile(this.src)" target="_blank">默认链接</el-link>-->
 <!--      <button @click="downloadFile(item)"  v-for="item in blobfile" :key="item">a标签下载</button>-->
@@ -37,6 +41,8 @@
 
       </el-descriptions-item>
     </el-descriptions>
+
+    <el-button type="primary"  @click="dialogTableVisible=true" :disabled='this.avaible' style="margin-top: 20px; width: 100px;margin-bottom: 20px">{{ this.bttext }}</el-button>
 
     <el-dialog title="报名信息" :visible.sync="dialogTableVisible">
       <el-descriptions title="用户信息" direction="horizontal" :column="1" border>
@@ -64,9 +70,26 @@
 export default {
   mounted: function () {
     this.loadActive()
+    this.refreshOptions()
+    this.refreshOptions2()
+    this.refreshData()
   },
   data () {
     return {
+      CS: {
+        'text-align': 'center', // 文本居中
+        'min-width': '250px', // 最小宽度
+        'word-break': 'break-all' // 过长时自动换行
+      },
+      LS: {
+        'color': '#000',
+        'text-align': 'center',
+        'font-weight': '600',
+        'height': '40px',
+        'background-color': '#b3c1d1',
+        'min-width': '200px',
+        'word-break': 'keep-all'
+      },
       carouselTableVisible: false,
       avaible: false,
       bttext: '报 名',
@@ -103,7 +126,27 @@ export default {
       },
       items: [],
       file: [],
-      blobfile: []
+      blobfile: [],
+      ruleForm: {
+        star_time: '',
+        end_time: '',
+        theme: '',
+        tag1: '',
+        tag2: '',
+        name: '',
+        join_num: '',
+        text: '',
+        limit: '',
+        enroll_time: '',
+        enroll_end_time: '',
+        place: '',
+        aca: '',
+        sch: '',
+        can_join1: [],
+        can_join2: []
+      },
+      options2: [],
+      options: []
     }
   },
   methods: {
@@ -281,8 +324,114 @@ export default {
       // this.$router.push({
       //   path: '/StuActivityList'
       // })
+    },
+    refreshOptions () {
+      var url = '/un-authc/user/academy'
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          var temp = successResponse.data.result
+          console.log(temp)
+          for (var i = 0; i < temp.length; i++) {
+            var a = {'label': temp[i].username, 'value': temp[i].username, 'id': temp[i].id}
+            this.options.push(a)
+          }
+          console.log(this.options)
+        }
+      })
+        .catch(failResponse => {
+          console.log(failResponse)
+        })
+    },
+    refreshOptions2 () {
+      var url = '/un-authc/user/school'
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          var temp = successResponse.data.result
+          for (var i = 0; i < temp.length; i++) {
+            var a = {'label': temp[i].username, 'value': temp[i].username, 'id': temp[i].id}
+            this.options2.push(a)
+          }
+          console.log(this.options2)
+        }
+      })
+        .catch(failResponse => {
+          console.log('请求失败')
+        })
+    },
+    refreshData () {
+      this.row = this.$route.query.row
+      this.id = this.row.id
+      var url = '/no-authc/id/'
+      var a = {'id': this.$route.query.row.id}
+      this.$axios.post(url, {'id': this.$route.query.row.id}).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          var result = successResponse.data.result
+          var aca
+          for (var i = 0; i < this.options.length; i++) {
+            if (this.options[i].id === result.aca) {
+              aca = this.options[i].value
+            }
+          }
+          if (typeof aca === 'undefined') {
+            aca = '结束'
+          }
+          var sch
+          console.log(this.options2)
+          console.log(result.sch)
+          for (var a = 0; a < this.options2.length; a++) {
+            if (this.options2[a].id === result.sch) {
+              sch = this.options2[a].value
+            }
+          }
+          if (typeof sch === 'undefined') {
+            sch = '开始'
+          }
+          console.log(sch)
+          // 获取can_join
+          var canJoin = result.join_user
+          var canJoin1 = []
+          var canJoin2 = []
+          if (canJoin !== null) {
+            for (var b = 0; b < canJoin.length; b++) {
+              if (canJoin[b].role === '学校') {
+                canJoin1.push(canJoin[b].username)
+              } else if (canJoin[b].role === '学院') {
+                canJoin2.push(canJoin[b].username)
+              }
+            }
+          }
+          this.ruleForm.star_time = result.star_time
+          this.ruleForm.end_time = result.end_time
+          this.ruleForm.theme = result.theme
+          this.ruleForm.tag1 = result.tag1
+          this.ruleForm.tag2 = result.tag2
+          this.ruleForm.name = result.name
+          this.ruleForm.join_num = result.join_num
+          this.ruleForm.text = result.text
+          this.ruleForm.limit = result.limit_
+          this.ruleForm.enroll_time = result.enroll_time
+          this.ruleForm.enroll_end_time = result.enroll_end_time
+          this.ruleForm.place = result.place
+          this.ruleForm.aca = aca
+          this.ruleForm.sch = sch
+          this.ruleForm.place = result.place
+          this.ruleForm.can_join1 = canJoin1
+          this.ruleForm.can_join2 = canJoin2
+          this.fileList = result.files
+          console.log(this.ruleForm)
+        }
+      })
+        .catch(failResponse => {
+          console.log('请求失败')
+          console.log(failResponse)
+        })
     }
-
   }
 }
 </script>

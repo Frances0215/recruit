@@ -19,17 +19,17 @@
     <el-table-column
       prop="id"
       label="审核ID"
-      width="150">
+      width="100">
     </el-table-column>
     <el-table-column
       prop="active.id"
       label="活动ID"
-      width="80">
+      width="100">
     </el-table-column>
     <el-table-column
       prop="active.name"
       label="活动名称"
-      width="80">
+      width="120">
     </el-table-column>
     <el-table-column
       prop="status"

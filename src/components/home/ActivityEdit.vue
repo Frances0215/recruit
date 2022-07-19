@@ -26,26 +26,30 @@
           <el-form-item label="活动时间" required>
             <el-col :span="11">
               <el-form-item prop="star_time">
-                <el-date-picker type="date" placeholder="选择开始日期" v-model="ruleForm.star_time" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择开始日期" v-model="ruleForm.star_time" style="width: 100%;" format="yyyy 年 MM 月 dd 日"
+                                value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="end_time">
-                <el-date-picker placeholder="选择结束日期" v-model="ruleForm.end_time" style="width: 100%;"></el-date-picker>
+                <el-date-picker placeholder="选择结束日期" v-model="ruleForm.end_time" style="width: 100%;" format="yyyy 年 MM 月 dd 日"
+                                value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item>
           <el-form-item label="报名时间" required>
             <el-col :span="11">
               <el-form-item prop="enroll_time">
-                <el-date-picker placeholder="选择报名开始日期" v-model="ruleForm.enroll_time" style="width: 100%;"></el-date-picker>
+                <el-date-picker placeholder="选择报名开始日期" v-model="ruleForm.enroll_time" style="width: 100%;" format="yyyy 年 MM 月 dd 日"
+                                value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col class="line" :span="2">-</el-col>
             <el-col :span="11">
               <el-form-item prop="enroll_end_time">
-                <el-date-picker placeholder="选择报名结束日期" v-model="ruleForm.enroll_end_time" style="width: 100%;"></el-date-picker>
+                <el-date-picker placeholder="选择报名结束日期" v-model="ruleForm.enroll_end_time" style="width: 100%;" format="yyyy 年 MM 月 dd 日"
+                                value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item>

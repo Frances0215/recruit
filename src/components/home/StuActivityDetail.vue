@@ -34,17 +34,17 @@
       <el-table-column
         prop="active.name"
         label="活动名称"
-        width="80">
+        width="120">
       </el-table-column>
       <el-table-column
         prop="active.star_time"
         label="开始时间"
-        width="80">
+        width="120">
       </el-table-column>
       <el-table-column
         prop="active.end_time"
         label="结束时间"
-        width="80">
+        width="120">
       </el-table-column>
       <el-table-column
         prop="active.enroll_time"
@@ -84,7 +84,7 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="300">
+        width="200">
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
           <el-button @click="handleEdit(scope.row)" type="text" size="small">查看反馈</el-button>
