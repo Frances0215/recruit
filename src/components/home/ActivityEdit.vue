@@ -1,6 +1,9 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
   <div>
-    <el-button slot="append" style='float: left;margin-bottom: 10px' v-on:click="back" icon="el-icon-arrow-left"></el-button>
+<!--    <el-button slot="append" style='float: left;margin-bottom: 10px' v-on:click="back" icon="el-icon-arrow-left"></el-button>-->
+    <br>
+    <el-button style='float: left;' v-on:click="back" icon="el-icon-arrow-left"></el-button>
+    <br>
     <el-row>
       <el-col :span ="24">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="medium">
@@ -459,7 +462,7 @@ export default {
         })
     },
     back () {
-      console.log()
+      console.log('‘aa’')
       this.$router.push({
         path: '/ActivityList',
         query: {

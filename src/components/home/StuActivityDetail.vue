@@ -210,11 +210,28 @@ export default {
   },
 
   methods: {
+    async loadfile () {
+      for (var j = 0; j < this.file.length; j++) {
+        var temp = j
+        var url1 = '/file' + this.file[j].url
+        // console.log(url1)
+        await this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+          console.log(successResponse)
+          // let blob = new Blob([successResponse.data])
+          // let url = window.URL.createObjectURL(blob)
+          this.src = window.URL.createObjectURL(successResponse.data)
+          // console.log(this.file[temp])
+          this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+        })
+      }
+    },
     handledown(row){
-      if (row.active.file != null && row.active.file.length > 0) {
-        // console.log('has')
-        for (var k = 0; k < row.active.file.length; k++) {
-          var item = row.active.file[k]
+
+      if (row.active.files != null && row.active.files.length > 0) {
+        console.log('has')
+        console.log(row.active.files)
+        for (var k = 0; k < row.active.files.length; k++) {
+          var item = row.active.files[k]
           if (item.type === 'photo') {
           } else {
             var index1 = item.url.indexOf('files')
@@ -225,20 +242,20 @@ export default {
         }
         if (this.file.length > 0) {
           console.log('file')
-
-          for (var j = 0; j < this.file.length; j++) {
-            var temp = j
-            var url1 = '/file' + this.file[j].url
-            // console.log(url1)
-            this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
-              console.log(successResponse)
-              // let blob = new Blob([successResponse.data])
-              // let url = window.URL.createObjectURL(blob)
-              this.src = window.URL.createObjectURL(successResponse.data)
-              // console.log(this.file[temp])
-              this.blobfile.push({src: this.src, filename: this.file[temp].filename})
-            })
-          }
+          this.loadfile()
+          // for (var j = 0; j < this.file.length; j++) {
+          //   var temp = j
+          //   var url1 = '/file' + this.file[j].url
+          //   // console.log(url1)
+          //   this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+          //     console.log(successResponse)
+          //     // let blob = new Blob([successResponse.data])
+          //     // let url = window.URL.createObjectURL(blob)
+          //     this.src = window.URL.createObjectURL(successResponse.data)
+          //     // console.log(this.file[temp])
+          //     this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+          //   })
+          // }
         }
       }
     },
