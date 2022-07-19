@@ -368,7 +368,7 @@ export default new Router({
             meta: {
               title: '用户信息'
             }
-          },
+          }
         ]
     }
   ]
