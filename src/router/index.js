@@ -20,7 +20,7 @@ import JoinedActivityInfo from '../components/home/JoinedActivityInfo'
 import AppIndexschool from '../components/index/Appindexschool'
 import Appindexstudent from '../components/index/Appindexstudent'
 import Appindexaca from '../components/index/Appindexaca'
-
+import StuFeedback from '../components/home/StuFeedback'
 Vue.use(Router)
 
 export default new Router({
@@ -220,6 +220,14 @@ export default new Router({
       redirect: {name: 'StuActivityListStu'},
       children:
         [
+          {
+            path: '/StuFeedback',
+            name: 'StuFeedback',
+            component: StuFeedback,
+            meta: {
+              title: '学生反馈'
+            }
+          },
           {
             path: '/StuActivityListStu',
             name: 'StuActivityListStu',

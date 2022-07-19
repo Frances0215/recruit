@@ -2,7 +2,7 @@
   <div>
     <div class="block" v-if="carouselTableVisible">
       <el-carousel trigger="click" height="350px" type="card">
-        <el-carousel-item v-for="item in items" :key="item">
+        <el-carousel-item v-for="item in items" :key="item.src">
           <el-image
             style="width: 100%; height: 350px"
             :src=item.src
@@ -344,9 +344,11 @@ export default {
     myact(){
       this.page=1
       this.mode=3
+
       var url='/auth/can_join/page='+this.page
+      console.log(url)
       this.$axios.get(url).then(successResponse => {
-        // console.log(successResponse)
+        console.log(successResponse)
         if (successResponse.data.code === 200) {
           // console.log(successResponse.data.result.totalElements)
           this.total=successResponse.data.result.totalElements
