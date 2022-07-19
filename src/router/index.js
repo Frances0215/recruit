@@ -20,6 +20,7 @@ import JoinedActivityInfo from '../components/home/JoinedActivityInfo'
 import AppIndexschool from '../components/index/Appindexschool'
 import Appindexstudent from '../components/index/Appindexstudent'
 import Appindexaca from '../components/index/Appindexaca'
+import ActivityEdit from '../components/home/ActivityEdit'
 
 Vue.use(Router)
 
@@ -54,6 +55,14 @@ export default new Router({
             component: ActivityAdd,
             meta: {
               title: '活动添加'
+            }
+          },
+          {
+            path: '/ActivityEdit',
+            name: 'ActivityEdit',
+            component: ActivityEdit,
+            meta: {
+              title: '活动编辑'
             }
           },
           {

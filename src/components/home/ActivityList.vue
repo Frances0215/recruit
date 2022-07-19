@@ -164,7 +164,7 @@
           width="100">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small" @click="handleClick2(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -352,6 +352,22 @@ export default {
           row: row
         }
       })
+      this.aid = row.id
+      this.astart_time = row.star_time
+      this.aend_time = row.end_time
+      this.aname = row.name
+      this.aenroll_time = row.enroll_time
+      this.afile = row.files
+      this.atext = row.text
+    },
+    handleClick2 (row) {
+      this.$router.push({
+        path: '/ActivityEdit',
+        query: {
+          row: row
+        }
+      })
+      console.log(row)
       this.aid = row.id
       this.astart_time = row.star_time
       this.aend_time = row.end_time
