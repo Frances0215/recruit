@@ -303,7 +303,12 @@ export default {
           console.log(successResponse.data.result.totalElements)
           this.total = successResponse.data.result.totalElements
           this.tableData = successResponse.data.result.content
-          console.log(this.tableData)
+          // console.log(successResponse.data.result.content)
+          // this.tableData.star_time = this.filterTime(successResponse.data.result.content.star_time)
+          // console.log(this.tableData.star_time)
+          // this.tableData.end_time = this.filterTime(successResponse.data.result.content.end_time)
+          // this.tableData.enroll_time = this.filterTime(successResponse.data.result.content.enroll_time)
+          // console.log(this.tableData)
         }
       })
         .catch(failResponse => {
@@ -430,12 +435,6 @@ export default {
           }
         }
       })
-      // this.$router.push({
-      //   path: '/ActivityInfo',
-      //   query: {
-      //     row: row
-      //   }
-      // })
       this.aid = row.id
       this.astart_time = row.star_time
       this.aend_time = row.end_time
@@ -468,26 +467,9 @@ export default {
                   }
                   // console.log(item.url)
                   photo.push({url: item.url, aid: successResponse.data.result.content[j]})
-                  // console.log("photo")
-                  // console.log(photo.length)
                 } else if (this.carouselTableVisible === false) {
-                  // console.log(photo)
                   this.carouselTableVisible = true
                   this.loadNodeList(photo)
-
-                  // for (var k = 0; k < photo.length; k++) {
-                  //   var url = '/file' + photo[k].url
-                  //   var p=photo[k]
-                  //   this.$axios.get(url, {responseType: 'blob'}).then(successResponse => {
-                  //     // console.log(successResponse.data)
-                  //     // let blob = new Blob([successResponse.data])
-                  //     // let url = window.URL.createObjectURL(blob)
-                  //     this.src = window.URL.createObjectURL(successResponse.data)
-                  //     console.log(photo[k])
-                  //     this.items.push({src:this.src,aid:p.aid})
-                  //     // console.log(this.items)
-                  //   })
-                  // }
                 }
               }
             }
@@ -511,25 +493,9 @@ export default {
                           item.url = item.url.substring(index + 5, item.url.length)
                         }
                         photo.push({url: item.url, aid: successResponse.data.result.content[a]})
-                        // console.log('photo')
-                        // console.log(photo.length)
                       } else if (this.carouselTableVisible === false) {
-                        // console.log('photo')
-                        // console.log(photo)
                         this.carouselTableVisible = true
                         this.loadNodeList(photo)
-                        // for (var s = 0; s < photo.length; s++) {
-                        //   var url = '/file' + photo[s].url
-                        //   var p=photo[s]
-                        //   this.$axios.get(url, {responseType: 'blob'}).then(successResponse => {
-                        //     // console.log(successResponse.data)
-                        //     // let blob = new Blob([successResponse.data])
-                        //     // let url = window.URL.createObjectURL(blob)
-                        //     this.src = window.URL.createObjectURL(successResponse.data)
-                        //     this.items.push({src:this.src,aid:p.aid})
-                        //     // console.log(this.items)
-                        //   })
-                        // }
                       }
                     }
                   }
@@ -541,6 +507,21 @@ export default {
       })
         .catch(failResponse => {
         })
+    },
+    filterTime (time) {
+      var date = new Date(time)
+      var y = date.getFullYear()
+      var m = date.getMonth() + 1
+      m = m < 10 ? '0' + m : m
+      var d = date.getDate()
+      d = d < 10 ? '0' + d : d
+      var h = date.getHours()
+      h = h < 10 ? '0' + h : h
+      var minute = date.getMinutes()
+      minute = minute < 10 ? '0' + minute : minute
+      var s = date.getSeconds()
+      s = s < 10 ? '0' + s : s
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + s
     }
   }
 }

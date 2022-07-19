@@ -81,7 +81,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="审核学校" prop="sch" style="float: left">
-                <el-select v-model="ruleForm.sch" placeholder="请选择审核学校">
+                <el-select v-model="ruleForm.sch" placeholder="请选择审核学校" clearable>
                   <el-option
                     v-for="item in options2"
                     :key="item.value"
@@ -93,7 +93,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="审核学院" prop="aca" style="float: left">
-                <el-select v-model="ruleForm.aca" placeholder="请选择审核学院">
+                <el-select v-model="ruleForm.aca" placeholder="请选择审核学院" clearable>
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -107,7 +107,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="参加学校" prop="can_join1" style="float: left">
-                <el-select v-model="ruleForm.can_join1" multiple placeholder="请选择参加学校">
+                <el-select v-model="ruleForm.can_join1" multiple placeholder="请选择参加学校" clearable>
                   <el-option
                     v-for="item in options2"
                     :key="item.value"
@@ -119,7 +119,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="参加学院" prop="can_join2" style="float: left">
-                <el-select v-model="ruleForm.can_join2" multiple placeholder="请选择参加学院">
+                <el-select v-model="ruleForm.can_join2" multiple placeholder="请选择参加学院" clearable>
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -260,6 +260,7 @@ export default {
       })
       var num = parseInt(this.ruleForm.join_num)
       var canJoin = this.ruleForm.can_join1.concat(this.ruleForm.can_join2)
+      console.log(this.ruleForm)
       // param.append('star_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
       // param.append('end_time', 'Fri Jul 08 2022 00:00:00 GMT+0800')
       // param.append('theme', '诚邀新友，共赏明月')
@@ -288,6 +289,18 @@ export default {
       param.append('enroll_time', this.ruleForm.enroll_time)
       param.append('enroll_end_time', this.ruleForm.enroll_end_time)
       param.append('place', this.ruleForm.place)
+      console.log(this.ruleForm.aca)
+      console.log(this.ruleForm.sch)
+      if (this.ruleForm.aca === '') {
+        console.log(2)
+        this.ruleForm.aca = 'no'
+      }
+      if (this.ruleForm.sch === '') {
+        console.log(1)
+        this.ruleForm.sch = 'no'
+      }
+      console.log(this.ruleForm.aca)
+      console.log(this.ruleForm.sch)
       param.append('aca', this.ruleForm.aca)
       param.append('sch', this.ruleForm.sch)
       param.append('can_join', canJoin)

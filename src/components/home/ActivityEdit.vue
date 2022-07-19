@@ -86,7 +86,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="审核学校" prop="sch" style="float: left">
-                <el-select v-model="ruleForm.sch" placeholder="请选择审核学校">
+                <el-select v-model="ruleForm.sch" placeholder="请选择审核学校" clearable>
                   <el-option
                     v-for="item in options2"
                     :key="item.value"
@@ -98,7 +98,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="审核学院" prop="aca" style="float: left">
-                <el-select v-model="ruleForm.aca" placeholder="请选择审核学院">
+                <el-select v-model="ruleForm.aca" placeholder="请选择审核学院" clearable>
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -285,6 +285,7 @@ export default {
       // param.append('place', '二基楼报告厅')
       // param.append('can_join', '四川大学')
       // param.append('body', JSON.stringify(this.newData))
+      console.log(this.ruleForm)
       param.append('star_time', this.ruleForm.star_time)
       param.append('end_time', this.ruleForm.end_time)
       param.append('theme', this.ruleForm.theme)
@@ -297,12 +298,12 @@ export default {
       param.append('enroll_time', this.ruleForm.enroll_time)
       param.append('enroll_end_time', this.ruleForm.enroll_end_time)
       param.append('place', this.ruleForm.place)
-      if (typeof this.ruleForm.aca === 'undefined') {
-        this.ruleForm.aca = 'null'
+      if (typeof this.ruleForm.aca === 'undefined' || this.ruleForm.aca === '') {
+        this.ruleForm.aca = 'no'
       }
-      param.append('sch', this.ruleForm.sch)
-      if (typeof this.ruleForm.sch === 'undefined') {
-        this.ruleForm.sch = 'null'
+      param.append('aca', this.ruleForm.aca)
+      if (typeof this.ruleForm.sch === 'undefined' || this.ruleForm.sch === '') {
+        this.ruleForm.sch = 'no'
       }
       param.append('sch', this.ruleForm.sch)
       param.append('place', this.ruleForm.place)
@@ -404,6 +405,7 @@ export default {
               sch = this.options2[a].value
             }
           }
+          console.log(sch)
           // 获取can_join
           var canJoin = result.join_user
           var canJoin1 = []
