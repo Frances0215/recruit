@@ -53,7 +53,7 @@
       </el-descriptions>
       <span slot="footer" class="dialog-footer">
           <el-button @click="dialogTableVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submit">提 交</el-button>
+          <el-button type="primary" @click="submit">报 名</el-button>
         </span>
     </el-dialog>
   </div>
@@ -107,6 +107,21 @@ export default {
     }
   },
   methods: {
+    async loadfile () {
+      for (var j = 0; j < this.file.length; j++) {
+        var temp = j
+        var url1 = '/file' + this.file[j].url
+        // console.log(url1)
+        await this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+          console.log(successResponse)
+          // let blob = new Blob([successResponse.data])
+          // let url = window.URL.createObjectURL(blob)
+          this.src = window.URL.createObjectURL(successResponse.data)
+          // console.log(this.file[temp])
+          this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+        })
+      }
+    },
     // downloadFile (url, fileName = 'a') {
     //   let link = document.createElement('a')
     //   link.style.display = 'none'
@@ -125,8 +140,11 @@ export default {
     },
     submit () {
       this.$axios.post('/auth/join', {id: this.aid}).then(resp => {
+        console.log(resp)
         if (resp && resp.data.code === 200) {
           alert('报名成功')
+        } else {
+          alert('报名失败')
         }
       })
     },
@@ -153,8 +171,9 @@ export default {
           this.aenroll_time = this.row.enroll_time
           this.afile = this.row.files
           this.atext = this.row.text
-          this.$axios.post('auth/can_join', {aid: 23, uid: 3}).then(successResponse => {
-            // console.log(successResponse.data.result)
+          console.log(this.aid, this.id)
+          this.$axios.post('auth/can_join', {aid: this.aid, uid: this.id}).then(successResponse => {
+            console.log(successResponse.data.result)
             if (successResponse && successResponse.data.code === 200) {
               if (!successResponse.data.result) {
                 // console.log('auth/can_join')
@@ -203,20 +222,20 @@ export default {
             }
             if (this.file.length > 0) {
               console.log('file')
-
-              for (var j = 0; j < this.file.length; j++) {
-                var temp = j
-                var url1 = '/file' + this.file[j].url
-                // console.log(url1)
-                this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
-                  console.log(successResponse)
-                  // let blob = new Blob([successResponse.data])
-                  // let url = window.URL.createObjectURL(blob)
-                  this.src = window.URL.createObjectURL(successResponse.data)
-                  // console.log(this.file[temp])
-                  this.blobfile.push({src: this.src, filename: this.file[temp].filename})
-                })
-              }
+              this.loadfile()
+              // for (var j = 0; j < this.file.length; j++) {
+              //   var temp = j
+              //   var url1 = '/file' + this.file[j].url
+              //   // console.log(url1)
+              //   this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+              //     console.log(successResponse)
+              //     // let blob = new Blob([successResponse.data])
+              //     // let url = window.URL.createObjectURL(blob)
+              //     this.src = window.URL.createObjectURL(successResponse.data)
+              //     // console.log(this.file[temp])
+              //     this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+              //   })
+              // }
             }
           }
           console.log(this.blobfile)

@@ -23,7 +23,11 @@
         </el-menu-item>
         <el-menu-item index="/StuActivityDetailStu">
           <i class="el-icon-document"></i>
-          <span slot="title">学生我的活动</span>
+          <span slot="title">我的活动</span>
+        </el-menu-item>
+        <el-menu-item index="/StuFeedback">
+          <i class="el-icon-document"></i>
+          <span slot="title">活动反馈</span>
         </el-menu-item>
       </el-menu>
       <!--          </el-col>-->
