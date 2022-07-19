@@ -236,12 +236,6 @@ export default {
           console.log(suresponse.data.result)
           this.$alert(suresponse.data.result, '审核结果', {
             confirmButtonText: '确定'
-            // callback: action => {
-            //   this.$message({
-            //     type: 'info',
-            //     // message: `action: $ { action }`
-            //   })
-            // }
           })
         }
       })
@@ -259,12 +253,6 @@ export default {
           console.log(suresponse.data.result)
           this.$alert(suresponse.data.result, '审核结果', {
             confirmButtonText: '确定'
-            // callback: action => {
-            //   this.$message({
-            //     type: 'info',
-            //     // message: `action: $ { action }`
-            //   })
-            // }
           })
         }
       })

@@ -19,7 +19,7 @@
         </el-menu-item>
         <el-menu-item index="/StuActivityListStu">
           <i class="el-icon-document"></i>
-          <span slot="title">学生活动</span>
+          <span slot="title">活动列表</span>
         </el-menu-item>
         <el-menu-item index="/StuActivityDetailStu">
           <i class="el-icon-document"></i>
