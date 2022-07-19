@@ -22,6 +22,7 @@ import Appindexstudent from '../components/index/Appindexstudent'
 import Appindexaca from '../components/index/Appindexaca'
 import StuFeedback from '../components/home/StuFeedback'
 import ActivityEdit from '../components/home/ActivityEdit'
+import modifyUser from '../components/home/modifyUser'
 
 Vue.use(Router)
 
@@ -139,6 +140,14 @@ export default new Router({
             }
           },
           {
+            path: '/modifyUser',
+            name: 'modifyUser',
+            component: modifyUser,
+            meta: {
+              title: '用户信息'
+            }
+          },
+          {
             path: '/ActivityInfo',
             name: 'ActivityInfo',
             component: ActivityInfo
@@ -212,6 +221,14 @@ export default new Router({
             component: Myinfo,
             meta: {
               title: '个人信息'
+            }
+          },
+          {
+            path: '/modifyUserSch',
+            name: 'modifyUserSch',
+            component: modifyUser,
+            meta: {
+              title: '用户信息'
             }
           },
           {
@@ -342,6 +359,14 @@ export default new Router({
             component: Myinfo,
             meta: {
               title: '个人信息'
+            }
+          },
+          {
+            path: '/modifyUseraca',
+            name: 'modifyUseraca',
+            component: modifyUser,
+            meta: {
+              title: '用户信息'
             }
           }
         ]

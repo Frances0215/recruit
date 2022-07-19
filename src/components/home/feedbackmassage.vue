@@ -1,16 +1,16 @@
 <template>
   <body>
   <el-button slot="append" style='float: left;margin-bottom: 10px' v-on:click="back" icon="el-icon-arrow-left"></el-button>
-<!--  <div>-->
-<!--    <el-input placeholder="请输入内容" v-model="input" class="input-with-select">-->
-<!--      <el-select v-model="value" slot="prepend" placeholder="请选择">-->
-<!--        <el-option label="学生学院" value="2"></el-option>-->
-<!--        <el-option label="学生学校" value="1"></el-option>-->
-<!--      </el-select>-->
-<!--      <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>-->
-<!--      <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>&ndash;&gt;-->
-<!--    </el-input>-->
-<!--  </div>-->
+  <div>
+    <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+      <el-select v-model="value" slot="prepend" placeholder="请选择">
+        <el-option label="学生学院" value="2"></el-option>
+        <el-option label="学生学校" value="1"></el-option>
+      </el-select>
+      <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
+      <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
+    </el-input>
+  </div>
 <!--  <el-row style="margin-top: 10px">-->
 <!--    <el-col :span="12">-->
 <!--    </el-col>-->
@@ -177,39 +177,39 @@ export default {
       this.page = 1
       this.refreshtable()
     },
-    // searcht () {
-    //   this.mode = 2
-    //   console.log(this.input)
-    //   if (this.value === '1') {
-    //     this.$axios.post('/admin/order/find/pages=1', {
-    //       aid: this.aid,
-    //       father: '',
-    //       status: '已反馈',
-    //       grandfather: parseInt(this.input)
-    //     }).then(successResponse => {
-    //       console.log(successResponse.data.result.content)
-    //       this.total = successResponse.data.result.totalElements
-    //       this.tableData = successResponse.data.result.content
-    //       this.page = 1
-    //     }).catch(failResponse => {
-    //       this.tableData = []
-    //     })
-    //   } else {
-    //     this.$axios.post('/admin/order/find/pages=1', {
-    //       aid: this.aid,
-    //       father: parseInt(this.input),
-    //       status: '已反馈',
-    //       grandfather: ''
-    //     }).then(successResponse => {
-    //       console.log(successResponse.data.result.content)
-    //       this.total = successResponse.data.result.totalElements
-    //       this.tableData = successResponse.data.result.content
-    //       this.page = 1
-    //     }).catch(failResponse => {
-    //       this.tableData = []
-    //     })
-    //   }
-    // },
+    searcht () {
+      this.mode = 2
+      console.log(this.input)
+      if (this.value === '1') {
+        this.$axios.post('/auth/order/find/pages=1', {
+          aid: this.aid,
+          father: '',
+          status: '已反馈',
+          grandfather: parseInt(this.input)
+        }).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      } else {
+        this.$axios.post('/auth/order/find/pages=1', {
+          aid: this.aid,
+          father: parseInt(this.input),
+          status: '已反馈',
+          grandfather: ''
+        }).then(successResponse => {
+          console.log(successResponse.data.result.content)
+          this.total = successResponse.data.result.totalElements
+          this.tableData = successResponse.data.result.content
+          this.page = 1
+        }).catch(failResponse => {
+          this.tableData = []
+        })
+      }
+    },
     // handleEdit (row) {
     //   this.aid = row.id
     //   console.log(row.id)

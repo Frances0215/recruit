@@ -37,15 +37,17 @@
     </el-aside>
     <el-container style="height: 100%;margin-left: 10px">
       <el-header style="text-align: right; font-size: 12px">
-        <span>{{this.name}}</span>
-        <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
-          <el-dropdown-menu slot="dropdown">
-            <!--            <el-dropdown-item>查看</el-dropdown-item>-->
-            <!--            <el-dropdown-item>新增</el-dropdown-item>-->
-            <el-dropdown-item>登出</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <!--        <span style="font-size: 18px; margin-right: 10px">{{this.name}}</span>-->
+        <el-link target="_blank" size="mini" v-on:click="person" style="margin-right: 10px" plain>{{this.name}}</el-link>
+        <el-link target="_blank" size="mini" v-on:click="exit" plain>退出登录</el-link>
+        <!--        <el-dropdown>-->
+        <!--          <i class="el-icon-setting" style="margin-right: 15px"></i>-->
+        <!--          <el-dropdown-menu slot="dropdown">-->
+        <!--&lt;!&ndash;            <el-dropdown-item>查看</el-dropdown-item>&ndash;&gt;-->
+        <!--&lt;!&ndash;            <el-dropdown-item>新增</el-dropdown-item>&ndash;&gt;-->
+        <!--            <el-dropdown-item >登出</el-dropdown-item>-->
+        <!--          </el-dropdown-menu>-->
+        <!--        </el-dropdown>-->
       </el-header>
 
       <el-main>
@@ -94,7 +96,30 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
-    }
+    },
+    exit () {
+      this.$axios.get('/auth/myself').then(suresponse => {
+        this.username = suresponse.data.result.username
+        console.log(this.username)
+      })
+      this.$axios.get('/logout', {
+        username: this.username
+      }).then(resp => {
+        if (resp && resp.data.code === 200) {
+          console.log('success')
+          console.log(resp)
+          this.$router.push({
+            path: '/login'
+          })
+        }
+      })
+    },
+    person () {
+      console.log('success')
+      this.$router.push({
+        path: '/MyinfoStu'
+      })
+    },
   }
 
 }

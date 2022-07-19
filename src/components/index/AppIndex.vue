@@ -41,6 +41,10 @@
                 <i class="el-icon-setting"></i>
                 <span slot="title">个人信息</span>
               </el-menu-item>
+              <el-menu-item index="/modifyUser">
+                <i class="el-icon-setting"></i>
+                <span slot="title">用户信息</span>
+              </el-menu-item>
               <el-menu-item index="/StuActivityList">
                 <i class="el-icon-document"></i>
                 <span slot="title">活动列表</span>
@@ -56,8 +60,9 @@
     </el-aside>
     <el-container style="height: 100%;margin-left: 10px">
       <el-header style="text-align: right; font-size: 12px">
-        <span style="font-size: 18px; margin-right: 10px">{{this.name}}</span>
-        <el-link  type="primary" size="mini" v-on:click="exit" plain>退出登录</el-link>
+<!--        <span style="font-size: 18px; margin-right: 10px">{{this.name}}</span>-->
+        <el-link target="_blank" size="mini" v-on:click="person" style="margin-right: 10px" plain>{{this.name}}</el-link>
+        <el-link target="_blank" size="mini" v-on:click="exit" plain>退出登录</el-link>
 <!--        <el-dropdown>-->
 <!--          <i class="el-icon-setting" style="margin-right: 15px"></i>-->
 <!--          <el-dropdown-menu slot="dropdown">-->
@@ -122,6 +127,12 @@ export default {
             path: '/login'
           })
         }
+      })
+    },
+    person () {
+      console.log('success')
+      this.$router.push({
+        path: '/Myinfo'
       })
     },
     changeSidebar (path) {
