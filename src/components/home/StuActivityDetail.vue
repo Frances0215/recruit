@@ -86,10 +86,10 @@
         label="操作"
         width="300">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row),dialogTableVisible = true" type="text" size="small">查看详情</el-button>
-          <el-button @click="handlefeedClick(scope.row),dialogFeedbackVisible = true" type="text" size="small">查看反馈</el-button>
-          <el-button @click="handlefeedClick(scope.row),dialogFeedbackVisible = true" type="text" size="small">附件下载</el-button>
-          <el-button @click="handlefeedClick(scope.row),dialogFeedbackVisible = true" type="text" size="small">附件上传</el-button>
+          <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
+          <el-button @click="handleEdit(scope.row)" type="text" size="small">查看反馈</el-button>
+          <el-button @click="handledown(scope.row),dialogFeedbackVisible = true" type="text" size="small">附件下载</el-button>
+          <el-button @click="handlefeedClick(scope.row),dialogTableVisible=true" type="text" size="small">附件上传</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -97,36 +97,50 @@
       <!--      <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>-->
       <!--      <el-button @click="toggleSelection()">取消选择</el-button>-->
     </div>
-    <el-dialog title="活动信息" :visible.sync="dialogTableVisible">
-      <div class="block">
-        <span class="demonstration">默认</span>
-        <el-image :src="src"></el-image>
-      </div>
-      <el-descriptions class="margin-top"  :column="3" :size="size" border>
-        <template slot="extra">
-          <el-button type="primary" size="small">参与</el-button>
-        </template>
-        <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
-        <el-descriptions-item label="活动名">{{this.aname}}</el-descriptions-item>
-        <el-descriptions-item label="活动时间">{{ this.astart_time+'-'+this.aend_time }}</el-descriptions-item>
-        <el-descriptions-item label="报名时间">{{ this.aenroll_time }}</el-descriptions-item>
-        <el-descriptions-item label="活动描述">{{ this.atext }}</el-descriptions-item>
-        <el-descriptions-item label="活动附件">{{ this.afile }}</el-descriptions-item>
-      </el-descriptions>
+    <el-dialog title="上传附件" :visible.sync="dialogTableVisible">
+<!--      <el-upload-->
+<!--        class="upload-demo"-->
+<!--        drag-->
+<!--        action=""-->
+<!--        :file-list="fileList"-->
+<!--        multiple>-->
+<!--        <i class="el-icon-upload"></i>-->
+<!--        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+<!--        <el-button @click="asd"></el-button>-->
+<!--      </el-upload>-->
+      <el-upload
+        class="upload-file"
+        action="/admin/active/creat"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        multiple
+        :on-exceed="handleExceed"
+        :file-list="fileList"
+        :auto-upload="false"
+        :on-change="handleChange"
+        name="file"
+        ref="upload"
+        show-file-list="true"
+        :http-request="httpRequest"
+        on-success="handleSuccess"
+        limit=1
+      >
+        <el-button size="small" type="primary">点击上传附件/图片</el-button>
+        <div slot="tip" class="el-upload__tip">单个文件不超过500kb</div>
+      </el-upload>
+      <el-button @click="submitUpload"></el-button>
     </el-dialog>
-    <el-dialog title="活动反馈" :visible.sync="dialogFeedbackVisible">
-      <div class="block">
-        <span class="demonstration">默认</span>
-        <el-image :src="src"></el-image>
-      </div>
-      <el-descriptions class="margin-top"  :column="3" :size="size" border>
-        <template slot="extra">
-          <el-button type="primary" size="small">参与</el-button>
-        </template>
-        <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
-        <el-descriptions-item label="活动名">{{this.aname}}</el-descriptions-item>
-        <el-descriptions-item label="活动反馈">{{ this.des_ }}</el-descriptions-item>
-<!--        <el-descriptions-item label="反馈附件">{{ this.afile }}</el-descriptions-item>-->
+    <el-dialog title="下载附件" :visible.sync="dialogFeedbackVisible">
+      <el-descriptions class="margin-top"  :column="2" border>
+        <el-descriptions-item label="活动附件" >
+          <!--        <el-link @click="downloadFile(this.src)" target="_blank">默认链接</el-link>-->
+          <!--      <button @click="downloadFile(item)"  v-for="item in blobfile" :key="item">a标签下载</button>-->
+          <div v-for="item in blobfile" :key="item">
+            <el-link @click="downloadFile(item)" >{{ item.filename }}<br></el-link>
+          </div>
+
+        </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
     <div class="block">
@@ -188,11 +202,152 @@ export default {
         value: '2',
         label: '活动名'
       }],
-      value: '1'
+      value: '1',
+      file:[],
+      fileList:[],
+      blobfile: []
     }
   },
 
   methods: {
+    handledown(row){
+      if (row.active.file != null && row.active.file.length > 0) {
+        // console.log('has')
+        for (var k = 0; k < row.active.file.length; k++) {
+          var item = row.active.file[k]
+          if (item.type === 'photo') {
+          } else {
+            var index1 = item.url.indexOf('files')
+            item.url = item.url.substring(index1 + 5, item.url.length)
+            this.file.push({url: item.url, filename: item.name})
+            console.log(this.file)
+          }
+        }
+        if (this.file.length > 0) {
+          console.log('file')
+
+          for (var j = 0; j < this.file.length; j++) {
+            var temp = j
+            var url1 = '/file' + this.file[j].url
+            // console.log(url1)
+            this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+              console.log(successResponse)
+              // let blob = new Blob([successResponse.data])
+              // let url = window.URL.createObjectURL(blob)
+              this.src = window.URL.createObjectURL(successResponse.data)
+              // console.log(this.file[temp])
+              this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+            })
+          }
+        }
+      }
+    },
+    downloadFile (item) {
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = item.src
+      link.setAttribute('download', item.filename)
+      document.body.appendChild(link)
+      link.click()
+    },
+    handleRemove (file, fileList) {
+      console.log(file, fileList)
+      fileList.remove(file)
+    },
+    handlePreview (file) {
+      console.log(file)
+    },
+    submitUpload () {
+      var param = new FormData()
+      this.$refs.upload.submit()
+      this.file.forEach(function (file) {
+        param.append('file', file)
+      })
+      param.append('desc_','')
+
+      // var num = parseInt(this.ruleForm.join_num)
+      // var canJoin = this.ruleForm.can_join1.concat(this.ruleForm.can_join2)
+      param.append('id',this.row.active.id)
+      console.log(this.row.active.id)
+      let config = {
+        header: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      console.log(param)
+      this.$axios.post('/auth/order/addfile', {id:this.row.active.id,desc_:'',file:null}).then(response => {
+        console.log('请求成功')
+        console.log(response)
+        this.$refs.upload.clearFiles()
+
+        this.$message({
+          type: 'info',
+          message: '创建成功'
+        })
+        // this.openMessage()
+        // 接口成功调用params上的onSuccess函数，会触发默认的successHandler函数
+        // 这样可以用自带的ui等
+        // params.onSuccess({name: 'eric'})
+      }).catch(err => {
+        console.log('请求失败')
+        console.log(err)
+      })
+    },
+    handleChange (file, fileList) {
+      console.log(fileList)
+      console.log(file)
+      this.fileList = fileList
+    },
+    httpRequest (param) {
+      // this.photoList = fd.fileList
+      this.file.push(param.file)
+      // console.log(this.photoList)
+    },
+    getFile (event) {
+      this.files = event.target.files
+    },
+    handleEdit (row) {
+      this.aid = row.active.id
+      console.log(row.id)
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/feedbackmassage',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+          if (this.role === '学生'||'教师') {
+            this.$router.push({
+              path: '/feedbackmassageStu',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+          if (this.role === '学院') {
+            this.$router.push({
+              path: '/feedbackmassageaca',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+          if (this.role === '学校') {
+            this.$router.push({
+              path: '/feedbackmassageSch',
+              query: {
+                aid: this.aid
+              }
+            })
+          }
+        }
+      })
+    },
     clear(){
       this.mode=1
       this.page=1
@@ -200,12 +355,9 @@ export default {
     },
     pagehandle(val){
       this.page=val
-      if(this.mode=1){
-        this.refreshtable()
-      }
-      else{
-        this.searchnext()
-      }
+      this.refreshtable()
+
+
     },
     refreshtable(){
       var url='/auth/order/my/pages='+this.page
@@ -279,14 +431,15 @@ export default {
     //   this.refreshtable()
     // },
     handlefeedClick(row){
-      this.aid=row.active.id
-      this.astart_time=row.active.star_time
-      this.aend_time=row.active.end_time
-      this.aname=row.active.name
-      this.aenroll_time=row.active.enroll_time
-      this.afile=row.active.files
-      this.atext=row.active.text
-      this.des_=row.desc_
+      // this.aid=row.active.id
+      // this.astart_time=row.active.star_time
+      // this.aend_time=row.active.end_time
+      // this.aname=row.active.name
+      // this.aenroll_time=row.active.enroll_time
+      // this.afile=row.active.files
+      // this.atext=row.active.text
+      // this.des_=row.desc_
+      this.row=row
     },
     handleClick(row) {
       this.$axios.get('/auth/myself').then(suresponse => {
