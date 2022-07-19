@@ -15,10 +15,11 @@
               style="height: 100vh">
               <el-submenu index="1">
                 <template slot="title">
-                  <i class="el-icon-location"></i>
+                  <i class="el-icon-user-solid"></i>
                   <span>活动管理</span>
                 </template>
                 <el-menu-item-group>
+<!--                  <i class="el-icon-circle-plus-outline"></i>-->
                   <el-menu-item index="/ActivityAdd">活动添加</el-menu-item>
                   <el-menu-item index="/ActivityList">活动列表</el-menu-item>
                 </el-menu-item-group>
@@ -38,7 +39,7 @@
                 <span slot="title">活动反馈</span>
               </el-menu-item>
               <el-menu-item index="/Myinfo">
-                <i class="el-icon-setting"></i>
+                <i class="el-icon-user"></i>
                 <span slot="title">个人信息</span>
               </el-menu-item>
               <el-menu-item index="/modifyUser">
@@ -50,7 +51,7 @@
                 <span slot="title">活动列表</span>
               </el-menu-item>
               <el-menu-item index="/StuActivityDetail">
-                <i class="el-icon-document"></i>
+                <i class="el-icon-s-flag"></i>
                 <span slot="title">我的活动</span>
               </el-menu-item>
             </el-menu>
@@ -176,5 +177,13 @@ export default {
 }
 .el-card__body, .el-main {
   padding: 0px;
+}
+.el-icon-circle-plus-outline:before {
+  content: "\E723";
+  margin-right: 10px;
+}
+.el-icon-circle-check:before {
+  content: "\E720";
+  margin-right: 10px;
 }
 </style>

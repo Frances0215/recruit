@@ -15,7 +15,7 @@
         style="height: 100vh">
         <el-submenu index="1">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            <i class="el-icon-user-solid"></i>
             <span>活动管理</span>
           </template>
           <el-menu-item-group>
@@ -37,7 +37,7 @@
           <span slot="title">活动反馈</span>
         </el-menu-item>
         <el-menu-item index="/Myinfoaca">
-          <i class="el-icon-setting"></i>
+          <i class="el-icon-user"></i>
           <span slot="title">个人信息</span>
         </el-menu-item>
         <el-menu-item index="/modifyUseraca">
