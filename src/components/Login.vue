@@ -24,7 +24,7 @@
     <el-form-item>
       <el-checkbox v-model="checked" style="float: left">记住密码</el-checkbox>
 <!--      <el-button type="text" v-on:click="modify">修改密码</el-button>-->
-      <el-link style="float: right">忘记密码</el-link>
+      <el-button type="text" style="float: right" @click="open">忘记密码</el-button>
     </el-form-item>
     <el-form-item style="width: 100%">
       <el-button type="primary" style="width: 100%;background: #505458;border: none" v-on:click="login">登录</el-button>
@@ -134,6 +134,17 @@ export default {
       var _this = this
       var path = this.$route.query.redirect
       this.$router.replace({path: path === '/' || path === undefined ? '/modify' : path})
+    },
+    open () {
+      this.$alert('请联系教务处重置密码', '忘记密码', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$message({
+            type: 'info',
+            message: `action: $ { action }`
+          })
+        }
+      })
     },
     clickitem () {
       if (this.loginForm === 1) {
