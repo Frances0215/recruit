@@ -48,15 +48,15 @@
     </el-aside>
     <el-container style="height: 100%;margin-left: 10px">
       <el-header style="text-align: right; font-size: 12px">
+        <span>{{this.name}}</span>
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 15px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <!--            <el-dropdown-item>查看</el-dropdown-item>-->
+            <!--            <el-dropdown-item>新增</el-dropdown-item>-->
+            <el-dropdown-item>登出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span>王小虎</span>
       </el-header>
 
       <el-main>
@@ -76,18 +76,27 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
+  mounted: function () {
+    this.loadActive()
+  },
   data () {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    }
     return {
-      tableData: Array(20).fill(item)
+      tableData: Array(20).fill(item),
+      name: ''
     }
   },
   methods: {
+    loadActive () {
+      var _this = this
+      this.$axios.get('/auth/myself').then(resp => {
+        if (resp && resp.data.code === 200) {
+          this.name=resp.data.result.username
+          console.log(resp)
+        }
+      })
+    },
     changeSidebar (path) {
       this.$router.push(path)
     },
@@ -126,5 +135,8 @@ export default {
   margin: 13px 8px;
   vertical-align: middle;
   position: relative;
+}
+.el-card__body, .el-main {
+  padding: 0px;
 }
 </style>

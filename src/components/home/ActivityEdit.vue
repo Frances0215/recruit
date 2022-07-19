@@ -1,8 +1,10 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
+  <div>
+    <el-button slot="append" style='float: left;margin-bottom: 10px' v-on:click="back" icon="el-icon-arrow-left"></el-button>
     <el-row>
       <el-col :span ="24">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="medium">
-          <h1 style="font-size: 30px;margin-bottom: 30px">活动添加</h1>
+          <h1 style="font-size: 30px;margin-bottom: 30px">活动编辑</h1>
           <el-row>
             <el-col :span="12">
               <el-form-item label="活动名称" prop="name" style="">
@@ -156,12 +158,13 @@
             </el-upload>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitUpload">立即创建</el-button>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
+            <el-button type="primary" @click="submitUpload">确认修改</el-button>
+            <el-button @click="deleteActive">删除活动</el-button>
           </el-form-item>
         </el-form>
       </el-col>
     </el-row>
+  </div>
 </template>
 
 <script>
@@ -170,9 +173,12 @@ export default {
   mounted: function () { // 自动触发写入的函数
     this.refreshOptions()
     this.refreshOptions2()
+    this.refreshForm()
   },
   data () {
     return {
+      row: [],
+      id: '',
       ruleForm: {
         star_time: '',
         end_time: '',
@@ -290,20 +296,21 @@ export default {
       param.append('place', this.ruleForm.place)
       param.append('aca', this.ruleForm.aca)
       param.append('sch', this.ruleForm.sch)
+      param.append('place', this.ruleForm.place)
       param.append('can_join', canJoin)
+      param.append('id', this.id)
       let config = {
         header: {
           'Content-Type': 'multipart/form-data'
         }
       }
-      this.$axios.post('/admin/active/creat', param, config).then(response => {
+      console.log(this.ruleForm.name)
+      this.$axios.post('/admin/active/edit_add', param, config).then(response => {
         console.log('请求成功')
         console.log(response)
-        this.$refs.upload.clearFiles()
-        this.$refs['ruleForm'].resetFields()
         this.$message({
           type: 'info',
-          message: '创建成功'
+          message: '修改成功'
         })
         // this.openMessage()
         // 接口成功调用params上的onSuccess函数，会触发默认的successHandler函数
@@ -336,7 +343,7 @@ export default {
           var temp = successResponse.data.result
           console.log(temp)
           for (var i = 0; i < temp.length; i++) {
-            var a = {'label': temp[i].username, 'value': temp[i].username}
+            var a = {'label': temp[i].username, 'value': temp[i].username, 'id': temp[i].id}
             this.options.push(a)
           }
           console.log(this.options)
@@ -354,7 +361,7 @@ export default {
           console.log(successResponse.data.result)
           var temp = successResponse.data.result
           for (var i = 0; i < temp.length; i++) {
-            var a = {'label': temp[i].username, 'value': temp[i].username}
+            var a = {'label': temp[i].username, 'value': temp[i].username, 'id': temp[i].id}
             this.options2.push(a)
           }
           console.log(this.options2)
@@ -364,14 +371,99 @@ export default {
           console.log('请求失败')
         })
     },
-    openMessage () {
-      this.$alert('创建成功！', '提示', {
-        confirmButtonText: '确定',
-        callback: action => {
+    refreshForm () {
+      this.row = this.$route.query.row
+      this.id = this.row.id
+      var url = '/no-authc/id/'
+      var a = {'id': this.$route.query.row.id}
+      this.$axios.post(url, {'id': this.$route.query.row.id}).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          var result = successResponse.data.result
+          var aca
+          for (var i = 0; i < this.options.length; i++) {
+            if (this.options[i].id === result.aca) {
+              aca = this.options[i].value
+            }
+          }
+          var sch
+          console.log(this.options2)
+          console.log(result.sch)
+          for (var a = 0; a < this.options2.length; a++) {
+            if (this.options2[a].id === result.sch) {
+              sch = this.options2[a].value
+            }
+          }
+          // 获取can_join
+          var canJoin = result.join_user
+          var canJoin1 = []
+          var canJoin2 = []
+          for (var b = 0; b < canJoin.length; b++) {
+            if (canJoin[b].role === '学校') {
+              canJoin1.push(canJoin[b].username)
+            } else if (canJoin[b].role === '学院') {
+              canJoin2.push(canJoin[b].username)
+            }
+          }
+          this.ruleForm.star_time = result.star_time
+          this.ruleForm.end_time = result.end_time
+          this.ruleForm.theme = result.theme
+          this.ruleForm.tag1 = result.tag1
+          this.ruleForm.tag2 = result.tag2
+          this.ruleForm.name = result.name
+          this.ruleForm.join_num = result.join_num
+          this.ruleForm.text = result.text
+          this.ruleForm.limit = result.limit_
+          this.ruleForm.enroll_time = result.enroll_time
+          this.ruleForm.enroll_end_time = result.enroll_end_time
+          this.ruleForm.place = result.place
+          this.ruleForm.aca = aca
+          this.ruleForm.sch = sch
+          this.ruleForm.place = result.place
+          this.ruleForm.can_join1 = canJoin1
+          this.ruleForm.can_join2 = canJoin2
+          this.fileList = result.files
+          console.log(this.ruleForm)
+        }
+      })
+        .catch(failResponse => {
+          console.log('请求失败')
+          console.log(failResponse)
+        })
+    },
+    deleteActive () {
+      var url = '/admin/delete'
+      console.log(this.$route.query.row.id)
+      this.$axios.post(url, {'id': this.$route.query.row.id}).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          console.log('请求成功')
+          console.log(successResponse.data.result)
+          this.$refs.upload.clearFiles()
+          this.$refs['ruleForm'].resetFields()
           this.$message({
             type: 'info',
-            message: `action: $ { action }`
+            message: '删除成功'
           })
+          this.$router.push({
+            path: '/ActivityList',
+            query: {
+              aid: this.aid
+            }
+          })
+        }
+      })
+        .catch(failResponse => {
+          console.log('请求失败')
+          console.log(failResponse)
+        })
+    },
+    back () {
+      console.log()
+      this.$router.push({
+        path: '/ActivityList',
+        query: {
+          id: this.id
         }
       })
     }

@@ -62,7 +62,7 @@
           <el-dropdown-menu slot="dropdown">
 <!--            <el-dropdown-item>查看</el-dropdown-item>-->
 <!--            <el-dropdown-item>新增</el-dropdown-item>-->
-            <el-dropdown-item>登出</el-dropdown-item>
+            <el-dropdown-item v-on:click="exit">登出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -102,6 +102,15 @@ export default {
         if (resp && resp.data.code === 200) {
           this.name=resp.data.result.username
           // console.log(resp)
+        }
+      })
+    },
+    exit () {
+      this.$axios.get('/logout').then(resp => {
+        if (resp && resp.data.code === 200) {
+          this.name=resp.data.result.username
+          console.log(resp)
+          this.$router.replace({path: path === '/' || path === undefined ? '/login' : path})
         }
       })
     },
