@@ -204,6 +204,16 @@ export default new Router({
             meta: {
               title: '个人信息'
             }
+          },
+          {
+            path: '/ActivityInfo',
+            name: 'ActivityInfo',
+            component: ActivityInfo
+          },
+          {
+            path: '/JoinedActivityInfo',
+            name: 'JoinedActivityInfo',
+            component: JoinedActivityInfo
           }
         ]
     },
@@ -226,6 +236,11 @@ export default new Router({
             meta: {
               title: '学生活动'
             }
+          },
+          {
+            path: '/feedbackmassageStu',
+            name: 'feedbackmassageStu',
+            component: feedbackmassage
           },
           {
             path: '/StuActivityDetailStu',

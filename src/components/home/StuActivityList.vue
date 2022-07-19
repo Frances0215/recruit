@@ -1,10 +1,16 @@
 <template>
   <div>
-    <el-carousel :interval="4000" type="card" height="200px">
-      <el-carousel-item v-for="item in 6" :key="item">
-        <h3 class="medium">{{ item }}</h3>
-      </el-carousel-item>
-    </el-carousel>
+    <div class="block" v-if="carouselTableVisible">
+      <el-carousel trigger="click" height="350px" type="card">
+        <el-carousel-item v-for="item in items" :key="item">
+          <el-image
+            style="width: 100%; height: 350px"
+            :src=item.src
+            :fit='fill'
+            @click="clickcarousel(item.aid)"></el-image>
+        </el-carousel-item>
+      </el-carousel>
+    </div>
     <div style="margin-top: 15px;">
       <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
         <el-select v-model="value" slot="prepend" placeholder="请选择">
@@ -12,7 +18,8 @@
           <el-option label="发布用户" value="1"></el-option>
         </el-select>
         <el-button slot="append" @click="searcht" icon="el-icon-search"></el-button>
-        <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>-->
+        <el-button slot="append" type="danger" @click="clear" icon="el-icon-refresh-left">重置</el-button>
+        <el-button slot="append" type="danger" @click="myact">我可以参加的活动</el-button>
       </el-input>
     </div>
     <el-table
@@ -121,10 +128,13 @@ var responses
 export default {
   mounted:function () {   //自动触发写入的函数
     this.refreshtable()
+    this.loadCard ()
   },
   data () {
 
     return {
+      items:[],
+      carouselTableVisible:false,
       tableData: [],
       multipleSelection: [],
       dialogTableVisible: false,
@@ -164,6 +174,203 @@ export default {
   },
 
   methods: {
+    async loadNodeList(photo){
+      for (var s = 0; s < photo.length; s++) {
+        var url = '/file' + photo[s].url
+        var p=photo[s]
+        await this.$axios.get(url, {responseType: 'blob'}).then(successResponse => {
+          // console.log(successResponse.data)
+          // let blob = new Blob([successResponse.data])
+          // let url = window.URL.createObjectURL(blob)
+          this.src = window.URL.createObjectURL(successResponse.data)
+          this.items.push({src:this.src,aid:p.aid})
+          // console.log(this.items)
+        })
+      }
+    },
+    clickcarousel(row) {
+      console.log(row)
+      console.log('row')
+      this.$axios.get('/auth/myself').then(suresponse => {
+        if (suresponse.data.code === 200) {
+          this.role = suresponse.data.result.role
+          console.log(this.role)
+          if (this.role === 'super') {
+            this.$router.push({
+              path: '/ActivityInfo',
+              query: {
+                row: row
+              }
+            })
+          }
+          if (this.role === '学生') {
+            this.$router.push({
+              path: '/ActivityInfostu',
+              query: {
+                row: row
+              }
+            })
+          }
+          if (this.role === '教师') {
+            this.$router.push({
+              path: '/ActivityInfostu',
+              query: {
+                row: row
+              }
+            })
+          }
+
+        }
+      })
+      // this.$router.push({
+      //   path: '/ActivityInfo',
+      //   query: {
+      //     row: row
+      //   }
+      // })
+      this.aid=row.id
+      this.astart_time=row.star_time
+      this.aend_time=row.end_time
+      this.aname=row.name
+      this.aenroll_time=row.enroll_time
+      this.afile=row.files
+      this.atext=row.text
+    },
+    loadCard () {
+      var photo=[]
+      var page=1
+      var total=0
+      var url = '/no_authc/allactive/page=' + page
+      // console.log(url)
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          // console.log(successResponse.data.result)
+          total = successResponse.data.result.totalElements
+          for(var j=0;j<successResponse.data.result.content.length;j++){
+            if(successResponse.data.result.content[j].files!=null && successResponse.data.result.content[j].files.length>0){
+              var item=successResponse.data.result.content[j].files[0]
+              if (item.type === 'photo') {
+
+                if(photo.length<=2){
+
+                  var index = item.url.indexOf('files//')
+                  if(index!=-1){
+                    item.url = item.url.substring(index + 6, item.url.length)
+                  }
+                  else{
+                    index = item.url.indexOf('files/')
+                    item.url = item.url.substring(index + 5, item.url.length)
+                  }
+                  // console.log(item.url)
+                  photo.push({url:item.url,aid:successResponse.data.result.content[j]})
+                  // console.log("photo")
+                  // console.log(photo.length)
+                }
+                else if(this.carouselTableVisible==false){
+                  // console.log(photo)
+                  this.carouselTableVisible = true
+                  this.loadNodeList(photo)
+
+                  // for (var k = 0; k < photo.length; k++) {
+                  //   var url = '/file' + photo[k].url
+                  //   var p=photo[k]
+                  //   this.$axios.get(url, {responseType: 'blob'}).then(successResponse => {
+                  //     // console.log(successResponse.data)
+                  //     // let blob = new Blob([successResponse.data])
+                  //     // let url = window.URL.createObjectURL(blob)
+                  //     this.src = window.URL.createObjectURL(successResponse.data)
+                  //     console.log(photo[k])
+                  //     this.items.push({src:this.src,aid:p.aid})
+                  //     // console.log(this.items)
+                  //   })
+                  // }
+                }
+              }
+            }
+          }
+          for(var i=2;i<total/10+1;i++){
+            page=i
+            // console.log(page)
+            var url = '/no_authc/allactive/page=' + page
+            this.$axios.get(url).then(successResponse => {
+              if (successResponse.data.code === 200) {
+                for(var a=0;a<successResponse.data.result.content.length;a++){
+                  if(successResponse.data.result.content[a].files!=null&&successResponse.data.result.content[a].files.length>0){
+                    var item=successResponse.data.result.content[a].files[0]
+                    if (item.type === 'photo') {
+                      if(photo.length<=2){
+
+                        var index = item.url.indexOf('files//')
+                        if(index!=-1){
+                          item.url = item.url.substring(index + 6, item.url.length)
+                        }
+                        else{
+                          index = item.url.indexOf('files/')
+                          item.url = item.url.substring(index + 5, item.url.length)
+                        }
+                        photo.push({url:item.url,aid:successResponse.data.result.content[a]})
+                        // console.log('photo')
+                        // console.log(photo.length)
+                      }
+                      else if(this.carouselTableVisible==false){
+                        // console.log('photo')
+                        // console.log(photo)
+                        this.carouselTableVisible = true
+                        this.loadNodeList(photo)
+                        // for (var s = 0; s < photo.length; s++) {
+                        //   var url = '/file' + photo[s].url
+                        //   var p=photo[s]
+                        //   this.$axios.get(url, {responseType: 'blob'}).then(successResponse => {
+                        //     // console.log(successResponse.data)
+                        //     // let blob = new Blob([successResponse.data])
+                        //     // let url = window.URL.createObjectURL(blob)
+                        //     this.src = window.URL.createObjectURL(successResponse.data)
+                        //     this.items.push({src:this.src,aid:p.aid})
+                        //     // console.log(this.items)
+                        //   })
+                        // }
+                      }
+                    }
+                  }
+                }
+              }
+            })
+          }
+        }
+      })
+        .catch(failResponse => {
+        })
+    },
+    myact(){
+      this.page=1
+      this.mode=3
+      var url='/auth/can_join/page='+this.page
+      this.$axios.get(url).then(successResponse => {
+        // console.log(successResponse)
+        if (successResponse.data.code === 200) {
+          // console.log(successResponse.data.result.totalElements)
+          this.total=successResponse.data.result.totalElements
+          this.tableData=successResponse.data.result.content
+
+        }
+        else{
+          this.tableData=[]
+          this.total=0
+        }
+      })
+    },
+    myactnext(){
+      var url='/auth/can_join/page='+this.page
+      // console.log(url)
+      this.$axios.get(url).then(successResponse => {
+        if (successResponse.data.code === 200) {
+          // console.log(successResponse)
+          // console.log(successResponse.data.result.totalElements)
+          this.total=successResponse.data.result.totalElements
+          this.tableData=successResponse.data.result.content
+        }
+      })
+    },
     clear(){
       this.mode=1
       this.page=1
@@ -174,16 +381,19 @@ export default {
       if(this.mode==1){
         this.refreshtable()
       }
-      else{
+      else if(this.mode==2){
         this.searchnext()
+      }
+      else{
+        this.myactnext()
       }
     },
     refreshtable(){
       var url='/no_authc/allactive/page='+this.page
-      console.log(url)
+      // console.log(url)
       this.$axios.get(url).then(successResponse => {
         if (successResponse.data.code === 200) {
-          console.log(successResponse.data.result.totalElements)
+          // console.log(successResponse.data.result.totalElements)
           this.total=successResponse.data.result.totalElements
           this.tableData=successResponse.data.result.content
           console.log(this.tableData)
@@ -203,6 +413,7 @@ export default {
           this.page=1
         }).catch(failResponse => {
           this.tableData=[]
+          this.total=0
         })
       }
       else{
@@ -213,6 +424,7 @@ export default {
           this.page=1
         }).catch(failResponse => {
           this.tableData=[]
+          this.total=0
         })
       }
     },
@@ -226,6 +438,7 @@ export default {
           this.tableData=successResponse.data.result.content
         }).catch(failResponse => {
           this.tableData=[]
+          this.total=0
         })
       }
       else{
@@ -234,6 +447,7 @@ export default {
           this.tableData=successResponse.data.result.content
         }).catch(failResponse => {
           this.tableData=[]
+          this.total=0
         })
       }
 

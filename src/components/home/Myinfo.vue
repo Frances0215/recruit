@@ -18,17 +18,28 @@
     </el-row>
 
     <el-dialog title="修改密码" :visible.sync="dialogTableVisible">
-      <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-        <el-form-item label="新密码">
-          <el-input v-model="formLabelAlign.pass" show-password></el-input>
+<!--      <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">-->
+<!--        <el-form-item label="新密码">-->
+<!--          <el-input v-model="formLabelAlign.pass" show-password></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="确认密码">-->
+<!--          <el-input v-model="formLabelAlign.confirm" show-password></el-input>-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
+      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码">
-          <el-input v-model="formLabelAlign.confirm" show-password></el-input>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
         </el-form-item>
+<!--        <el-form-item label="年龄" prop="age">-->
+<!--          <el-input v-model.number="ruleForm.age"></el-input>-->
+<!--        </el-form-item>-->
       </el-form>
       <span slot="footer" class="dialog-footer">
           <el-button @click="dialogTableVisibleVisible = false">取 消</el-button>
-          <el-button type="primary" @click="changepassword">确 定</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
         </span>
     </el-dialog>
   </div>
@@ -41,6 +52,25 @@ export default {
     this.loadActive()
   },
   data () {
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.ruleForm.checkPass !== '') {
+          this.$refs.ruleForm.validateField('checkPass')
+        }
+        callback()
+      }
+    }
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.ruleForm.pass) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       id: '',
       name: '',
@@ -55,10 +85,35 @@ export default {
         pass: '',
         region: '',
         confirm: ''
+      },
+      ruleForm: {
+        pass: '',
+        checkPass: '',
+        age: ''
+      },
+      rules: {
+        pass: [
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        checkPass: [
+          { validator: validatePass2, trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('已修改密码')
+          this.changepassword()
+        } else {
+          alert('信息错误')
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
     loadActive () {
       var _this = this
       this.$axios.get('/auth/myself').then(resp => {
@@ -77,16 +132,12 @@ export default {
       })
     },
     changepassword () {
-      if (this.formLabelAlign.confirm === this.formLabelAlign.pass) {
-        this.$axios.put('/auth/user/password', {username: 'admin', password: this.formLabelAlign.pass}).then(resp => {
-          if (resp && resp.data.code === 200) {
-            console.log(resp)
-          }
-        })
-        this.dialogTableVisible = false
-      } else {
-        alert('密码不一致')
-      }
+      this.$axios.put('/auth/user/password', {username: 'admin', password: this.ruleForm.pass}).then(resp => {
+        if (resp && resp.data.code === 200) {
+          console.log(resp)
+        }
+      })
+      this.dialogTableVisible = false
     }
 
   }

@@ -43,11 +43,11 @@
               </el-menu-item>
               <el-menu-item index="/StuActivityList">
                 <i class="el-icon-document"></i>
-                <span slot="title">学生活动</span>
+                <span slot="title">活动列表</span>
               </el-menu-item>
               <el-menu-item index="/StuActivityDetail">
                 <i class="el-icon-document"></i>
-                <span slot="title">学生我的活动</span>
+                <span slot="title">我的活动</span>
               </el-menu-item>
             </el-menu>
 <!--          </el-col>-->
@@ -62,7 +62,7 @@
           <el-dropdown-menu slot="dropdown">
 <!--            <el-dropdown-item>查看</el-dropdown-item>-->
 <!--            <el-dropdown-item>新增</el-dropdown-item>-->
-            <el-dropdown-item>登出</el-dropdown-item>
+            <el-dropdown-item v-on:click="exit">登出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -101,7 +101,16 @@ export default {
       this.$axios.get('/auth/myself').then(resp => {
         if (resp && resp.data.code === 200) {
           this.name=resp.data.result.username
+          // console.log(resp)
+        }
+      })
+    },
+    exit () {
+      this.$axios.get('/logout').then(resp => {
+        if (resp && resp.data.code === 200) {
+          this.name=resp.data.result.username
           console.log(resp)
+          this.$router.replace({path: path === '/' || path === undefined ? '/login' : path})
         }
       })
     },

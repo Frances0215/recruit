@@ -2,7 +2,7 @@
   <body>
   <div style="margin-top: 15px;">
     <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
-      <el-select v-model="select" slot="prepend" placeholder="请选择">
+      <el-select v-model="value" slot="prepend" placeholder="请选择">
         <el-option label="活动名称" value="2"></el-option>
         <el-option label="发布用户" value="1"></el-option>
       </el-select>
@@ -120,7 +120,7 @@ export default {
     searcht () {
       this.mode = 2
       console.log(this.input)
-      if (this.value === 1) {
+      if (this.value === '1') {
         this.$axios.post('/no-authc/publisher/page=1', {publisher: this.input}).then(successResponse => {
           console.log(successResponse.data.result.content)
           this.total = successResponse.data.result.totalElements
