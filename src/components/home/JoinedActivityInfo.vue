@@ -20,7 +20,7 @@
     <br>
     <el-descriptions class="margin-top"  :column="2" border>
       <template slot="extra">
-<!--        <el-button type="primary" size="small" @click="dialogTableVisible=true" :disabled='this.avaible'>{{ this.bttext }}</el-button>-->
+        <el-button type="primary" size="small" @click="dialogTableVisible=true" :disabled='this.avaible'>{{ this.bttext }}</el-button>
       </template>
 
       <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
@@ -53,7 +53,7 @@
       </el-descriptions>
       <span slot="footer" class="dialog-footer">
           <el-button @click="dialogTableVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submit">提 交</el-button>
+          <el-button type="primary" @click="submit">报 名</el-button>
         </span>
     </el-dialog>
   </div>
@@ -107,6 +107,21 @@ export default {
     }
   },
   methods: {
+    async loadfile () {
+      for (var j = 0; j < this.file.length; j++) {
+        var temp = j
+        var url1 = '/file' + this.file[j].url
+        // console.log(url1)
+        await this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+          console.log(successResponse)
+          // let blob = new Blob([successResponse.data])
+          // let url = window.URL.createObjectURL(blob)
+          this.src = window.URL.createObjectURL(successResponse.data)
+          // console.log(this.file[temp])
+          this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+        })
+      }
+    },
     // downloadFile (url, fileName = 'a') {
     //   let link = document.createElement('a')
     //   link.style.display = 'none'
@@ -125,8 +140,11 @@ export default {
     },
     submit () {
       this.$axios.post('/auth/join', {id: this.aid}).then(resp => {
+        console.log(resp)
         if (resp && resp.data.code === 200) {
           alert('报名成功')
+        } else {
+          alert('报名失败')
         }
       })
     },
@@ -153,8 +171,9 @@ export default {
           this.aenroll_time = this.row.enroll_time
           this.afile = this.row.files
           this.atext = this.row.text
-          this.$axios.post('auth/can_join', {aid: 23, uid: 3}).then(successResponse => {
-            // console.log(successResponse.data.result)
+          console.log(this.aid, this.id)
+          this.$axios.post('auth/can_join', {aid: this.aid, uid: this.id}).then(successResponse => {
+            console.log(successResponse.data.result)
             if (successResponse && successResponse.data.code === 200) {
               if (!successResponse.data.result) {
                 // console.log('auth/can_join')
@@ -169,8 +188,15 @@ export default {
             for (var k = 0; k < this.afile.length; k++) {
               var item = this.afile[k]
               if (item.type === 'photo') {
-                var index = item.url.indexOf('files')
-                item.url = item.url.substring(index + 5, item.url.length)
+                var index = item.url.indexOf('files//')
+                if (index !== -1) {
+                  item.url = item.url.substring(index + 6, item.url.length)
+                } else {
+                  index = item.url.indexOf('files/')
+                  if (index !== -1) {
+                    item.url = item.url.substring(index + 5, item.url.length)
+                  }
+                }
                 photo.push(item)
               } else {
                 var index1 = item.url.indexOf('files')
@@ -179,13 +205,11 @@ export default {
                 console.log(this.file)
               }
             }
-            this.afile.forEach(function (item) {
-
-            })
             if (photo.length > 0) {
               this.carouselTableVisible = true
               for (var i = 0; i < photo.length; i++) {
                 var url = '/file' + photo[i].url
+                console.log(url)
                 this.$axios.get(url, {responseType: 'blob'}).then(successResponse => {
                   // console.log(successResponse.data)
                   // let blob = new Blob([successResponse.data])
@@ -198,20 +222,20 @@ export default {
             }
             if (this.file.length > 0) {
               console.log('file')
-
-              for (var j = 0; j < this.file.length; j++) {
-                var temp = j
-                var url1 = '/file' + this.file[j].url
-                // console.log(url1)
-                this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
-                  console.log(successResponse)
-                  // let blob = new Blob([successResponse.data])
-                  // let url = window.URL.createObjectURL(blob)
-                  this.src = window.URL.createObjectURL(successResponse.data)
-                  // console.log(this.file[temp])
-                  this.blobfile.push({src: this.src, filename: this.file[temp].filename})
-                })
-              }
+              this.loadfile()
+              // for (var j = 0; j < this.file.length; j++) {
+              //   var temp = j
+              //   var url1 = '/file' + this.file[j].url
+              //   // console.log(url1)
+              //   this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+              //     console.log(successResponse)
+              //     // let blob = new Blob([successResponse.data])
+              //     // let url = window.URL.createObjectURL(blob)
+              //     this.src = window.URL.createObjectURL(successResponse.data)
+              //     // console.log(this.file[temp])
+              //     this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+              //   })
+              // }
             }
           }
           console.log(this.blobfile)
@@ -232,6 +256,7 @@ export default {
         }
       })
     },
+
     goBack () {
       this.$axios.get('/auth/myself').then(suresponse => {
         if (suresponse.data.code === 200) {
@@ -254,18 +279,6 @@ export default {
           }
         }
       })
-    },
-    changepassword () {
-      if (this.formLabelAlign.confirm === this.formLabelAlign.pass) {
-        this.$axios.put('/auth/user/password', {username: 'admin', password: this.formLabelAlign.pass}).then(resp => {
-          if (resp && resp.data.code === 200) {
-            console.log(resp)
-          }
-        })
-        this.dialogTableVisible = false
-      } else {
-        alert('密码不一致')
-      }
     }
 
   }

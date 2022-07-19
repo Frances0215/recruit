@@ -22,6 +22,12 @@
     style="width: 100%"
     @selection-change="handleSelectionChange">
     <el-table-column
+      prop="id"
+      label="审核ID"
+      width="150"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
       prop="active.name"
       label="活动名称"
       width="150">
@@ -29,6 +35,24 @@
     <el-table-column
       prop="user.username"
       label="参与者"
+      width="150"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="uid"
+      label="参与ID"
+      width="150"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="aca"
+      label="学院ID"
+      width="150"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="sch"
+      label="学校ID"
       width="150"
       show-overflow-tooltip>
     </el-table-column>
@@ -44,15 +68,14 @@
       width="150"
       show-overflow-tooltip>
     </el-table-column>
+
     <el-table-column
-      label="下载图片"
-      width="150"
-      show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-      label="下载附件"
-      width="150"
-      show-overflow-tooltip>
+      fixed="right"
+      label="操作"
+      width="100">
+      <template slot-scope="scope">
+        <el-button @click="downfile(scope.row)" type="text" size="small">下载附件</el-button>
+      </template>
     </el-table-column>
   </el-table>
   <div class="block" style="margin-top: 10px">
@@ -77,12 +100,14 @@
 export default {
   mounted: function () {
     this.aid = parseInt(this.$route.query.aid)
+    this.modea = parseInt(this.$route.query.mode)
     console.log(this.aid)
     this.refreshtable()
   },
   detail: {name: 'd'},
   data () {
     return {
+      modea: 1,
       tableData: [],
       multipleSelection: [],
       input: '',
@@ -109,6 +134,44 @@ export default {
     }
   },
   methods: {
+    async loadfile () {
+      for (var j = 0; j < this.file.length; j++) {
+        var temp = j
+        var url1 = '/file' + this.file[j].url
+        // console.log(url1)
+        await this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+          console.log(successResponse)
+          // let blob = new Blob([successResponse.data])
+          // let url = window.URL.createObjectURL(blob)
+          this.src = window.URL.createObjectURL(successResponse.data)
+          // console.log(this.file[temp])
+          this.blobfile.push({src: this.src, filename: this.file[temp].filename})
+        })
+      }
+    },
+    async downfile (row) {
+      var url = row.url
+      var index = url.indexOf('files/')
+      var name = url.substring(index + 5, url.length)
+      var src
+      console.log(name)
+      var url1 = '/file' + name
+      console.log(url1)
+      await this.$axios.get(url1, {responseType: 'blob'}).then(successResponse => {
+        // let blob = new Blob([successResponse.data])
+        // let url = window.URL.createObjectURL(blob)
+        console.log(successResponse)
+        src = window.URL.createObjectURL(successResponse.data)
+        // console.log(this.file[temp])
+      })
+      console.log(src)
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = src
+      link.setAttribute('download', name)
+      document.body.appendChild(link)
+      link.click()
+    },
     clear () {
       this.mode = 1
       this.page = 1
@@ -200,12 +263,21 @@ export default {
             })
           }
           if (this.role === '学生' || this.role === '教师') {
-            this.$router.push({
-              path: '/StuActivityDetailStu',
-              query: {
-                aid: this.aid
-              }
-            })
+            if (this.modea === 2) {
+              this.$router.push({
+                path: '/StuFeedback',
+                query: {
+                  aid: this.aid
+                }
+              })
+            } else {
+              this.$router.push({
+                path: '/StuActivityDetailStu',
+                query: {
+                  aid: this.aid
+                }
+              })
+            }
           }
           if (this.role === '学院') {
             this.$router.push({
