@@ -67,6 +67,14 @@ export default new Router({
             }
           },
           {
+            path: '/ActivityDetail',
+            name: 'ActivityDetail',
+            component: ActivityDetail,
+            meta: {
+              title: '活动详情'
+            }
+          },
+          {
             path: '/ActivityList',
             name: 'ActivityList',
             component: ActivityList,

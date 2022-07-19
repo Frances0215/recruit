@@ -244,7 +244,7 @@ export default {
       // console.log(url)
       this.$axios.get(url).then(successResponse => {
         if (successResponse.data.code === 200) {
-          // console.log(successResponse.data.result)
+          console.log(successResponse.data.result)
           total = successResponse.data.result.totalElements
           for(var j=0;j<successResponse.data.result.content.length;j++){
             if(successResponse.data.result.content[j].files!=null && successResponse.data.result.content[j].files.length>0){

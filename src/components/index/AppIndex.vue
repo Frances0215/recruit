@@ -56,15 +56,16 @@
     </el-aside>
     <el-container style="height: 100%;margin-left: 10px">
       <el-header style="text-align: right; font-size: 12px">
-        <span>{{this.name}}</span>
-        <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
-          <el-dropdown-menu slot="dropdown">
-<!--            <el-dropdown-item>查看</el-dropdown-item>-->
-<!--            <el-dropdown-item>新增</el-dropdown-item>-->
-            <el-dropdown-item v-on:click="exit">登出</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <span style="font-size: 18px; margin-right: 10px">{{this.name}}</span>
+        <el-link  type="primary" size="mini" v-on:click="exit" plain>退出登录</el-link>
+<!--        <el-dropdown>-->
+<!--          <i class="el-icon-setting" style="margin-right: 15px"></i>-->
+<!--          <el-dropdown-menu slot="dropdown">-->
+<!--&lt;!&ndash;            <el-dropdown-item>查看</el-dropdown-item>&ndash;&gt;-->
+<!--&lt;!&ndash;            <el-dropdown-item>新增</el-dropdown-item>&ndash;&gt;-->
+<!--            <el-dropdown-item >登出</el-dropdown-item>-->
+<!--          </el-dropdown-menu>-->
+<!--        </el-dropdown>-->
       </el-header>
 
       <el-main>
@@ -92,7 +93,8 @@ export default {
   data () {
     return {
       tableData: Array(20).fill(item),
-      name: ''
+      name: '',
+      username: ''
     }
   },
   methods: {
@@ -106,11 +108,19 @@ export default {
       })
     },
     exit () {
-      this.$axios.get('/logout').then(resp => {
+      this.$axios.get('/auth/myself').then(suresponse => {
+        this.username = suresponse.data.result.username
+        console.log(this.username)
+      })
+      this.$axios.get('/logout', {
+        username: this.username
+      }).then(resp => {
         if (resp && resp.data.code === 200) {
-          this.name=resp.data.result.username
+          console.log('success')
           console.log(resp)
-          this.$router.replace({path: path === '/' || path === undefined ? '/login' : path})
+          this.$router.push({
+            path: '/login'
+          })
         }
       })
     },
