@@ -56,8 +56,8 @@
     </el-aside>
     <el-container style="height: 100%;margin-left: 10px">
       <el-header style="text-align: right; font-size: 12px">
-        <span>{{this.name}}</span>
-        <el-button type="info" size="mini" v-on:click="exit" plain>退出登录</el-button>
+        <span style="font-size: 18px; margin-right: 10px">{{this.name}}</span>
+        <el-link  type="primary" size="mini" v-on:click="exit" plain>退出登录</el-link>
 <!--        <el-dropdown>-->
 <!--          <i class="el-icon-setting" style="margin-right: 15px"></i>-->
 <!--          <el-dropdown-menu slot="dropdown">-->

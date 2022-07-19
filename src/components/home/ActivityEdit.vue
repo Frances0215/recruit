@@ -1,8 +1,9 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
   <body>
-<!--  <el-button slot="append" style='float: left;margin-bottom: 10px' v-on:click="back" icon="el-icon-arrow-left"></el-button>-->
-<!--  <el-button style='float: left;margin-bottom: 10px' icon="el-icon-back"></el-button>-->
-  <div>
+  <br>
+  <el-page-header @back="back1">
+  </el-page-header>
+  <br>
     <el-row>
       <el-col :span ="24">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" size="medium">
@@ -166,7 +167,6 @@
         </el-form>
       </el-col>
     </el-row>
-  </div>
   </body>
 </template>
 
@@ -297,7 +297,13 @@ export default {
       param.append('enroll_time', this.ruleForm.enroll_time)
       param.append('enroll_end_time', this.ruleForm.enroll_end_time)
       param.append('place', this.ruleForm.place)
-      param.append('aca', this.ruleForm.aca)
+      if (typeof this.ruleForm.aca === 'undefined') {
+        this.ruleForm.aca = 'null'
+      }
+      param.append('sch', this.ruleForm.sch)
+      if (typeof this.ruleForm.sch === 'undefined') {
+        this.ruleForm.sch = 'null'
+      }
       param.append('sch', this.ruleForm.sch)
       param.append('place', this.ruleForm.place)
       param.append('can_join', canJoin)
@@ -402,11 +408,13 @@ export default {
           var canJoin = result.join_user
           var canJoin1 = []
           var canJoin2 = []
-          for (var b = 0; b < canJoin.length; b++) {
-            if (canJoin[b].role === '学校') {
-              canJoin1.push(canJoin[b].username)
-            } else if (canJoin[b].role === '学院') {
-              canJoin2.push(canJoin[b].username)
+          if (canJoin !== null) {
+            for (var b = 0; b < canJoin.length; b++) {
+              if (canJoin[b].role === '学校') {
+                canJoin1.push(canJoin[b].username)
+              } else if (canJoin[b].role === '学院') {
+                canJoin2.push(canJoin[b].username)
+              }
             }
           }
           this.ruleForm.star_time = result.star_time
@@ -449,10 +457,7 @@ export default {
             message: '删除成功'
           })
           this.$router.push({
-            path: '/ActivityList',
-            query: {
-              aid: this.aid
-            }
+            path: '/ActivityList'
           })
         }
       })
@@ -460,16 +465,13 @@ export default {
           console.log('请求失败')
           console.log(failResponse)
         })
+    },
+    back1 () {
+      console.log('返回')
+      this.$router.push({
+        path: '/ActivityList'
+      })
     }
-    // back () {
-    //   console.log()
-    //   this.$router.push({
-    //     path: '/ActivityList',
-    //     query: {
-    //       id: this.id
-    //     }
-    //   })
-    // }
   }
 }
 </script>
