@@ -89,7 +89,7 @@
           <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
           <el-button @click="handleEdit(scope.row)" type="text" size="small">查看反馈</el-button>
           <el-button @click="handledown(scope.row),dialogFeedbackVisible = true" type="text" size="small">附件下载</el-button>
-          <el-button @click="handlefeedClick(scope.row),dialogTableVisible=true" type="text" size="small">附件上传</el-button>
+<!--          <el-button @click="handlefeedClick(scope.row),dialogTableVisible=true" type="text" size="small">附件上传</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -226,7 +226,8 @@ export default {
       }
     },
     handledown(row){
-
+      this.blobfile=[]
+      this.file=[]
       if (row.active.files != null && row.active.files.length > 0) {
         console.log('has')
         console.log(row.active.files)
