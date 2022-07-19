@@ -234,6 +234,15 @@ export default {
       }).then(suresponse => {
         if (suresponse.data.code === 200) {
           console.log(suresponse.data.result)
+          this.$alert(suresponse.data.result, '审核结果', {
+            confirmButtonText: '确定'
+            // callback: action => {
+            //   this.$message({
+            //     type: 'info',
+            //     // message: `action: $ { action }`
+            //   })
+            // }
+          })
         }
       })
       this.clear()
@@ -248,6 +257,15 @@ export default {
       }).then(suresponse => {
         if (suresponse.data.code === 200) {
           console.log(suresponse.data.result)
+          this.$alert(suresponse.data.result, '审核结果', {
+            confirmButtonText: '确定'
+            // callback: action => {
+            //   this.$message({
+            //     type: 'info',
+            //     // message: `action: $ { action }`
+            //   })
+            // }
+          })
         }
       })
       this.clear()

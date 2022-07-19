@@ -118,7 +118,7 @@ export default {
       this.mode = 2
       console.log(this.input)
       if (this.value === '1') {
-        this.$axios.post('/admin/order/find/pages=1', {
+        this.$axios.post('/auth/order/find/pages=1', {
           aid: this.aid,
           father: '',
           status: '已反馈',
@@ -132,7 +132,7 @@ export default {
           this.tableData = []
         })
       } else {
-        this.$axios.post('/admin/order/find/pages=1', {
+        this.$axios.post('/auth/order/find/pages=1', {
           aid: this.aid,
           father: parseInt(this.input),
           status: '已反馈',
@@ -162,7 +162,7 @@ export default {
       this.refreshtable()
     },
     refreshtable () {
-      var url = '/admin/order/find/pages=' + this.page
+      var url = '/auth/order/find/pages=' + this.page
       console.log(url)
       console.log(this.aid)
       this.$axios

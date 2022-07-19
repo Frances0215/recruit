@@ -137,13 +137,13 @@ export default {
     },
     open () {
       this.$alert('请联系教务处重置密码', '忘记密码', {
-        confirmButtonText: '确定',
-        callback: action => {
-          this.$message({
-            type: 'info',
-            message: `action: $ { action }`
-          })
-        }
+        confirmButtonText: '确定'
+        // callback: action => {
+        //   this.$message({
+        //     type: 'info',
+        //     message: `action: $ { action }`
+        //   })
+        // }
       })
     },
     clickitem () {
