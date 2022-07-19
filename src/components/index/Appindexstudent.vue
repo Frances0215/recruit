@@ -13,22 +13,23 @@
         text-color="#fff"
         active-text-color="#ffd04b"
         style="height: 100vh">
+        <el-menu-item index="/StuActivityListStu">
+          <i class="el-icon-data-analysis"></i>
+          <span slot="title">学生活动</span>
+        </el-menu-item>
+        <el-menu-item index="/StuActivityDetailStu">
+          <i class="el-icon-pie-chart"></i>
+          <span slot="title">我的活动</span>
+        </el-menu-item>
+        <el-menu-item index="/StuFeedback">
+          <i class="el-icon-headset"></i>
+          <span slot="title">活动反馈</span>
+        </el-menu-item>
         <el-menu-item index="/MyinfoStu">
           <i class="el-icon-setting"></i>
           <span slot="title">个人信息</span>
         </el-menu-item>
-        <el-menu-item index="/StuActivityListStu">
-          <i class="el-icon-document"></i>
-          <span slot="title">学生活动</span>
-        </el-menu-item>
-        <el-menu-item index="/StuActivityDetailStu">
-          <i class="el-icon-document"></i>
-          <span slot="title">我的活动</span>
-        </el-menu-item>
-        <el-menu-item index="/StuFeedback">
-          <i class="el-icon-document"></i>
-          <span slot="title">活动反馈</span>
-        </el-menu-item>
+
       </el-menu>
       <!--          </el-col>-->
       <!--        </el-row>-->
