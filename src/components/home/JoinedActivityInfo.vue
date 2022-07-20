@@ -18,10 +18,10 @@
       </el-carousel>
     </div>
     <br>
-    <el-descriptions class="margin-top"  :column="2" border>
-      <template slot="extra">
-        <el-button type="primary" size="small" @click="dialogTableVisible=true" :disabled='this.avaible'>{{ this.bttext }}</el-button>
-      </template>
+    <el-descriptions class="margin-top"  :column="2" border :contentStyle="CS" :label-style="LS ">
+<!--      <template slot="extra">-->
+<!--        <el-button type="primary" size="small" @click="dialogTableVisible=true" :disabled='this.avaible'>{{ this.bttext }}</el-button>-->
+<!--      </template>-->
 
       <el-descriptions-item label="活动ID">{{this.aid}}</el-descriptions-item>
       <el-descriptions-item label="活动名">{{this.aname}}</el-descriptions-item>
@@ -37,7 +37,7 @@
 
       </el-descriptions-item>
     </el-descriptions>
-
+    <el-button type="primary"  @click="dialogTableVisible=true" :disabled='this.avaible' style="margin-top: 20px; width: 100px;margin-bottom: 20px">{{ this.bttext }}</el-button>
     <el-dialog title="报名信息" :visible.sync="dialogTableVisible">
       <el-descriptions title="用户信息" direction="horizontal" :column="1" border>
         <el-descriptions-item label="用户ID">{{ this.id }}</el-descriptions-item>
@@ -67,6 +67,20 @@ export default {
   },
   data () {
     return {
+      CS: {
+        'text-align': 'center', // 文本居中
+        'min-width': '250px', // 最小宽度
+        'word-break': 'break-all' // 过长时自动换行
+      },
+      LS: {
+        'color': '#000',
+        'text-align': 'center',
+        'font-weight': '600',
+        'height': '40px',
+        'background-color': '#b3c1d1',
+        'min-width': '200px',
+        'word-break': 'keep-all'
+      },
       carouselTableVisible: false,
       avaible: false,
       bttext: '报 名',

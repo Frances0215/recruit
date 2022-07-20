@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top: 10px">
     <div class="block" v-if="carouselTableVisible">
       <el-carousel trigger="click" height="350px" type="card">
         <el-carousel-item v-for="item in items" :key="item.src">
